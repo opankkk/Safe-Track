@@ -1,5 +1,7 @@
 <aside class="main-sidebar sidebar-light-primary elevation-4">
-  <a href="#" class="brand-link">
+
+  {{-- Brand --}}
+  <a href="{{ url('/hse/dashboard') }}" class="brand-link">
     <img src="{{ asset('adminlte3/dist/img/AdminLTELogo.png') }}"
          alt="Logo"
          class="brand-image img-circle elevation-3"
@@ -9,21 +11,50 @@
 
   <div class="sidebar">
     <nav class="mt-2">
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+      <ul class="nav nav-pills nav-sidebar flex-column"
+          data-widget="treeview"
+          role="menu"
+          data-accordion="false">
+
+        {{-- DASHBOARD --}}
         <li class="nav-item">
-          <a href="#" class="nav-link @yield('menu-dashboard-active')">
+          <a href="{{ url('/hse/dashboard') }}"
+             class="nav-link @yield('menu-dashboard-active')">
             <i class="nav-icon fas fa-tachometer-alt"></i>
             <p>Dashboard</p>
           </a>
         </li>
 
+        {{-- LAPORAN KERUSAKAN (ACCIDENT) --}}
         <li class="nav-item">
-          <a href="#" class="nav-link @yield('menu-reports-active')">
-            <i class="nav-icon fas fa-file-alt"></i>
-            <p>Laporan</p>
+          <a href="{{ url('/hse/accident') }}"
+             class="nav-link @yield('menu-accident-active')">
+            <i class="nav-icon fas fa-notes-medical"></i>
+            <p>Laporan Kerusakan</p>
           </a>
         </li>
+
+        {{-- LAPORAN TEMUAN (UNSAFE) --}}
+        <li class="nav-item">
+          <a href="{{ url('/hse/incident') }}"
+             class="nav-link @yield('menu-incident-active')">
+            <i class="nav-icon fas fa-exclamation-triangle"></i>
+            <p>Laporan Temuan</p>
+          </a>
+        </li>
+
+        {{-- LAPORAN PERBAIKAN (RIWAYAT) --}}
+        <li class="nav-item">
+          <a href="{{ url('/hse/perbaikan') }}"
+             class="nav-link @yield('menu-perbaikan-active')">
+            <i class="nav-icon fas fa-tools"></i>
+            <p>Laporan Perbaikan</p>
+          </a>
+        </li>
+
       </ul>
+
     </nav>
   </div>
 </aside>
