@@ -41,7 +41,7 @@
             </div>
           </div>
           <div class="col-4">
-            <a href="{{ route('hse.dashboard') }}" class="btn btn-primary btn-block">
+            <a href="{{ route('hse.manager.dashboard') }}" class="btn btn-primary btn-block">
                 Login
             </a>
           </div>
@@ -49,7 +49,7 @@
       </form>
 
       <p class="mb-1 mt-3">
-        <a href="#">Lupa password?</a>
+        <a href="{{ route('user.forgotpw') }}">Lupa password?</a>
       </p>
     </div>
   </div>
