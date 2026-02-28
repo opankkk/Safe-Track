@@ -249,7 +249,6 @@
                 <div class="notif-time">Kemarin</div>
               </div>
             </div>
-
           </div>
 
           <div class="mt-3 text-right">

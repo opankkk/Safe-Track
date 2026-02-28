@@ -124,26 +124,27 @@
     color:var(--hse-muted);
     font-size:.86rem;
   }
+
+  /* ✅ tombol warna sama seperti bg-info (Unsafe Condition) */
+  .btn-info-match{
+    background-color: #17a2b8;   /* info */
+    border: 1px solid #17a2b8;
+    color: #fff;
+  }
+  .btn-info-match:hover{
+    background-color: #138496;
+    border-color: #117a8b;
+    color: #fff;
+  }
+  .btn-info-match:focus{
+    box-shadow: 0 0 0 .2rem rgba(23, 162, 184, .25);
+  }
 </style>
 @endpush
 
 @section('content')
 <div class="public-page">
   <div class="container">
-
-    {{-- Hero Header --}}
-    <div class="hero">
-      <div class="hero-left">
-        <div class="hero-badge"><i class="fas fa-shield-alt"></i></div>
-        <div>
-          <p class="hero-title">Pelaporan Unsafe</p>
-          <p class="hero-sub">Laporkan Unsafe Action atau Unsafe Condition. Tanpa login.</p>
-        </div>
-      </div>
-      <a href="#" class="btn btn-outline-secondary btn-sm">
-        <i class="fas fa-home mr-1"></i> Beranda
-      </a>
-    </div>
 
     {{-- Menu --}}
     <div class="row">
@@ -367,6 +368,7 @@
 
         </div>
 
+        {{-- ✅ FIX: tombol UA harus "Kirim Unsafe Action" --}}
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Tutup</button>
           <button type="submit" class="btn btn-warning">
@@ -562,9 +564,10 @@
 
         </div>
 
+        {{-- ✅ FIX: tombol UC harus sama warna info --}}
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Tutup</button>
-          <button type="submit" class="btn btn-gradient">
+          <button type="submit" class="btn btn-info-match">
             <i class="fas fa-paper-plane mr-1"></i> Kirim Unsafe Condition
           </button>
         </div>
@@ -572,6 +575,7 @@
     </div>
   </div>
 </div>
+@endsection
 
 @push('scripts')
 <script>

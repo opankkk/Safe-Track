@@ -1,10 +1,10 @@
+{{-- resources/views/livewire/h-s-e/dashboard.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Dashboard | Sistem HSE')
 @section('menu-dashboard-active', 'active')
 @section('hide-navbar', true)
 
-{{-- Header kiri --}}
 @section('page-title')
   <div class="d-flex flex-column">
     <small class="text-muted">Periode Laporan</small>
@@ -83,36 +83,89 @@
   /* Chart placeholder */
   .chart-placeholder { height: 220px; }
 
-  /* Notifikasi (mirip screenshot) */
+  /* ==========================
+     Notifikasi (CARD ikut warna status)
+     Palette:
+       open    : #3c8dbc
+       close   : #001f3f
+       pending : #ff851b
+     NOTE: jangan pakai class "close" (bentrok bootstrap .close)
+     ========================== */
   .notif-wrap { display:flex; flex-direction:column; gap:14px; }
-  .notif-item {
+
+  /* container scroll */
+  .notif-scroll{
+    max-height: 350px;     /* atur sesuai kebutuhan */
+    overflow-y: auto;
+    padding-right: 6px;    /* ruang scrollbar */
+  }
+  /* scrollbar (opsional, biar rapi) */
+  .notif-scroll::-webkit-scrollbar { width: 8px; }
+  .notif-scroll::-webkit-scrollbar-track { background: transparent; }
+  .notif-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,.15);
+    border-radius: 999px;
+  }
+
+  /* item card */
+  .notif-item{
     display:flex;
     gap:14px;
     padding:18px 16px;
     border-radius:14px;
-    background:#f7f9fc;
+    color:#fff;
+    width: 100%;
   }
-  .notif-icon {
+  .notif-item.pending{ background:#ff851b; }
+  .notif-item.open{ background:#3c8dbc; }
+  .notif-item.status-close{ background:#001f3f; }
+
+  .notif-icon{
     width:46px; height:46px;
     border-radius:12px;
     display:flex; align-items:center; justify-content:center;
     flex: 0 0 46px;
     font-size:18px;
+    background: rgba(255,255,255,.16);
+    color:#fff;
   }
-  .notif-icon.success { background:#dff7e8; color:#1f9254; }
-  .notif-icon.warning { background:#fff3cd; color:#b07a00; }
-  .notif-icon.info    { background:#e7f1ff; color:#0d6efd; }
 
-  .notif-title { font-weight:800; font-size:15px; margin-bottom:2px; color:#2b2f33; }
-  .notif-desc  { color:#6c757d; line-height:1.35; margin-bottom:10px; }
-  .notif-time  { font-size:13px; color:#48628a; font-weight:600; }
+  .notif-title{
+    font-weight:800;
+    font-size:15px;
+    margin-bottom:2px;
+    color:#fff;
+  }
+  .notif-desc{
+    color: rgba(255,255,255,0.86);
+    line-height:1.35;
+    margin-bottom:10px;
+  }
+  .notif-time{
+    font-size:13px;
+    color: rgba(255,255,255,0.92);
+    font-weight:600;
+  }
+
+  /* link wrapper: wajib block + full width */
+  .notif-link{
+    display:block;
+    width:100%;
+    text-decoration:none !important;
+    color:inherit;
+    border-radius:14px;
+  }
+  .notif-link:hover{ filter: brightness(0.98); }
+  .notif-link:focus{
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(13,110,253,.18);
+  }
 </style>
 @endpush
 
 @section('content')
 <div class="container-fluid">
 
-  {{-- Topbar: kanan filter periode --}}
   <div class="dash-topbar mb-3">
     <div></div>
     <div class="dash-filter">
@@ -126,10 +179,7 @@
     </div>
   </div>
 
-  {{-- ROW 1: 3 metric cards --}}
   <div class="row">
-
-    {{-- Total Accident --}}
     <div class="col-lg-4 col-md-6 mb-3">
       <div class="metric-card g-pink p-3">
         <i class="metric-icon fas fa-notes-medical"></i>
@@ -140,7 +190,6 @@
       </div>
     </div>
 
-    {{-- Total Unsafe Action --}}
     <div class="col-lg-4 col-md-6 mb-3">
       <div class="metric-card g-orange p-3">
         <i class="metric-icon fas fa-user-times"></i>
@@ -151,7 +200,6 @@
       </div>
     </div>
 
-    {{-- Total Unsafe Condition --}}
     <div class="col-lg-4 col-md-6 mb-3">
       <div class="metric-card g-blue p-3">
         <i class="metric-icon fas fa-exclamation-triangle"></i>
@@ -161,13 +209,10 @@
         <div class="metric-dot"></div>
       </div>
     </div>
-
   </div>
 
-  {{-- ROW 2: Lagging Indicator + Notifikasi --}}
   <div class="row">
 
-    {{-- LEFT: Lagging Indicator --}}
     <div class="col-lg-7 mb-3">
       <div class="card" style="border-radius: 10px;">
         <div class="card-body">
@@ -215,56 +260,32 @@
             </div>
           </div>
 
-          <div class="mt-3 notif-wrap">
-
-            <div class="notif-item">
-              <div class="notif-icon success">
-                <i class="fas fa-check"></i>
-              </div>
-              <div class="notif-content">
-                <div class="notif-title">Approval Unsafe Action disetujui</div>
-                <div class="notif-desc">Laporan unsafe action anda telah disetujui oleh atasan.</div>
-                <div class="notif-time">Baru saja</div>
-              </div>
+          {{-- SCROLL WRAPPER --}}
+          <div class="mt-3 notif-scroll">
+            <div class="notif-wrap" id="notifWrap">
+              {{-- fallback jika JS mati --}}
+              <a class="notif-link" href="{{ url('/hse/accident') }}">
+                <div class="notif-item pending">
+                  <div class="notif-icon"><i class="fas fa-clock"></i></div>
+                  <div class="notif-content">
+                    <div class="notif-title">Accident Report - Budi Susanto (Pending)</div>
+                    <div class="notif-desc">Laporan dari Budi Susanto pada 24 Nov 2025 di Area Loading belum disetujui. Mohon tindak lanjut.</div>
+                    <div class="notif-time">Baru saja</div>
+                  </div>
+                </div>
+              </a>
             </div>
-
-            <div class="notif-item">
-              <div class="notif-icon warning">
-                <i class="far fa-clock"></i>
-              </div>
-              <div class="notif-content">
-                <div class="notif-title">Menunggu approval Accident Report</div>
-                <div class="notif-desc">Laporan kecelakaan sedang menunggu persetujuan atasan.</div>
-                <div class="notif-time">1 jam lalu</div>
-              </div>
-            </div>
-
-            <div class="notif-item">
-              <div class="notif-icon info">
-                <i class="fas fa-exclamation-triangle"></i>
-              </div>
-              <div class="notif-content">
-                <div class="notif-title">Approval Unsafe Condition disetujui</div>
-                <div class="notif-desc">Laporan unsafe condition anda telah disetujui.</div>
-                <div class="notif-time">Kemarin</div>
-              </div>
-            </div>
-
           </div>
+          {{-- /SCROLL WRAPPER --}}
 
-          <div class="mt-3 text-right">
-            <a href="javascript:void(0)" class="text-primary" style="font-weight:600;">Lihat semua</a>
-          </div>
-
+          {{-- "Lihat semua" DIHAPUS --}}
         </div>
       </div>
     </div>
 
   </div>
 
-  {{-- ROW 3: KPI cards --}}
   <div class="row">
-
     <div class="col-lg-4 mb-3">
       <div class="kpi-card kpi-red p-3 d-flex align-items-center justify-content-between">
         <div>
@@ -303,7 +324,6 @@
         <i class="fas fa-chart-bar" style="opacity:.85;"></i>
       </div>
     </div>
-
   </div>
 
 </div>
@@ -312,9 +332,11 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
+  // ======================
+  // Chart: Lagging Indicator (dummy front-end)
+  // ======================
   const labelsMonthTotal = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Total'];
 
-  // Dummy data (frontend only)
   const laggingDataByYear = {
     2025: {
       nearmiss:   [2,0,0,0,1,1,1,1,1,0,0,0,8],
@@ -390,5 +412,100 @@
     chartLagging.options.plugins.title.text = `Lagging Indicator ${year}`;
     chartLagging.update();
   });
+
+  // ======================
+  // Notifikasi (dummy front-end)
+  // ======================
+  const dummyAccidentRows = [
+    { id: 1, nama: 'Budi Susanto', jenis: 'First Aid', departemen: 'Workshop', lokasi: 'Area Loading', tanggal: '24 Nov 2025', process_status: 'pending' },
+    { id: 2, nama: 'Siti Rahma', jenis: 'Property Damage', departemen: 'Produksi', lokasi: 'Gudang', tanggal: '01 Jan 2026', process_status: 'open' },
+    { id: 3, nama: 'Ahmad Fauzi', jenis: 'Nearmiss', departemen: 'Engineering', lokasi: 'Workshop A', tanggal: '02 Jan 2026', process_status: 'close' },
+  ];
+
+  const dummyIncidentRows = [
+    { id: 1, nama: 'Budi Susanto', temuan: 'Temuan APD tidak digunakan', jenis: 'Unsafe Action', departemen: 'Workshop', lokasi: 'Workshop A', tanggal: '24 Nov 2025', process_status: 'pending' },
+    { id: 2, nama: 'Budiarto', temuan: 'Lantai licin tanpa rambu', jenis: 'Unsafe Condition', departemen: 'Produksi', lokasi: 'Area Loading', tanggal: '01 Jan 2026', process_status: 'open' },
+    { id: 3, nama: 'Budiman', temuan: 'Kabel berserakan di jalur pejalan kaki', jenis: 'Unsafe Condition', departemen: 'Engineering', lokasi: 'Gudang', tanggal: '02 Jan 2026', process_status: 'close' },
+  ];
+
+  const notifDummy = [
+    { status: 'pending', time: 'Baru saja', type: 'accident', ref_id: 1 },
+    { status: 'open',    time: '1 jam lalu', type: 'incident', ref_id: 2 },
+    { status: 'close',   time: 'Kemarin', type: 'accident', ref_id: 3 },
+  ];
+
+  function getNotifMeta(status){
+    if (status === 'pending') return { cardClass: 'pending', icon: 'fas fa-clock' };
+    if (status === 'open')    return { cardClass: 'open', icon: 'fas fa-folder-open' };
+    if (status === 'close')   return { cardClass: 'status-close', icon: 'fas fa-lock' };
+    return { cardClass: 'pending', icon: 'fas fa-clock' };
+  }
+
+  function getHrefByType(type){
+    if (type === 'accident') return `{{ url('/hse/accident') }}`;
+    if (type === 'incident') return `{{ url('/hse/incident') }}`;
+    return 'javascript:void(0)';
+  }
+
+  function findRow(type, id){
+    if (type === 'accident') return dummyAccidentRows.find(r => String(r.id) === String(id));
+    if (type === 'incident') return dummyIncidentRows.find(r => String(r.id) === String(id));
+    return null;
+  }
+
+  function buildTitle(item, row){
+    const prefix = item.type === 'accident' ? 'Accident Report' : 'Incident Report';
+    const name = row?.nama ? ` - ${row.nama}` : '';
+    const statusText = item.status ? item.status.charAt(0).toUpperCase() + item.status.slice(1) : 'Pending';
+    return `${prefix}${name} (${statusText})`;
+  }
+
+  function buildDesc(item, row){
+    const nama = row?.nama || 'Pelapor';
+    const tanggal = row?.tanggal ? ` pada ${row.tanggal}` : '';
+    const lokasi = row?.lokasi ? ` di ${row.lokasi}` : '';
+
+    if (item.status === 'pending') {
+      return `Laporan dari ${nama}${tanggal}${lokasi} belum disetujui. Mohon tindak lanjut.`;
+    }
+    if (item.status === 'open') {
+      return `Laporan dari ${nama}${tanggal}${lokasi} telah disetujui, menunggu persetujuan / tindak lanjut dari PIC.`;
+    }
+    if (item.status === 'close') {
+      return `Laporan dari ${nama}${tanggal}${lokasi} ditolak.`;
+    }
+    return `Laporan dari ${nama}${tanggal}${lokasi}.`;
+  }
+
+  function renderNotifItem(item){
+    const m = getNotifMeta(item.status);
+    const row = findRow(item.type, item.ref_id);
+
+    const title = buildTitle(item, row);
+    const desc = buildDesc(item, row);
+
+    const card = `
+      <div class="notif-item ${m.cardClass}">
+        <div class="notif-icon"><i class="${m.icon}"></i></div>
+        <div class="notif-content">
+          <div class="notif-title">${title}</div>
+          <div class="notif-desc">${desc}</div>
+          <div class="notif-time">${item.time || '-'}</div>
+        </div>
+      </div>
+    `;
+
+    if (item.status === 'pending') {
+      const href = getHrefByType(item.type);
+      return `<a class="notif-link" href="${href}">${card}</a>`;
+    }
+
+    return card;
+  }
+
+  const $notifWrap = document.getElementById('notifWrap');
+  if ($notifWrap) {
+    $notifWrap.innerHTML = notifDummy.map(renderNotifItem).join('');
+  }
 </script>
 @endpush

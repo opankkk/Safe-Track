@@ -139,14 +139,27 @@
     background: linear-gradient(135deg, var(--hse-primary), var(--hse-accent));
     border:none;
   }
-  .btn-primary:hover{ filter:brightness(.98); }
+  .btn-info-match{
+    background-color: #17a2b8;   /* warna bootstrap alert-info */
+    border: 1px solid #17a2b8;
+    color: #fff;
+  }
 
+  .btn-info-match:hover{
+    background-color: #138496;
+    border-color: #117a8b;
+    color: #fff;
+  }
+
+  .btn-info-match:focus{
+    box-shadow: 0 0 0 .2rem rgba(23, 162, 184, .25);
+  }
+  
   /* Footer */
   .card-footer{
     background:#fff;
     border-top:1px solid rgba(0,0,0,.06);
   }
-
   /* Alert */
   .alert{
     border-radius: 12px;
@@ -162,28 +175,6 @@
 @section('content')
 <div class="public-page">
   <div class="container">
-
-    {{-- Hero Header --}}
-    <div class="hero mb-3">
-      <div class="hero-left">
-        <div class="hero-badge">
-          <i class="fas fa-shield-alt"></i>
-        </div>
-        <div>
-          <p class="hero-title">Sistem HSE — Accident Report</p>
-          <p class="hero-sub">Isi form singkat & jelas. Tim HSE akan verifikasi setelah submit.</p>
-        </div>
-      </div>
-
-      <div class="d-flex" style="gap:10px;">
-        <a href="#" class="btn btn-outline-secondary">
-          <i class="fas fa-home mr-1"></i> Beranda
-        </a>
-        <a href="#" class="btn btn-outline-secondary">
-          <i class="fas fa-question-circle mr-1"></i> Bantuan
-        </a>
-      </div>
-    </div>
 
     {{-- Stepper --}}
     <div class="stepper mb-3">
@@ -530,7 +521,7 @@
           <a href="#" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left mr-1"></i> Kembali
           </a>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-info-match">
             <i class="fas fa-paper-plane mr-1"></i> Kirim Laporan
           </button>
         </div>

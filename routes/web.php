@@ -88,3 +88,9 @@ Route::view('/hse-manager/dashboard', 'livewire.h-s-e-manager.dashboard')
 
 Route::view('/pic/dashboard', 'livewire.p-i-c.dashboard')
     ->name('pic.dashboard');
+
+Route::view('/pic/accident', 'livewire.p-i-c.accident-report')
+    ->name('pic.accident');
+
+Route::view('/pic/incident', 'livewire.p-i-c.incident-report')
+    ->name('pic.incident');
