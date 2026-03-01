@@ -264,7 +264,7 @@
           <div class="mt-3 notif-scroll">
             <div class="notif-wrap" id="notifWrap">
               {{-- fallback jika JS mati --}}
-              <a class="notif-link" href="{{ url('/hse/accident') }}">
+              <a class="notif-link" href="{{ route('pic.accident') }}">
                 <div class="notif-item pending">
                   <div class="notif-icon"><i class="fas fa-clock"></i></div>
                   <div class="notif-content">
@@ -276,9 +276,6 @@
               </a>
             </div>
           </div>
-          {{-- /SCROLL WRAPPER --}}
-
-          {{-- "Lihat semua" DIHAPUS --}}
         </div>
       </div>
     </div>
@@ -442,8 +439,8 @@
   }
 
   function getHrefByType(type){
-    if (type === 'accident') return `{{ url('/hse/accident') }}`;
-    if (type === 'incident') return `{{ url('/hse/incident') }}`;
+    if (type === 'accident') return `{{ route('pic.accident') }}`;
+    if (type === 'incident') return `{{ route('pic.incident') }}`;
     return 'javascript:void(0)';
   }
 
