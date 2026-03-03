@@ -19,133 +19,90 @@
 
 @push('styles')
 <style>
-  .table td, .table th { vertical-align: middle; }
+  /* cuma yang gak ada utility-nya */
+  #incidentTable{ table-layout: fixed; width:100%; }
+  #incidentTable th, #incidentTable td{ vertical-align: middle; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-  /* bukti button kecil rapi */
-  .bukti-btn{ padding: .25rem .55rem; border-radius: .4rem; }
-
-  /* aksi ala AdminLTE projects (rapi, rounded) */
-  .aksi-btn{
-    font-weight: 600;
-    border-radius: .4rem;
-    padding: .35rem .75rem;
+  .clamp-2{
+    white-space: normal !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .wrap-full{
+    white-space: normal !important;
+    overflow: visible;
+    text-overflow: initial;
+    line-height: 1.5;
   }
 
-  /* teks nama */
-  .name-title{ font-weight: 700; margin-bottom: 0; }
-
-  /* badge konsisten */
-  .badge-pillish{
-    padding: .5rem .75rem;
-    border-radius: .4rem;
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
-    font-weight: 600;
-  }
-
-  /* biar header card serasa AdminLTE */
-  .card{ border-radius: .75rem; }
-
-  /* pagination button konsisten */
-  .pager-btn{
-    border-radius: .4rem;
-    font-weight: 600;
-    padding: .35rem .75rem;
-  }
-  .pager-btn:disabled{
-    opacity: .6;
-    cursor: not-allowed;
-  }
-
-  /* ==========================
-     FIX: modal follow-up scroll (AdminLTE friendly)
-     ========================== */
-  #modalFollowUpIncident .modal-dialog{
-    max-width: 900px;
-  }
-  #modalFollowUpIncident .modal-content{
-    max-height: calc(100vh - 3rem);
-    overflow: hidden; /* penting: biar body yang scroll */
-  }
-  #modalFollowUpIncident .modal-body{
-    overflow-y: auto;
-    max-height: calc(100vh - 3rem - 120px); /* header+footer kira2 */
-  }
+  /* modal follow-up biar scroll + footer tetap */
+  #modalFollowUpIncident .modal-dialog{ max-width: 900px; }
+  #modalFollowUpIncident .modal-content{ max-height: calc(100vh - 3rem); overflow:hidden; }
+  #modalFollowUpIncident .modal-body{ overflow-y:auto; max-height: calc(100vh - 3rem - 120px); }
   #modalFollowUpIncident .modal-footer{
-    position: sticky;
-    bottom: 0;
-    background: #fff;
-    z-index: 2;
+    position: sticky; bottom:0; background:#fff; z-index:2;
     border-top: 1px solid rgba(0,0,0,.1);
   }
-
-  /* ==========================
-     status open note kecil
-     ========================== */
-  .status-wrap{
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1.1;
-    gap: .25rem;
-  }
-  .status-note{
-    font-size: .75rem;
-    color: #6c757d;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  /* ==========================
-     Palette status (custom)
-     open    : #3c8dbc
-     close   : #001f3f
-     pending : #ff851b
-     NOTE: JANGAN pakai class "close" (bentrok bootstrap .close)
-     ========================== */
-  .badge-status{
-    color:#fff !important;
-    border: 0 !important;
-  }
-  .badge-status.pending{ background:#ff851b !important; }
-  .badge-status.open{ background:#3c8dbc !important; }
-  .badge-status.status-close{ background:#001f3f !important; }
 </style>
 @endpush
 
 @section('content')
 <div class="container-fluid">
 
-  <div class="card">
+  <div class="card" style="border-radius:.75rem;">
     <div class="card-header">
       <h3 class="card-title">Laporan Temuan</h3>
 
       <div class="card-tools">
-        <div class="input-group input-group-sm" style="width: 220px;">
-          <input type="text" name="table_search" class="form-control float-right" placeholder="Cari...">
-          <div class="input-group-append">
-            <button type="button" class="btn btn-default">
-              <i class="fas fa-search"></i>
-            </button>
+        {{-- Inline utilities ala tailwind --}}
+        <div class="d-flex align-items-center flex-wrap justify-content-end" style="gap:.5rem;">
+
+          <select id="filterJenisIncident" class="form-control form-control-sm font-weight-bold" style="width:190px; border-radius:.4rem;">
+            <option value="all">Semua Jenis</option>
+            <option value="ua">Unsafe Action</option>
+            <option value="uc">Unsafe Condition</option>
+          </select>
+
+          <select id="filterStatusIncident" class="form-control form-control-sm font-weight-bold" style="width:180px; border-radius:.4rem;">
+            <option value="all">Semua Status</option>
+            <option value="pending">Pending</option>
+            <option value="open">Open</option>
+            <option value="close">Close</option>
+          </select>
+
+          <div class="input-group input-group-sm" style="width:220px;">
+            <input type="text" id="incidentSearchInput" class="form-control" placeholder="Cari...">
+            <div class="input-group-append">
+              <button type="button" class="btn btn-default" id="incidentSearchBtn">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
           </div>
+
+          <button type="button" class="btn btn-outline-secondary btn-sm font-weight-bold" id="incidentResetBtn"
+                  title="Reset filter & pencarian" style="border-radius:.4rem;">
+            <i class="fas fa-undo mr-1"></i> Reset
+          </button>
+
         </div>
       </div>
     </div>
 
-    {{-- Table --}}
     <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-striped projects mb-0">
+        <table class="table table-striped projects mb-0" id="incidentTable">
           <thead>
             <tr>
-              <th style="width:60px;" class="text-center">No</th>
-              <th>Nama</th>
-              <th>Temuan</th>
+              <th style="width:160px;" class="text-center">ID Laporan</th>
+              <th style="width:240px;">Temuan</th>
               <th style="width:190px;">Jenis</th>
-              <th>Departemen</th>
-              <th>Lokasi</th>
-              <th style="width:140px;">Tanggal</th>
+              <th style="width:150px;">Departemen</th>
+              <th style="width:160px;">Lokasi</th>
+              <th style="width:170px;">Tanggal &amp; Waktu</th>
+              <th style="width:240px;">Dampak</th>
+              <th style="width:240px;">Perbaikan</th>
               <th style="width:140px;" class="text-center">Status</th>
               <th style="width:110px;" class="text-center">Bukti</th>
               <th style="width:280px;" class="text-right">Aksi</th>
@@ -156,198 +113,267 @@
 
             {{-- 1) Pending + UA --}}
             <tr data-id="1" data-jenis="ua" data-approval="none" data-process-status="pending">
-              <td class="text-center">1</td>
-
-              <td><div class="name-title">Budi Susanto</div></td>
-              <td>Temuan APD tidak digunakan</td>
+              <td class="text-center font-weight-bolder" style="letter-spacing:.2px;">UA-2026-0001</td>
 
               <td>
-                <span class="badge badge-warning badge-pillish">
+                <div class="clamp-2" title="Temuan APD tidak digunakan saat pekerjaan berlangsung.">
+                  Temuan APD tidak digunakan saat pekerjaan berlangsung.
+                </div>
+              </td>
+
+              <td>
+                <span class="badge badge-warning px-3 py-2" style="border-radius:.4rem; display:inline-flex; align-items:center; gap:.35rem; font-weight:700;">
                   <i class="fas fa-user-shield"></i> Unsafe Action
                 </span>
               </td>
 
               <td>Workshop</td>
               <td>Workshop A</td>
-              <td>24 Nov 2025</td>
+              <td>24 Nov 2025 08:30</td>
+
+              <td>
+                <div class="wrap-full" title="Potensi cedera kepala/anggota tubuh karena tidak menggunakan APD.">
+                  Potensi cedera kepala/anggota tubuh karena tidak menggunakan APD.
+                </div>
+              </td>
+
+              <td>
+                <div class="wrap-full" title="Briefing ulang wajib APD, berikan APD yang sesuai, dan lakukan pengawasan rutin.">
+                  Briefing ulang wajib APD, berikan APD yang sesuai, dan lakukan pengawasan rutin.
+                </div>
+              </td>
 
               <td class="text-center js-status-cell">
-                <span class="badge badge-pillish badge-status pending">
+                <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#ff851b; border:0;">
                   <i class="fas fa-clock"></i> Pending
                 </span>
               </td>
 
               <td class="text-center">
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-sm bukti-btn js-open-pdf"
-                  title="Lihat Bukti PDF"
-                  data-toggle="modal"
-                  data-target="#modalBuktiIncident"
-                  data-pdf="{{ asset('storage/bukti/incident-1.pdf') }}"
-                >
+                <button type="button"
+                        class="btn btn-outline-danger btn-sm js-open-pdf"
+                        style="padding:.25rem .55rem; border-radius:.4rem;"
+                        title="Lihat Bukti PDF"
+                        data-toggle="modal"
+                        data-target="#modalBuktiIncident"
+                        data-pdf="{{ asset('storage/bukti/incident-1.pdf') }}">
                   <i class="far fa-file-pdf"></i>
                 </button>
               </td>
 
               <td class="text-right">
-                <button
-                  type="button"
-                  class="btn btn-success btn-sm aksi-btn js-approve"
-                  data-id="1"
-                  data-nama="Budi Susanto"
-                  data-jenis="Unsafe Action"
-                  data-temuan="Temuan APD tidak digunakan"
-                  data-lokasi="Workshop A"
-                  data-tanggal="24 Nov 2025"
-                >
-                  <i class="fas fa-check mr-1"></i> Setujui
-                </button>
+                <div class="d-flex justify-content-end" style="gap:.5rem;">
+                  <button type="button"
+                          class="btn btn-success btn-sm font-weight-bold js-approve"
+                          style="border-radius:.4rem; padding:.35rem .75rem;"
+                          data-id="1"
+                          data-id_laporan="UA-2026-0001"
+                          data-jenis="Unsafe Action"
+                          data-temuan="Temuan APD tidak digunakan saat pekerjaan berlangsung."
+                          data-departemen="Workshop"
+                          data-lokasi="Workshop A"
+                          data-tanggal="24 Nov 2025 08:30"
+                          data-dampak="Potensi cedera kepala/anggota tubuh karena tidak menggunakan APD."
+                          data-perbaikan="Briefing ulang wajib APD, berikan APD yang sesuai, dan lakukan pengawasan rutin.">
+                    <i class="fas fa-check mr-1"></i> Setujui
+                  </button>
 
-                <button type="button" class="btn btn-danger btn-sm aksi-btn js-reject" data-id="1">
-                  <i class="fas fa-times mr-1"></i> Tolak
-                </button>
+                  <button type="button"
+                          class="btn btn-danger btn-sm font-weight-bold js-reject"
+                          style="border-radius:.4rem; padding:.35rem .75rem;"
+                          data-id="1">
+                    <i class="fas fa-times mr-1"></i> Tolak
+                  </button>
+                </div>
               </td>
             </tr>
 
-            {{-- 2) Open (contoh sudah disetujui) --}}
+            {{-- 2) Open + UC --}}
             <tr data-id="2" data-jenis="uc" data-approval="approved" data-process-status="open">
-              <td class="text-center">2</td>
-
-              <td><div class="name-title">Budiarto</div></td>
-              <td>Lantai licin tanpa rambu</td>
+              <td class="text-center font-weight-bolder" style="letter-spacing:.2px;">UC-2026-0002</td>
 
               <td>
-                <span class="badge badge-info badge-pillish">
+                <div class="clamp-2" title="Lantai licin tanpa rambu peringatan di jalur operasional.">
+                  Lantai licin tanpa rambu peringatan di jalur operasional.
+                </div>
+              </td>
+
+              <td>
+                <span class="badge badge-info px-3 py-2" style="border-radius:.4rem; display:inline-flex; align-items:center; gap:.35rem; font-weight:700;">
                   <i class="fas fa-exclamation-triangle"></i> Unsafe Condition
                 </span>
               </td>
 
               <td>Produksi</td>
               <td>Area Loading</td>
-              <td>01 Jan 2026</td>
+              <td>01 Jan 2026 09:10</td>
+
+              <td>
+                <div class="wrap-full" title="Risiko terpeleset/cedera dan potensi kecelakaan material handling.">
+                  Risiko terpeleset/cedera dan potensi kecelakaan material handling.
+                </div>
+              </td>
+
+              <td>
+                <div class="wrap-full" title="Pasang rambu wet floor, bersihkan tumpahan, dan lakukan inspeksi area berkala.">
+                  Pasang rambu wet floor, bersihkan tumpahan, dan lakukan inspeksi area berkala.
+                </div>
+              </td>
 
               <td class="text-center js-status-cell">
-                <span class="status-wrap">
-                  <span class="badge badge-pillish badge-status open">
+                <div class="d-flex flex-column align-items-center" style="gap:.25rem;">
+                  <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#3c8dbc; border:0;">
                     <i class="fas fa-folder-open"></i> Open
                   </span>
-                  <small class="status-note">Menunggu tindak lanjut dari PIC</small>
-                </span>
+                  <small class="text-muted font-weight-bold" style="font-size:.75rem; white-space:nowrap;">Pending : PIC</small>
+                </div>
               </td>
 
               <td class="text-center">
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-sm bukti-btn js-open-pdf"
-                  title="Lihat Bukti PDF"
-                  data-toggle="modal"
-                  data-target="#modalBuktiIncident"
-                  data-pdf="{{ asset('storage/bukti/incident-2.pdf') }}"
-                >
+                <button type="button"
+                        class="btn btn-outline-danger btn-sm js-open-pdf"
+                        style="padding:.25rem .55rem; border-radius:.4rem;"
+                        title="Lihat Bukti PDF"
+                        data-toggle="modal"
+                        data-target="#modalBuktiIncident"
+                        data-pdf="{{ asset('storage/bukti/incident-2.pdf') }}">
                   <i class="far fa-file-pdf"></i>
                 </button>
               </td>
 
               <td class="text-right">
-                <button type="button" class="btn btn-success btn-sm aksi-btn" disabled>
-                  <i class="fas fa-check mr-1"></i> Setujui
-                </button>
-                <button type="button" class="btn btn-danger btn-sm aksi-btn" disabled>
-                  <i class="fas fa-times mr-1"></i> Tolak
-                </button>
+                <div class="d-flex justify-content-end" style="gap:.5rem;">
+                  <button type="button" class="btn btn-success btn-sm font-weight-bold" style="border-radius:.4rem; padding:.35rem .75rem;" disabled>
+                    <i class="fas fa-check mr-1"></i> Setujui
+                  </button>
+                  <button type="button" class="btn btn-danger btn-sm font-weight-bold" style="border-radius:.4rem; padding:.35rem .75rem;" disabled>
+                    <i class="fas fa-times mr-1"></i> Tolak
+                  </button>
+                </div>
               </td>
             </tr>
 
-            {{-- 3) Close (contoh sudah selesai) --}}
+            {{-- 3) Close + UC --}}
             <tr data-id="3" data-jenis="uc" data-approval="approved" data-process-status="close">
-              <td class="text-center">3</td>
-
-              <td><div class="name-title">Budiman</div></td>
-              <td>Kabel berserakan di jalur pejalan kaki</td>
+              <td class="text-center font-weight-bolder" style="letter-spacing:.2px;">UC-2026-0003</td>
 
               <td>
-                <span class="badge badge-info badge-pillish">
+                <div class="clamp-2" title="Kabel berserakan di jalur pejalan kaki (trip hazard).">
+                  Kabel berserakan di jalur pejalan kaki (trip hazard).
+                </div>
+              </td>
+
+              <td>
+                <span class="badge badge-info px-3 py-2" style="border-radius:.4rem; display:inline-flex; align-items:center; gap:.35rem; font-weight:700;">
                   <i class="fas fa-exclamation-triangle"></i> Unsafe Condition
                 </span>
               </td>
 
               <td>Engineering</td>
               <td>Gudang</td>
-              <td>02 Jan 2026</td>
+              <td>02 Jan 2026 10:05</td>
+
+              <td>
+                <div class="wrap-full" title="Risiko tersandung dan jatuh, kerusakan peralatan, serta potensi korsleting.">
+                  Risiko tersandung dan jatuh, kerusakan peralatan, serta potensi korsleting.
+                </div>
+              </td>
+
+              <td>
+                <div class="wrap-full" title="Rapikan kabel dengan cable protector, pasang jalur kabel, dan buat housekeeping checklist.">
+                  Rapikan kabel dengan cable protector, pasang jalur kabel, dan buat housekeeping checklist.
+                </div>
+              </td>
 
               <td class="text-center js-status-cell">
-                <span class="badge badge-pillish badge-status status-close">
+                <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#001f3f; border:0;">
                   <i class="fas fa-lock"></i> Close
                 </span>
               </td>
 
               <td class="text-center">
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-sm bukti-btn js-open-pdf"
-                  title="Lihat Bukti PDF"
-                  data-toggle="modal"
-                  data-target="#modalBuktiIncident"
-                  data-pdf="{{ asset('storage/bukti/incident-3.pdf') }}"
-                >
+                <button type="button"
+                        class="btn btn-outline-danger btn-sm js-open-pdf"
+                        style="padding:.25rem .55rem; border-radius:.4rem;"
+                        title="Lihat Bukti PDF"
+                        data-toggle="modal"
+                        data-target="#modalBuktiIncident"
+                        data-pdf="{{ asset('storage/bukti/incident-3.pdf') }}">
                   <i class="far fa-file-pdf"></i>
                 </button>
               </td>
 
               <td class="text-right">
-                <button type="button" class="btn btn-success btn-sm aksi-btn" disabled>
-                  <i class="fas fa-check mr-1"></i> Setujui
-                </button>
-                <button type="button" class="btn btn-danger btn-sm aksi-btn" disabled>
-                  <i class="fas fa-times mr-1"></i> Tolak
-                </button>
+                <div class="d-flex justify-content-end" style="gap:.5rem;">
+                  <button type="button" class="btn btn-success btn-sm font-weight-bold" style="border-radius:.4rem; padding:.35rem .75rem;" disabled>
+                    <i class="fas fa-check mr-1"></i> Setujui
+                  </button>
+                  <button type="button" class="btn btn-danger btn-sm font-weight-bold" style="border-radius:.4rem; padding:.35rem .75rem;" disabled>
+                    <i class="fas fa-times mr-1"></i> Tolak
+                  </button>
+                </div>
               </td>
             </tr>
 
-            {{-- 4) Close (ditolak) --}}
+            {{-- 4) Close + UA (Rejected) --}}
             <tr data-id="4" data-jenis="ua" data-approval="rejected" data-process-status="close">
-              <td class="text-center">4</td>
-
-              <td><div class="name-title">Rina Putri</div></td>
-              <td>Tidak memakai helm di area kerja</td>
+              <td class="text-center font-weight-bolder" style="letter-spacing:.2px;">UA-2026-0004</td>
 
               <td>
-                <span class="badge badge-warning badge-pillish">
+                <div class="clamp-2" title="Tidak memakai helm di area kerja saat berada di bawah aktivitas lifting.">
+                  Tidak memakai helm di area kerja saat berada di bawah aktivitas lifting.
+                </div>
+              </td>
+
+              <td>
+                <span class="badge badge-warning px-3 py-2" style="border-radius:.4rem; display:inline-flex; align-items:center; gap:.35rem; font-weight:700;">
                   <i class="fas fa-user-shield"></i> Unsafe Action
                 </span>
               </td>
 
               <td>Workshop</td>
               <td>Workshop A</td>
-              <td>03 Jan 2026</td>
+              <td>03 Jan 2026 14:20</td>
+
+              <td>
+                <div class="wrap-full" title="Risiko cedera serius akibat benda jatuh (struck by).">
+                  Risiko cedera serius akibat benda jatuh (struck by).
+                </div>
+              </td>
+
+              <td>
+                <div class="wrap-full" title="Stop work, berikan helm, lakukan briefing, dan pastikan kepatuhan APD.">
+                  Stop work, berikan helm, lakukan briefing, dan pastikan kepatuhan APD.
+                </div>
+              </td>
 
               <td class="text-center js-status-cell">
-                <span class="badge badge-pillish badge-status status-close">
+                <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#001f3f; border:0;">
                   <i class="fas fa-lock"></i> Close
                 </span>
               </td>
 
               <td class="text-center">
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-sm bukti-btn js-open-pdf"
-                  title="Lihat Bukti PDF"
-                  data-toggle="modal"
-                  data-target="#modalBuktiIncident"
-                  data-pdf="{{ asset('storage/bukti/incident-4.pdf') }}"
-                >
+                <button type="button"
+                        class="btn btn-outline-danger btn-sm js-open-pdf"
+                        style="padding:.25rem .55rem; border-radius:.4rem;"
+                        title="Lihat Bukti PDF"
+                        data-toggle="modal"
+                        data-target="#modalBuktiIncident"
+                        data-pdf="{{ asset('storage/bukti/incident-4.pdf') }}">
                   <i class="far fa-file-pdf"></i>
                 </button>
               </td>
 
               <td class="text-right">
-                <button type="button" class="btn btn-success btn-sm aksi-btn" disabled>
-                  <i class="fas fa-check mr-1"></i> Setujui
-                </button>
-                <button type="button" class="btn btn-danger btn-sm aksi-btn" disabled>
-                  <i class="fas fa-times mr-1"></i> Tolak
-                </button>
+                <div class="d-flex justify-content-end" style="gap:.5rem;">
+                  <button type="button" class="btn btn-success btn-sm font-weight-bold" style="border-radius:.4rem; padding:.35rem .75rem;" disabled>
+                    <i class="fas fa-check mr-1"></i> Setujui
+                  </button>
+                  <button type="button" class="btn btn-danger btn-sm font-weight-bold" style="border-radius:.4rem; padding:.35rem .75rem;" disabled>
+                    <i class="fas fa-times mr-1"></i> Tolak
+                  </button>
+                </div>
               </td>
             </tr>
 
@@ -356,10 +382,13 @@
       </div>
 
       <div class="d-flex justify-content-between align-items-center p-3">
-        <small class="text-muted">Menampilkan <b>1</b> sampai <b>4</b> dari <b>4</b> data</small>
+        <small class="text-muted">
+          Menampilkan <b id="incidentShownCount">4</b> data dari <b id="incidentTotalCount">4</b> data
+        </small>
+
         <div class="btn-group btn-group-sm">
-          <button class="btn btn-outline-secondary pager-btn" disabled>Sebelumnya</button>
-          <button class="btn btn-outline-secondary pager-btn" disabled>Selanjutnya</button>
+          <button class="btn btn-outline-secondary" style="border-radius:.4rem; font-weight:600; padding:.35rem .75rem;" disabled>Sebelumnya</button>
+          <button class="btn btn-outline-secondary" style="border-radius:.4rem; font-weight:600; padding:.35rem .75rem;" disabled>Selanjutnya</button>
         </div>
       </div>
 
@@ -392,7 +421,7 @@
   </div>
 </div>
 
-{{-- Modal Tindak Lanjut (REVISI) --}}
+{{-- Modal Tindak Lanjut --}}
 <div class="modal fade" id="modalFollowUpIncident"
      data-backdrop="static" data-keyboard="false"
      tabindex="-1" role="dialog"
@@ -412,28 +441,31 @@
 
       <form id="followUpIncidentForm" novalidate>
         <div class="modal-body">
-
           <input type="hidden" id="ifuId" name="report_id" value="">
 
-          {{-- Info laporan: jadi form input --}}
           <div class="form-group">
-            <label for="ifuNama">Nama</label>
-            <input type="text" class="form-control" id="ifuNama" name="nama" value="" readonly>
+            <label for="ifuIdLaporan">ID Laporan</label>
+            <input type="text" class="form-control" id="ifuIdLaporan" name="id_laporan" readonly>
           </div>
 
           <div class="form-group">
             <label for="ifuJenis">Jenis</label>
-            <input type="text" class="form-control" id="ifuJenis" name="jenis" value="" readonly>
+            <input type="text" class="form-control" id="ifuJenis" name="jenis" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="ifuDepartemen">Departemen</label>
+            <input type="text" class="form-control" id="ifuDepartemen" name="departemen" readonly>
           </div>
 
           <div class="form-group">
             <label for="ifuLokasi">Lokasi</label>
-            <input type="text" class="form-control" id="ifuLokasi" name="lokasi" value="" readonly>
+            <input type="text" class="form-control" id="ifuLokasi" name="lokasi" readonly>
           </div>
 
           <div class="form-group">
-            <label for="ifuTanggal">Tanggal</label>
-            <input type="text" class="form-control" id="ifuTanggal" name="tanggal" value="" readonly>
+            <label for="ifuTanggal">Tanggal &amp; Waktu</label>
+            <input type="text" class="form-control" id="ifuTanggal" name="tanggal" readonly>
           </div>
 
           <div class="form-group">
@@ -441,19 +473,22 @@
             <textarea class="form-control" id="ifuTemuan" name="temuan" rows="2" readonly></textarea>
           </div>
 
+          <div class="form-group">
+            <label for="ifuDampak">Dampak</label>
+            <textarea class="form-control" id="ifuDampak" name="dampak" rows="2" readonly></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="ifuPerbaikan">Perbaikan</label>
+            <textarea class="form-control" id="ifuPerbaikan" name="perbaikan" rows="2" readonly></textarea>
+          </div>
+
           <hr class="my-3">
 
-          {{-- Isian follow-up: tinggal 1 field --}}
           <div class="form-group mb-0">
             <label for="ifuPengendalian">Pengendalian yang disarankan <span class="text-danger">*</span></label>
-            <textarea
-              class="form-control"
-              id="ifuPengendalian"
-              name="pengendalian_disarankan"
-              rows="4"
-              placeholder="Tuliskan pengendalian yang disarankan..."
-              required
-            ></textarea>
+            <textarea class="form-control" id="ifuPengendalian" name="pengendalian_disarankan"
+                      rows="4" placeholder="Tuliskan pengendalian yang disarankan..." required></textarea>
             <div class="invalid-feedback">Harap isi pengendalian yang disarankan.</div>
           </div>
 
@@ -476,92 +511,101 @@
 
 @push('scripts')
 <script>
-  // ======================
-  // Bukti: klik icon pdf -> set src iframe
-  // ======================
+  // Bukti PDF
   $(document).on('click', '.js-open-pdf', function () {
-    const pdfUrl = $(this).data('pdf');
-    $('#pdfFrameIncident').attr('src', pdfUrl);
+    $('#pdfFrameIncident').attr('src', $(this).data('pdf'));
   });
-
   $('#modalBuktiIncident').on('hidden.bs.modal', function () {
     $('#pdfFrameIncident').attr('src', '');
   });
 
-  // ======================
-  // Render status proses (pending/open/close) + note utk Open
-  // ======================
-  function renderProcessStatus(status, note = '') {
-    if (status === 'pending') {
-      return `<span class="badge badge-pillish badge-status pending"><i class="fas fa-clock"></i> Pending</span>`;
-    }
-    if (status === 'open') {
-      return `
-        <span class="status-wrap">
-          <span class="badge badge-pillish badge-status open">
-            <i class="fas fa-folder-open"></i> Open
-          </span>
-          ${note ? `<small class="status-note">${note}</small>` : ``}
-        </span>
-      `;
-    }
-    if (status === 'close') {
-      return `<span class="badge badge-pillish badge-status status-close"><i class="fas fa-lock"></i> Close</span>`;
-    }
-    return '';
+  // Filter
+  function normalizeText(s){ return (s || '').toString().toLowerCase().trim(); }
+
+  function applyIncidentFilters(){
+    const jenisVal  = $('#filterJenisIncident').val();
+    const statusVal = $('#filterStatusIncident').val();
+    const keyword   = normalizeText($('#incidentSearchInput').val());
+
+    const $rows = $('#incidentTable tbody tr');
+    const total = $rows.length;
+    let shown = 0;
+
+    $rows.each(function(){
+      const $row = $(this);
+      const rowJenis  = normalizeText($row.attr('data-jenis'));
+      const rowStatus = normalizeText($row.attr('data-process-status'));
+      const rowText   = normalizeText($row.text());
+
+      const okJenis  = (jenisVal === 'all') ? true : (rowJenis === jenisVal);
+      const okStatus = (statusVal === 'all') ? true : (rowStatus === statusVal);
+      const okSearch = (!keyword) ? true : rowText.includes(keyword);
+
+      const isShow = okJenis && okStatus && okSearch;
+      $row.toggle(isShow);
+      if (isShow) shown++;
+    });
+
+    $('#incidentShownCount').text(shown);
+    $('#incidentTotalCount').text(total);
   }
 
-  // ======================
-  // Setujui: buka modal dulu, JANGAN ubah status sebelum submit
-  // ======================
+  $(document).on('change', '#filterJenisIncident, #filterStatusIncident', applyIncidentFilters);
+  $(document).on('input', '#incidentSearchInput', applyIncidentFilters);
+  $(document).on('click', '#incidentSearchBtn', applyIncidentFilters);
+  $(document).on('click', '#incidentResetBtn', function(){
+    $('#filterJenisIncident').val('all');
+    $('#filterStatusIncident').val('all');
+    $('#incidentSearchInput').val('');
+    applyIncidentFilters();
+  });
+  $(document).ready(applyIncidentFilters);
+
+  // Approve -> modal
   let __pendingApproveRowId = null;
 
   $(document).on('click', '.js-approve', function () {
     const id = $(this).data('id');
     const $row = $(`tr[data-id="${id}"]`);
-
-    // kalau sudah diputuskan, stop
     if ($row.attr('data-approval') !== 'none') return;
 
     __pendingApproveRowId = id;
 
-    // isi modal info (sekarang input/textarea)
     $('#ifuId').val(id);
-    $('#ifuNama').val($(this).data('nama') || '');
+    $('#ifuIdLaporan').val($(this).data('id_laporan') || '');
     $('#ifuJenis').val($(this).data('jenis') || '');
+    $('#ifuDepartemen').val($(this).data('departemen') || '');
     $('#ifuLokasi').val($(this).data('lokasi') || '');
     $('#ifuTanggal').val($(this).data('tanggal') || '');
     $('#ifuTemuan').val($(this).data('temuan') || '');
+    $('#ifuDampak').val($(this).data('dampak') || '');
+    $('#ifuPerbaikan').val($(this).data('perbaikan') || '');
 
-    // reset validasi + textarea pengendalian
     $('#followUpIncidentForm').removeClass('was-validated');
     $('#ifuPengendalian').val('');
-
-    // show modal
     $('#modalFollowUpIncident').modal('show');
   });
 
-  // ======================
-  // Tolak: langsung close + disable tombol
-  // ======================
+  // Reject -> close + disable
   $(document).on('click', '.js-reject', function () {
     const id = $(this).data('id');
     const $row = $(`tr[data-id="${id}"]`);
-
     if ($row.attr('data-approval') !== 'none') return;
 
     $row.attr('data-approval', 'rejected');
     $row.attr('data-process-status', 'close');
-    $row.find('.js-status-cell').html(renderProcessStatus('close'));
+
+    $row.find('.js-status-cell').html(`
+      <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#001f3f; border:0;">
+        <i class="fas fa-lock"></i> Close
+      </span>
+    `);
 
     $row.find('.js-approve, .js-reject').prop('disabled', true);
+    applyIncidentFilters();
   });
 
-  // ======================
-  // Submit follow-up:
-  // - status jadi OPEN + note
-  // (tinggal sambungkan ke backend/AJAX/Livewire kalau sudah)
-  // ======================
+  // Submit follow-up -> open + note
   $('#followUpIncidentForm').on('submit', function (e) {
     e.preventDefault();
 
@@ -577,37 +621,32 @@
 
     const $row = $(`tr[data-id="${id}"]`);
 
-    // contoh ambil pengendalian utk dikirim ke backend
-    const pengendalian = ($('#ifuPengendalian').val() || '').trim();
-
     $row.attr('data-approval', 'approved');
     $row.attr('data-process-status', 'open');
 
-    $row.find('.js-status-cell').html(
-      renderProcessStatus('open', 'Menunggu tindak lanjut dari PIC')
-    );
+    $row.find('.js-status-cell').html(`
+      <div class="d-flex flex-column align-items-center" style="gap:.25rem;">
+        <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#3c8dbc; border:0;">
+          <i class="fas fa-folder-open"></i> Open
+        </span>
+        <small class="text-muted font-weight-bold" style="font-size:.75rem; white-space:nowrap;">Pending : PIC</small>
+      </div>
+    `);
 
     $row.find('.js-approve, .js-reject').prop('disabled', true);
-
     $('#modalFollowUpIncident').modal('hide');
-
-    // console.log({ id, pengendalian });
+    applyIncidentFilters();
   });
 
-  // ======================
-  // Reset form modal saat ditutup
-  // ======================
+  // Reset modal
   $('#modalFollowUpIncident').on('hidden.bs.modal', function () {
-    const form = document.getElementById('followUpIncidentForm');
-    form.reset();
+    document.getElementById('followUpIncidentForm').reset();
     $('#followUpIncidentForm').removeClass('was-validated');
-
     __pendingApproveRowId = null;
 
     $('#ifuId').val('');
-    $('#ifuNama,#ifuJenis,#ifuLokasi,#ifuTanggal').val('');
-    $('#ifuTemuan').val('');
-    $('#ifuPengendalian').val('');
+    $('#ifuIdLaporan,#ifuJenis,#ifuDepartemen,#ifuLokasi,#ifuTanggal').val('');
+    $('#ifuTemuan,#ifuDampak,#ifuPerbaikan,#ifuPengendalian').val('');
   });
 </script>
 @endpush

@@ -31,7 +31,7 @@ Route::prefix('hse')->name('hse.')->group(function () {
     Route::view('/dashboard', 'livewire.h-s-e.dashboard')->name('dashboard');
     Route::view('/accident',  'livewire.h-s-e.accident-report')->name('accident');
     Route::view('/incident',  'livewire.h-s-e.incident-report')->name('incident');
-    Route::view('/perbaikan', 'livewire.h-s-e.perbaikan-report')->name('perbaikan');
+    Route::view('/report', 'livewire.h-s-e.report')->name('report');
 });
 
 /*
@@ -51,9 +51,14 @@ Route::prefix('pic')->name('pic.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('hse-manager')->name('hse.manager.')->group(function () {
-    Route::view('/dashboard', 'livewire.h-s-e-manager.dashboard')->name('dashboard');
-
-    // kalau manager belum ada halaman accident/incident, boleh dihapus dulu
-    Route::view('/accident', 'livewire.h-s-e-manager.accident-report')->name('accident');
-    Route::view('/incident', 'livewire.h-s-e-manager.incident-report')->name('incident');
+    Route::view('/dashboard', 'livewire.h-s-e-manager.dashboard')
+        ->name('dashboard');
+    Route::view('/accident', 'livewire.h-s-e-manager.accident-report')
+        ->name('accident');
+    Route::view('/incident', 'livewire.h-s-e-manager.incident-report')
+        ->name('incident');
+    Route::view('/report', 'livewire.h-s-e-manager.report')
+        ->name('report');
+    Route::view('/plan-tindak-lanjut', 'livewire.h-s-e-manager.plan')
+        ->name('plan-tindak-lanjut');
 });

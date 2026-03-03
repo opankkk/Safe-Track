@@ -68,13 +68,24 @@
           </a>
         </li>
 
-        {{-- LAPORAN PERBAIKAN (RIWAYAT) - hanya HSE --}}
-        @if ($module === 'hse')
+        {{-- LAPORAN PERBAIKAN (RIWAYAT) - HSE & HSE MANAGER --}}
+        @if (in_array($module, ['hse', 'hse-manager']))
           <li class="nav-item">
-            <a href="{{ route('hse.perbaikan') }}"
+            <a href="{{ route($routePrefix.'report') }}"
                class="nav-link @yield('menu-perbaikan-active')">
               <i class="nav-icon fas fa-tools"></i>
               <p>Laporan Perbaikan</p>
+            </a>
+          </li>
+        @endif
+
+        {{-- PLAN TINDAK LANJUT - hanya HSE MANAGER --}}
+        @if ($module === 'hse-manager')
+          <li class="nav-item">
+            <a href="{{ route($routePrefix.'plan-tindak-lanjut') }}"
+               class="nav-link @yield('menu-plan-tindak-lanjut-active')">
+              <i class="nav-icon fas fa-clipboard-check"></i>
+              <p>Plan Tindak Lanjut</p>
             </a>
           </li>
         @endif
