@@ -8,7 +8,9 @@
 
 {{-- kalau halaman auth (login/register/forgot), tampilkan konten saja --}}
 @if(View::hasSection('is-auth'))
-  @yield('content')
+  <div class="auth-wrapper">
+    @yield('content')
+  </div>
 @else
 <div class="wrapper">
 
