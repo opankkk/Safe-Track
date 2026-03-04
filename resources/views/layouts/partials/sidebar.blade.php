@@ -90,6 +90,29 @@
           </li>
         @endif
 
+        {{-- SUPERADMIN MENU FOR MANAGER --}}
+        @if (auth()->check() && auth()->user()->role === 'manager')
+          <li class="nav-header">AKSES SUPERADMIN</li>
+          <li class="nav-item">
+            <a href="{{ route('hse.manager.dashboard') }}" class="nav-link {{ $module === 'hse-manager' ? 'active' : '' }}">
+              <i class="nav-icon fas fa-user-tie"></i>
+              <p>Halaman Manager</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('hse.dashboard') }}" class="nav-link {{ $module === 'hse' ? 'active' : '' }}">
+              <i class="nav-icon fas fa-hard-hat"></i>
+              <p>Halaman HSE Officer</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ route('pic.dashboard') }}" class="nav-link {{ $module === 'pic' ? 'active' : '' }}">
+              <i class="nav-icon fas fa-users"></i>
+              <p>Halaman PIC</p>
+            </a>
+          </li>
+        @endif
+
       </ul>
 
     </nav>

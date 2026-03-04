@@ -2,15 +2,17 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => view('welcome'));
-
+Route::get('/', function () {
+    return redirect()->route('user.login');
+});
 /*
 |--------------------------------------------------------------------------
 | AUTH (Frontend Only)
 |--------------------------------------------------------------------------
 */
-Route::view('/auth/login', 'livewire.auth.login')->name('user.login');
-Route::view('/auth/forgotpw', 'livewire.auth.forgotpw')->name('user.forgotpw');
+Route::get('/auth/login', \App\Livewire\Auth\Login::class)->name('user.login');
+Route::get('/auth/forgotpw', \App\Livewire\Auth\Forgotpw::class)->name('user.forgotpw');
+Route::get('/auth/resetpw/{token}', \App\Livewire\Auth\Resetpw::class)->name('password.reset');
 
 /*
 |--------------------------------------------------------------------------

@@ -1,10 +1,7 @@
-@extends('layouts.app')
-
+<div>
 @section('title', 'Lupa Password | Sistem HSE')
 @section('body-class', 'hold-transition login-page auth-page')
 @section('is-auth', true)
-
-@section('content')
 <div class="auth-bg"></div>
 
 <div class="login-box">
@@ -25,15 +22,19 @@
     </div>
 
     <div class="card-body login-card-body pt-4">
-      <form>
+      <form wire:submit.prevent="sendResetLink">
+        @if (session()->has('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" autocomplete="email">
+          <input type="email" wire:model="email" class="form-control" placeholder="Email" autocomplete="email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
+        @error('email') <span class="text-danger small mt-n2 mb-3 d-block">{{ $message }}</span> @enderror
 
         <button type="submit" class="btn btn-primary btn-block btn-lg auth-btn">
           <span class="fas fa-paper-plane mr-2"></span>
@@ -48,6 +49,8 @@
       </div>
     </div>
   </div>
+  </div>
+</div>
 </div>
 
 @push('styles')
@@ -104,4 +107,4 @@
   .font-weight-semibold{ font-weight: 600; }
 </style>
 @endpush
-@endsection
+</div>
