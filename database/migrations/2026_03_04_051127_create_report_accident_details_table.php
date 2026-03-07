@@ -22,9 +22,9 @@ return new class extends Migration
         $table->date('tanggal');
         $table->time('pukul');
         $table->text('uraian_insiden');
-        $table->string('apd'); // Ya / Tidak
+        $table->string('apd'); 
         $table->string('apd_alasan')->nullable();
-        $table->json('kondisi_korban'); // Untuk checkbox array
+        $table->json('kondisi_korban'); 
         $table->text('kerusakan_property')->nullable();
         $table->text('pencemaran_lingkungan')->nullable();
         $table->string('tindak_lanjut');

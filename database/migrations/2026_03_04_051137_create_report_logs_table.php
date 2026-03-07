@@ -11,10 +11,10 @@ return new class extends Migration
         Schema::create('report_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('report_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained(); // Siapa yang melakukan aksi
-            $table->string('status_from'); // Status sebelum
-            $table->string('status_to');   // Status sesudah
-            $table->text('message');       // Keterangan aksi (misal: "Manager menyetujui Plan")
+            $table->foreignId('user_id')->constrained(); 
+            $table->string('status_from'); 
+            $table->string('status_to');   
+            $table->text('message');       
             $table->timestamps();
         });
     }

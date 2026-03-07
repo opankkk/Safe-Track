@@ -13,8 +13,6 @@ class HseSystemSeeder extends Seeder
 {
     public function run(): void
     {
-        // --- 1. SEED USERS (Role-based) ---
-        
         $hseAdmin = User::create([
             'name'     => 'HSE Officer',
             'email'    => 'hse@pamitra.co.id',

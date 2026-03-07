@@ -11,11 +11,11 @@ return new class extends Migration
         Schema::create('report_plans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('report_id')->constrained()->onDelete('cascade');
-            $table->foreignId('uploaded_by')->constrained('users'); // PIC yang upload
-            $table->string('file_path'); // Path dokumen rencana
+            $table->foreignId('uploaded_by')->constrained('users'); 
+            $table->string('file_path'); 
             $table->text('description')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->text('manager_note')->nullable(); // Alasan jika ditolak manager
+            $table->text('manager_note')->nullable(); 
             $table->timestamps();
         });
     }

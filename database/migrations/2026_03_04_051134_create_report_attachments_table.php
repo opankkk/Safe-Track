@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('report_id')->constrained()->onDelete('cascade');
             $table->string('file_path');
             $table->string('file_name');
-            $table->string('category'); // e.g., 'evidence', 'initial_doc'
+            $table->string('category'); 
             $table->timestamps();
         });
     }

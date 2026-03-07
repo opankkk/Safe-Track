@@ -20,8 +20,8 @@ Route::get('/auth/resetpw/{token}', \App\Livewire\Auth\Resetpw::class)->name('pa
 |--------------------------------------------------------------------------
 */
 Route::prefix('public/report')->name('public.report.')->group(function () {
-    Route::view('/accident', 'livewire.public.report-accident')->name('accident');
-    Route::view('/unsafe',   'livewire.public.report-unsafe')->name('unsafe');
+    Route::get('/accident', \App\Livewire\Public\ReportAccident::class)->name('accident');
+    Route::get('/unsafe', \App\Livewire\Public\ReportUnsafe::class)->name('unsafe');
 });
 
 /*
