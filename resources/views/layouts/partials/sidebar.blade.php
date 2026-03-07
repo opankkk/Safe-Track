@@ -22,7 +22,7 @@
   };
 @endphp
 
-<aside class="main-sidebar sidebar-light-primary elevation-4">
+<aside class="main-sidebar sidebar-light-primary elevation-4 d-flex flex-column">
 
   {{-- Brand --}}
   <a href="{{ route($routePrefix.'dashboard') }}" class="brand-link">
@@ -117,4 +117,17 @@
 
     </nav>
   </div>
+
+  {{-- ================= LOGOUT BUTTON - POSISI PALING BAWAH ================= --}}
+  <div class="mt-auto p-3 border-top">
+    <form method="POST" action="{{ route('logout') }}" id="logout-form">
+      @csrf
+      <a href="#" 
+         class="btn btn-block btn-outline-danger btn-sm font-weight-bold" 
+         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i class="fas fa-sign-out-alt mr-2"></i> Logout
+      </a>
+    </form>
+  </div>
+
 </aside>

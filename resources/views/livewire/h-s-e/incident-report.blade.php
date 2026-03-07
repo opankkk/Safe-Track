@@ -17,37 +17,6 @@
   <li class="breadcrumb-item active">Laporan Temuan</li>
 @endsection
 
-@push('styles')
-<style>
-  /* cuma yang gak ada utility-nya */
-  #incidentTable{ table-layout: fixed; width:100%; }
-  #incidentTable th, #incidentTable td{ vertical-align: middle; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-
-  .clamp-2{
-    white-space: normal !important;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .wrap-full{
-    white-space: normal !important;
-    overflow: visible;
-    text-overflow: initial;
-    line-height: 1.5;
-  }
-
-  /* modal follow-up biar scroll + footer tetap */
-  #modalFollowUpIncident .modal-dialog{ max-width: 900px; }
-  #modalFollowUpIncident .modal-content{ max-height: calc(100vh - 3rem); overflow:hidden; }
-  #modalFollowUpIncident .modal-body{ overflow-y:auto; max-height: calc(100vh - 3rem - 120px); }
-  #modalFollowUpIncident .modal-footer{
-    position: sticky; bottom:0; background:#fff; z-index:2;
-    border-top: 1px solid rgba(0,0,0,.1);
-  }
-</style>
-@endpush
-
 @section('content')
 <div class="container-fluid">
 

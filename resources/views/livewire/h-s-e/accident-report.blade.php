@@ -22,102 +22,6 @@
 @endsection
 
 
-{{-- ================= STYLE (Scoped Clean) ================= --}}
-@push('styles')
-<style>
-.page-hse-accident .table td,
-.page-hse-accident .table th{
-  vertical-align: middle;
-}
-
-/* Button */
-.page-hse-accident .btn-round-sm{
-  padding:.25rem .55rem;
-  border-radius:.4rem;
-}
-.page-hse-accident .btn-action{
-  font-weight:600;
-  border-radius:.4rem;
-  padding:.35rem .75rem;
-}
-
-/* Badge */
-.page-hse-accident .badge-pillish{
-  padding:.5rem .75rem;
-  border-radius:.4rem;
-  display:inline-flex;
-  align-items:center;
-  gap:.35rem;
-  font-weight:600;
-  color:#fff !important;
-  border:0 !important;
-}
-.page-hse-accident .st-pending{ background:#ff851b !important; }
-.page-hse-accident .st-open{ background:#3c8dbc !important; }
-.page-hse-accident .st-close{ background:#001f3f !important; }
-
-/* Status wrap */
-.page-hse-accident .status-wrap{
-  display:inline-flex;
-  flex-direction:column;
-  align-items:center;
-  line-height:1.1;
-  gap:.25rem;
-}
-.page-hse-accident .status-note{
-  font-size:.75rem;
-  color:#6c757d;
-  font-weight:600;
-  white-space:nowrap;
-}
-
-/* Truncate */
-.page-hse-accident .truncate-2{
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-}
-
-/* Filter & Pager */
-.page-hse-accident .filter-select{
-  border-radius:.4rem;
-  font-weight:600;
-}
-.page-hse-accident .pager-btn{
-  border-radius:.4rem;
-  font-weight:600;
-  padding:.35rem .75rem;
-}
-.page-hse-accident .pager-btn:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
-
-/* Modal FollowUp */
-.page-hse-accident #modalFollowUp .modal-dialog{
-  max-width:900px;
-}
-.page-hse-accident #modalFollowUp .modal-content{
-  max-height:calc(100vh - 3rem);
-  overflow:hidden;
-}
-.page-hse-accident #modalFollowUp .modal-body{
-  overflow-y:auto;
-  max-height:calc(100vh - 3rem - 120px);
-}
-.page-hse-accident #modalFollowUp .modal-footer{
-  position:sticky;
-  bottom:0;
-  background:#fff;
-  z-index:2;
-  border-top:1px solid rgba(0,0,0,.1);
-}
-</style>
-@endpush
-
-
-
 {{-- ================= CONTENT ================= --}}
 @section('content')
 <div class="page-hse-accident">
@@ -199,7 +103,16 @@
               </td>
 
               <td class="text-right">
-                <button class="btn btn-success btn-sm btn-action js-approve" data-id="1">
+                {{-- Tambahkan data attributes untuk modal --}}
+                <button class="btn btn-success btn-sm btn-action js-approve" 
+                        data-id="1"
+                        data-no-laporan="AR-2026-0001"
+                        data-jenis="First Aid"
+                        data-departemen="Workshop"
+                        data-lokasi="Area Loading"
+                        data-tanggal="24 Nov 2025, 09:15"
+                        data-uraian="Tangan tergores saat pemindahan material, korban langsung dibersihkan dan diberi antiseptik."
+                        data-tindak-lanjut="Penanganan P3K">
                   <i class="fas fa-check mr-1"></i> Setujui
                 </button>
                 <button class="btn btn-danger btn-sm btn-action js-reject" data-id="1">
@@ -341,4 +254,263 @@
 
 </div>
 </div>
+
+{{-- ================= MODAL FORM APPROVAL ================= --}}
+{{-- ================= MODAL FORM APPROVAL ================= --}}
+<div class="modal fade" id="modalApprovalAccident"
+     data-backdrop="static" data-keyboard="false"
+     tabindex="-1" role="dialog"
+     aria-labelledby="modalApprovalAccidentLabel" aria-hidden="true">
+
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalApprovalAccidentLabel">
+          <i class="fas fa-clipboard-list mr-2"></i>Form Persetujuan Laporan
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form id="approvalAccidentForm" novalidate>
+        <div class="modal-body">
+          <input type="hidden" id="aaId" name="report_id" value="">
+
+          {{-- Read-only fields dengan bg-light --}}
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="aaNoLaporan">No Laporan</label>
+                <input type="text" class="form-control bg-light" id="aaNoLaporan" name="no_laporan" readonly>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="aaJenis">Jenis Insiden</label>
+                <input type="text" class="form-control bg-light" id="aaJenis" name="jenis" readonly>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="aaDepartemen">Departemen</label>
+                <input type="text" class="form-control bg-light" id="aaDepartemen" name="departemen" readonly>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="aaLokasi">Lokasi</label>
+                <input type="text" class="form-control bg-light" id="aaLokasi" name="lokasi" readonly>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="aaTanggal">Tanggal & Waktu Insiden</label>
+            <input type="text" class="form-control bg-light" id="aaTanggal" name="tanggal" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="aaUraian">Uraian Insiden</label>
+            <textarea class="form-control bg-light" id="aaUraian" name="uraian" rows="2" readonly></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="aaTindakLanjut">Tindak Lanjut Korban</label>
+            <textarea class="form-control bg-light" id="aaTindakLanjut" name="tindak_lanjut" rows="2" readonly></textarea>
+          </div>
+
+          <hr class="my-4">
+
+          {{-- Input fields yang wajib diisi --}}
+          <div class="form-group">
+            <label for="aaTanggalApproval">Tanggal Persetujuan <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" id="aaTanggalApproval" name="tanggal_approval" required>
+            <div class="invalid-feedback">Harap pilih tanggal persetujuan.</div>
+          </div>
+
+          <div class="form-group mb-0">
+            <label for="aaPengendalian">Pengendalian yang Disarankan <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="aaPengendalian" name="pengendalian_disarankan"
+                      rows="4" placeholder="Contoh: Lakukan safety briefing, pasang guardrail, periksa APD, dll..." required></textarea>
+            <div class="invalid-feedback">Harap isi pengendalian yang disarankan.</div>
+            <small class="form-text text-muted">Isikan rekomendasi tindakan pencegahan atau pengendalian risiko.</small>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+            <i class="fas fa-times mr-1"></i> Batal
+          </button>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="fas fa-save mr-1"></i> Simpan Tindak Lanjut
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+  // Helper: normalize text untuk filter (jika diperlukan nanti)
+  function normalizeText(s){ return (s || '').toString().toLowerCase().trim(); }
+
+  // Variable untuk menyimpan ID row yang sedang diproses
+  let __pendingApproveRowId = null;
+
+  // === MODAL APPROVAL LOGIC ===
+  
+  // 1. Buka modal ketika tombol Setujui diklik (hanya untuk status pending)
+  $(document).on('click', '.js-approve', function () {
+    const $btn = $(this);
+    const id = $btn.data('id');
+    const $row = $(`tr[data-id="${id}"]`);
+    
+    // Pastikan hanya row dengan approval='none' dan process-status='pending'
+    if ($row.attr('data-approval') !== 'none' || $row.attr('data-process-status') !== 'pending') {
+      return;
+    }
+
+    // Simpan ID untuk digunakan saat submit
+    __pendingApproveRowId = id;
+
+    // Populate form modal dengan data dari button
+    $('#aaId').val(id);
+    $('#aaNoLaporan').val($btn.data('no-laporan') || '');
+    $('#aaJenis').val($btn.data('jenis') || '');
+    $('#aaDepartemen').val($btn.data('departemen') || '');
+    $('#aaLokasi').val($btn.data('lokasi') || '');
+    $('#aaTanggal').val($btn.data('tanggal') || '');
+    $('#aaUraian').val($btn.data('uraian') || '');
+    $('#aaTindakLanjut').val($btn.data('tindak-lanjut') || '');
+
+    // Reset form & set tanggal default hari ini
+    $('#approvalAccidentForm').removeClass('was-validated');
+    $('#aaTanggalApproval').val(new Date().toISOString().split('T')[0]);
+    $('#aaPengendalian').val('');
+
+    // Tampilkan modal
+    $('#modalApprovalAccident').modal('show');
+  });
+
+  // 2. Handle submit form approval
+  $('#approvalAccidentForm').on('submit', function (e) {
+    e.preventDefault();
+    const form = this;
+
+    // Validasi Bootstrap
+    if (!form.checkValidity()) {
+      e.stopPropagation();
+      $(form).addClass('was-validated');
+      return;
+    }
+
+    const id = __pendingApproveRowId;
+    if (!id) return;
+
+    const $row = $(`tr[data-id="${id}"]`);
+    const pengendalian = $('#aaPengendalian').val();
+    const tglApproval = $('#aaTanggalApproval').val();
+
+    // === UPDATE UI ROW ===
+    // Update data attributes
+    $row.attr('data-approval', 'approved');
+    $row.attr('data-process-status', 'open');
+
+    // Update badge status menjadi Open + note
+    $row.find('.js-status-cell').html(`
+      <div class="d-flex flex-column align-items-center" style="gap:.25rem;">
+        <span class="badge badge-pillish st-open">
+          <i class="fas fa-folder-open"></i> Open
+        </span>
+        <small class="text-muted" style="font-size:.7rem;">Pending : PIC</small>
+      </div>
+    `);
+
+    // Optional: Update kolom tindak lanjut dengan pengendalian yang diinput
+    // $row.find('td:nth-child(7)').text(pengendalian);
+
+    // Disable tombol aksi
+    $row.find('.js-approve, .js-reject').prop('disabled', true);
+
+    // Tutup modal & reset
+    $('#modalApprovalAccident').modal('hide');
+    
+    // Refresh filter jika ada (opsional)
+    if (typeof applyAccidentFilters === 'function') {
+      applyAccidentFilters();
+    }
+  });
+
+  // 3. Reset modal ketika ditutup
+  $('#modalApprovalAccident').on('hidden.bs.modal', function () {
+    document.getElementById('approvalAccidentForm').reset();
+    $('#approvalAccidentForm').removeClass('was-validated');
+    __pendingApproveRowId = null;
+  });
+
+  // === REJECT LOGIC (tetap seperti sebelumnya) ===
+  $(document).on('click', '.js-reject', function () {
+    const id = $(this).data('id');
+    const $row = $(`tr[data-id="${id}"]`);
+    if ($row.attr('data-approval') !== 'none') return;
+
+    $row.attr('data-approval', 'rejected');
+    $row.attr('data-process-status', 'close');
+
+    $row.find('.js-status-cell').html(`
+      <span class="badge badge-pillish st-close">
+        <i class="fas fa-lock"></i> Close
+      </span>
+    `);
+
+    $row.find('.js-approve, .js-reject').prop('disabled', true);
+    
+    if (typeof applyAccidentFilters === 'function') {
+      applyAccidentFilters();
+    }
+  });
+
+  // === FILTER LOGIC (sesuaikan dengan kebutuhan) ===
+  function applyAccidentFilters(){
+    const statusVal = $('#statusFilter').val();
+    const keyword = normalizeText($('input[placeholder="Cari..."]').val());
+    const $rows = $('#accidentTable tbody tr');
+    const total = $rows.length;
+    let shown = 0, from = 0, to = 0;
+
+    $rows.each(function(i){
+      const $row = $(this);
+      const rowStatus = normalizeText($row.attr('data-process-status'));
+      const rowText = normalizeText($row.text());
+      const okStatus = (statusVal === 'all') ? true : (rowStatus === statusVal);
+      const okSearch = (!keyword) ? true : rowText.includes(keyword);
+      const isShow = okStatus && okSearch;
+      
+      $row.toggle(isShow);
+      if (isShow) {
+        shown++;
+        if (from === 0) from = i + 1;
+        to = i + 1;
+      }
+    });
+
+    $('#showFrom').text(shown > 0 ? from : 0);
+    $('#showTo').text(to);
+    $('#totalRows').text(total);
+    $('#filterHint').text(statusVal !== 'all' ? ` (Filter: ${statusVal})` : '');
+  }
+
+  $(document).on('change', '#statusFilter', applyAccidentFilters);
+  $(document).on('input', 'input[placeholder="Cari..."]', applyAccidentFilters);
+  $(document).ready(applyAccidentFilters);
+</script>
+@endpush

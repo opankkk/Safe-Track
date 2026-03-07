@@ -64,3 +64,12 @@ Route::prefix('hse-manager')->name('hse.manager.')->group(function () {
     Route::view('/plan-tindak-lanjut', 'livewire.h-s-e-manager.plan')
         ->name('plan-tindak-lanjut');
 });
+
+Route::post('/logout', function () {
+    Auth::logout();
+    
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    
+    return redirect('/auth/login'); // ← Ganti dari /login ke /auth/login
+})->name('logout');
