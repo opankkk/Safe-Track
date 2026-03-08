@@ -1,10 +1,10 @@
+{{-- resources/views/livewire/h-s-e/dashboard.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Dashboard | Sistem HSE')
 @section('menu-dashboard-active', 'active')
 @section('hide-navbar', true)
 
-{{-- Header kiri seperti screenshot --}}
 @section('page-title')
   <div class="d-flex flex-column">
     <small class="text-muted">Periode Laporan</small>
@@ -12,248 +12,297 @@
   </div>
 @endsection
 
-{{-- Breadcrumb bisa dikosongkan kalau tidak dipakai --}}
 @section('breadcrumb')
   <li class="breadcrumb-item"><a href="#">Home</a></li>
   <li class="breadcrumb-item active">Dashboard</li>
 @endsection
 
-@push('styles')
-<style>
-
- .sidebar-light-primary .nav-sidebar .nav-link {
-      color: #333;
-  }
-
-  .sidebar-light-primary .nav-sidebar .nav-link:hover {
-      background-color: #f2f4f7;
-      color: #0d6efd;
-  }
-
-  .sidebar-light-primary .nav-sidebar .nav-link.active {
-      background-color: #e7f1ff;
-      color: #0d6efd;
-      font-weight: 600;
-  }
-  /* Biar layout mirip screenshot */
-  .content-header { padding-bottom: 0; }
-  .dash-topbar { display:flex; justify-content:space-between; align-items:flex-start; gap: 12px; }
-  .dash-filter { display:flex; gap: 8px; align-items:center; }
-
-  /* Card metrik gradient */
-  .metric-card {
-    border-radius: 10px;
-    color: #fff;
-    min-height: 120px;
-    position: relative;
-    overflow: hidden;
-  }
-  .metric-card .metric-icon {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    opacity: .85;
-    font-size: 18px;
-  }
-  .metric-card .metric-value {
-    font-size: 26px;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-  .metric-card .metric-unit {
-    font-size: 12px;
-    opacity: .95;
-  }
-  .metric-card .metric-label {
-    font-size: 12px;
-    opacity: .95;
-  }
-  .metric-card .metric-dot {
-    position: absolute;
-    left: 50%;
-    top: 65%;
-    transform: translate(-50%, -50%);
-    width: 6px;
-    height: 6px;
-    background: rgba(255,255,255,.85);
-    border-radius: 999px;
-  }
-
-  /* Gradients */
-  .g-blue   { background: linear-gradient(135deg, #1e88e5, #1565c0); }
-  .g-green  { background: linear-gradient(135deg, #2ecc71, #1e9c5a); }
-  .g-orange { background: linear-gradient(135deg, #ffa000, #f57c00); }
-  .g-pink   { background: linear-gradient(135deg, #ff4b7d, #d81b60); }
-  .g-purple { background: linear-gradient(135deg, #7c4dff, #512da8); }
-
-  /* Card bawah */
-  .kpi-card {
-    border-radius: 10px;
-    color: #fff;
-    min-height: 86px;
-  }
-  .kpi-card .kpi-big { font-size: 26px; font-weight: 800; line-height: 1; }
-  .kpi-card .kpi-sub { font-size: 12px; opacity: .95; }
-  .kpi-red    { background: linear-gradient(135deg, #ff5a6a, #f50057); }
-  .kpi-amber  { background: linear-gradient(135deg, #ffb74d, #fb8c00); }
-  .kpi-green  { background: linear-gradient(135deg, #66bb6a, #2e7d32); }
-
-  /* Chart area placeholder */
-  .chart-placeholder {
-    height: 220px;
-  }
-</style>
-@endpush
-
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid d-flex flex-column"
+     style="min-height: calc(100vh - 170px);">
 
-  {{-- Topbar: kiri judul sudah di page-title, kanan filter --}}
-  <div class="dash-topbar mb-3">
-    <div></div>
-    <div class="dash-filter">
-      <select class="form-control form-control-sm" style="min-width: 220px;">
-        <option>November 2025</option>
-        <option>Oktober 2025</option>
-        <option>September 2025</option>
-      </select>
-      <button class="btn btn-primary btn-sm">Filter</button>
-      <button class="btn btn-light btn-sm">Reset</button>
-    </div>
-  </div>
-
-  {{-- ROW 1: 5 metric cards --}}
+  {{-- METRIC --}}
   <div class="row">
-    <div class="col-lg-3 col-md-6 mb-3">
-      <div class="metric-card g-blue p-3">
-        <i class="metric-icon fas fa-users"></i>
-        <div class="metric-value">0</div>
-        <div class="metric-label">Orang</div>
-        <div class="metric-unit">Jumlah Pegawai</div>
-        <div class="metric-dot"></div>
+    {{-- Accident --}}
+    <div class="col-lg-4 col-md-6 mb-3">
+      <div class="p-3 text-white position-relative overflow-hidden"
+           style="border-radius:10px; min-height:120px; background:linear-gradient(135deg,#ff4b7d,#d81b60);">
+        <i class="fas fa-notes-medical position-absolute"
+           style="top:14px; right:14px; opacity:.85; font-size:18px;"></i>
+
+        <div style="font-size:26px; font-weight:800; line-height:1; margin-bottom:4px;">0</div>
+        <div style="font-size:12px; opacity:.95;">Laporan</div>
+        <div style="font-size:12px; opacity:.95;">Total Accident Report</div>
+
+        <div class="position-absolute"
+             style="left:50%; top:65%; transform:translate(-50%,-50%); width:6px; height:6px; background:rgba(255,255,255,.85); border-radius:999px;"></div>
       </div>
     </div>
 
-    <div class="col-lg-3 col-md-6 mb-3">
-      <div class="metric-card g-green p-3">
-        <i class="metric-icon far fa-clock"></i>
-        <div class="metric-value">0</div>
-        <div class="metric-label">Jam</div>
-        <div class="metric-unit">Jam Kerja Normal</div>
-        <div class="metric-dot"></div>
+    {{-- Unsafe Action --}}
+    <div class="col-lg-4 col-md-6 mb-3">
+      <div class="p-3 text-white position-relative overflow-hidden"
+           style="border-radius:10px; min-height:120px; background:linear-gradient(135deg,#ffa000,#f57c00);">
+        <i class="fas fa-user-times position-absolute"
+           style="top:14px; right:14px; opacity:.85; font-size:18px;"></i>
+
+        <div style="font-size:26px; font-weight:800; line-height:1; margin-bottom:4px;">0</div>
+        <div style="font-size:12px; opacity:.95;">Laporan</div>
+        <div style="font-size:12px; opacity:.95;">Unsafe Action</div>
+
+        <div class="position-absolute"
+             style="left:50%; top:65%; transform:translate(-50%,-50%); width:6px; height:6px; background:rgba(255,255,255,.85); border-radius:999px;"></div>
       </div>
     </div>
 
-    <div class="col-lg-2 col-md-6 mb-3">
-      <div class="metric-card g-orange p-3">
-        <i class="metric-icon far fa-clock"></i>
-        <div class="metric-value">0</div>
-        <div class="metric-label">Jam</div>
-        <div class="metric-unit">Jam Kerja Lembur</div>
-        <div class="metric-dot"></div>
-      </div>
-    </div>
+    {{-- Unsafe Condition --}}
+    <div class="col-lg-4 col-md-6 mb-3">
+      <div class="p-3 text-white position-relative overflow-hidden"
+           style="border-radius:10px; min-height:120px; background:linear-gradient(135deg,#1e88e5,#1565c0);">
+        <i class="fas fa-exclamation-triangle position-absolute"
+           style="top:14px; right:14px; opacity:.85; font-size:18px;"></i>
 
-    <div class="col-lg-2 col-md-6 mb-3">
-      <div class="metric-card g-pink p-3">
-        <i class="metric-icon fas fa-notes-medical"></i>
-        <div class="metric-value">0</div>
-        <div class="metric-label">Orang</div>
-        <div class="metric-unit">Pegawai Sakit</div>
-        <div class="metric-dot"></div>
-      </div>
-    </div>
+        <div style="font-size:26px; font-weight:800; line-height:1; margin-bottom:4px;">0</div>
+        <div style="font-size:12px; opacity:.95;">Laporan</div>
+        <div style="font-size:12px; opacity:.95;">Unsafe Condition</div>
 
-    <div class="col-lg-2 col-md-6 mb-3">
-      <div class="metric-card g-purple p-3">
-        <i class="metric-icon fas fa-user-clock"></i>
-        <div class="metric-value">0</div>
-        <div class="metric-label">Jam</div>
-        <div class="metric-unit">Jam Kerja Hilang</div>
-        <div class="metric-dot"></div>
+        <div class="position-absolute"
+             style="left:50%; top:65%; transform:translate(-50%,-50%); width:6px; height:6px; background:rgba(255,255,255,.85); border-radius:999px;"></div>
       </div>
     </div>
   </div>
 
-  {{-- ROW 2: 2 charts --}}
-  <div class="row">
-    <div class="col-lg-6 mb-3">
-      <div class="card" style="border-radius: 10px;">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start">
+  {{-- CHART + NOTIF (FULL HEIGHT) --}}
+  <div class="row flex-grow-1 align-items-stretch">
+
+    {{-- LEFT: Chart --}}
+    <div class="col-lg-9 mb-3 d-flex">
+      <div class="card d-flex flex-column w-100" style="border-radius:10px;">
+        <div class="card-body d-flex flex-column">
+
+          <div class="d-flex justify-content-between align-items-start flex-wrap" style="gap:10px;">
             <div>
-              <div class="font-weight-bold">0</div>
-              <small class="text-muted">0 item last period</small>
-              <div class="mt-2 font-weight-bold">Laporan Kecelakaan</div>
+              <div class="font-weight-bold" style="font-size:16px;">Lagging Indicator</div>
+              <small class="text-muted">Diagram batang per bulan (stacked) + total.</small>
+            </div>
+
+            <div class="d-flex align-items-center" style="gap:8px;">
+              <small class="text-muted">Tahun</small>
+              <select id="filterYearLagging" class="form-control form-control-sm" style="min-width:120px;">
+                <option value="2025" selected>2025</option>
+                <option value="2024">2024</option>
+                <option value="2023">2023</option>
+              </select>
             </div>
           </div>
-          <div class="chart-placeholder mt-3">
-            <canvas id="chartAccident"></canvas>
+
+          <div class="mt-3 flex-grow-1" style="min-height:280px;">
+            <canvas id="chartLagging"></canvas>
           </div>
+
         </div>
       </div>
     </div>
 
-    <div class="col-lg-6 mb-3">
-      <div class="card" style="border-radius: 10px;">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-start">
+    {{-- RIGHT: Notifikasi --}}
+    <div class="col-lg-3 mb-3 d-flex">
+      <div class="card d-flex flex-column w-100" style="border-radius:10px;">
+        <div class="card-body d-flex flex-column">
+
+          <div class="d-flex justify-content-between align-items-start flex-wrap" style="gap:10px;">
             <div>
-              <div class="font-weight-bold">0</div>
-              <small class="text-success">↑ 5 item last period</small>
-              <div class="mt-2 font-weight-bold">Laporan Observasi</div>
+              <div class="font-weight-bold" style="font-size:18px;">Notifikasi</div>
+              <small class="text-muted">Approval laporan Unsafe & Accident.</small>
             </div>
           </div>
-          <div class="chart-placeholder mt-3">
-            <canvas id="chartObservation"></canvas>
+
+          <div class="mt-3 flex-grow-1 overflow-auto" style="padding-right:6px;">
+            <div id="notifWrap" class="d-flex flex-column" style="gap:12px;">
+
+              {{-- fallback jika JS mati --}}
+              <a href="{{ url('/hse/accident') }}" class="d-block text-decoration-none" style="color:inherit; border-radius:14px;">
+                <div class="d-flex text-white"
+                     style="gap:12px; padding:14px; border-radius:14px; background:#ff851b;">
+                  <div class="d-flex align-items-center justify-content-center"
+                       style="width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,.16); flex:0 0 44px; font-size:18px;">
+                    <i class="fas fa-clock"></i>
+                  </div>
+                  <div>
+                    <div style="font-weight:800; font-size:15px; margin-bottom:6px; line-height:1.2;">
+                      Accident Report - AC-2026-0001 (pending)
+                    </div>
+                    <div style="font-size:13px; color:rgba(255,255,255,.92); font-weight:600;">Baru saja</div>
+                  </div>
+                </div>
+              </a>
+
+            </div>
           </div>
+
         </div>
       </div>
     </div>
+
   </div>
-
-  {{-- ROW 3: KPI cards --}}
-  <div class="row">
-    <div class="col-lg-4 mb-3">
-      <div class="kpi-card kpi-red p-3 d-flex align-items-center justify-content-between">
-        <div>
-          <div class="kpi-big">0.00%</div>
-          <div class="kpi-sub">Severity Rate</div>
-        </div>
-        <i class="fas fa-percentage" style="opacity:.85;"></i>
-      </div>
-    </div>
-
-    <div class="col-lg-4 mb-3">
-      <div class="kpi-card kpi-amber p-3">
-        <div class="d-flex justify-content-between">
-          <div>
-            <div class="kpi-big">0%</div>
-            <div class="kpi-sub">Masuk</div>
-          </div>
-          <div>
-            <div class="kpi-big">0%</div>
-            <div class="kpi-sub">Keluar</div>
-          </div>
-        </div>
-        <div class="mt-2 d-flex align-items-center justify-content-between">
-          <div class="font-weight-bold">Limbah B3</div>
-          <i class="fas fa-recycle" style="opacity:.85;"></i>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4 mb-3">
-      <div class="kpi-card kpi-green p-3 d-flex align-items-center justify-content-between">
-        <div>
-          <div class="kpi-big">0.00%</div>
-          <div class="kpi-sub">Frequency Rate</div>
-        </div>
-        <i class="fas fa-chart-bar" style="opacity:.85;"></i>
-      </div>
-    </div>
-  </div>
-
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  // ======================
+  // Chart: Lagging Indicator (dummy front-end)
+  // ======================
+  const labelsMonthTotal = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Total'];
+
+  const laggingDataByYear = {
+    2025: {
+      nearmiss:   [2,0,0,0,1,1,1,1,1,0,0,0,8],
+      firstAid:   [0,0,0,0,1,2,0,0,1,0,0,0,4],
+      medicalAid: [0,0,0,0,0,1,0,0,0,0,0,0,1],
+      heavyAcc:   [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      fatality:   [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      lossDay:    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      propDmg:    [0,0,0,0,0,1,1,0,1,0,0,0,3],
+      majorNC:    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    },
+    2024: {
+      nearmiss:   [1,0,0,0,0,1,0,1,0,0,0,0,3],
+      firstAid:   [0,0,0,0,1,0,0,0,0,0,0,0,1],
+      medicalAid: [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      heavyAcc:   [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      fatality:   [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      lossDay:    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      propDmg:    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      majorNC:    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    },
+    2023: {
+      nearmiss:   [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      firstAid:   [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      medicalAid: [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      heavyAcc:   [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      fatality:   [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      lossDay:    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      propDmg:    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+      majorNC:    [0,0,0,0,0,0,0,0,0,0,0,0,0],
+    }
+  };
+
+  function buildLaggingDatasets(year){
+    const d = laggingDataByYear[year] || laggingDataByYear[2025];
+    return [
+      { label: '1 Nearmiss', data: d.nearmiss },
+      { label: '2 First Aid', data: d.firstAid },
+      { label: '3 Medical Aid', data: d.medicalAid },
+      { label: '4 Heavy Accident', data: d.heavyAcc },
+      { label: '5 Fatality', data: d.fatality },
+      { label: '6 Loss Mandays', data: d.lossDay },
+      { label: '7 Property Damage', data: d.propDmg },
+      { label: '8 Major Non Conformance Finding by Client', data: d.majorNC },
+    ];
+  }
+
+  const ctxLagging = document.getElementById('chartLagging');
+
+  const chartLagging = new Chart(ctxLagging, {
+    type: 'bar',
+    data: {
+      labels: labelsMonthTotal,
+      datasets: buildLaggingDatasets('2025')
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: 'Lagging Indicator 2025' },
+        legend: { position: 'bottom' }
+      },
+      scales: {
+        x: { stacked: true },
+        y: { stacked: true, beginAtZero: true }
+      }
+    }
+  });
+
+  document.getElementById('filterYearLagging').addEventListener('change', function(){
+    const year = this.value;
+    chartLagging.data.datasets = buildLaggingDatasets(year);
+    chartLagging.options.plugins.title.text = `Lagging Indicator ${year}`;
+    chartLagging.update();
+  });
+
+  // ======================
+  // Notifikasi (dummy front-end)
+  // ======================
+  const dummyAccidentRows = [
+    { id: 1, id_laporan: 'AC-2026-0001' },
+    { id: 2, id_laporan: 'AC-2026-0002' },
+    { id: 3, id_laporan: 'AC-2026-0003' },
+  ];
+
+  const dummyIncidentRows = [
+    { id: 1, id_laporan: 'UA-2026-0001' },
+    { id: 2, id_laporan: 'UC-2026-0002' },
+    { id: 3, id_laporan: 'UC-2026-0003' },
+  ];
+
+  const notifDummy = [
+    { status: 'pending', time: 'Baru saja', type: 'accident', ref_id: 1 },
+    { status: 'open',    time: '1 jam lalu', type: 'incident', ref_id: 2 },
+    { status: 'close',   time: 'Kemarin', type: 'accident', ref_id: 3 },
+  ];
+
+  function getNotifMeta(status){
+    if (status === 'pending') return { bg: '#ff851b', icon: 'fas fa-clock' };
+    if (status === 'open')    return { bg: '#3c8dbc', icon: 'fas fa-folder-open' };
+    if (status === 'close')   return { bg: '#001f3f', icon: 'fas fa-lock' };
+    return { bg: '#ff851b', icon: 'fas fa-clock' };
+  }
+
+  function getHrefByType(type){
+    if (type === 'accident') return `{{ url('/hse/accident') }}`;
+    if (type === 'incident') return `{{ url('/hse/incident') }}`;
+    return 'javascript:void(0)';
+  }
+
+  function findRow(type, id){
+    if (type === 'accident') return dummyAccidentRows.find(r => String(r.id) === String(id));
+    if (type === 'incident') return dummyIncidentRows.find(r => String(r.id) === String(id));
+    return null;
+  }
+
+  function renderNotifItem(item){
+    const m = getNotifMeta(item.status);
+    const row = findRow(item.type, item.ref_id);
+
+    const prefix = item.type === 'accident' ? 'Accident Report' : 'Incident Report';
+    const idLaporan = row?.id_laporan || `#${item.ref_id}`;
+    const title = `${prefix} - ${idLaporan} (${String(item.status || 'pending').toLowerCase()})`;
+
+    const card = `
+      <div class="d-flex text-white" style="gap:12px; padding:14px; border-radius:14px; background:${m.bg};">
+        <div class="d-flex align-items-center justify-content-center"
+             style="width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,.16); flex:0 0 44px; font-size:18px;">
+          <i class="${m.icon}"></i>
+        </div>
+        <div>
+          <div style="font-weight:800; font-size:15px; margin-bottom:6px; line-height:1.2;">${title}</div>
+          <div style="font-size:13px; color:rgba(255,255,255,.92); font-weight:600;">${item.time || '-'}</div>
+        </div>
+      </div>
+    `;
+
+    if (item.status === 'pending') {
+      const href = getHrefByType(item.type);
+      return `<a href="${href}" class="d-block text-decoration-none" style="color:inherit; border-radius:14px;">${card}</a>`;
+    }
+
+    return card;
+  }
+
+  const $notifWrap = document.getElementById('notifWrap');
+  if ($notifWrap) {
+    $notifWrap.innerHTML = notifDummy.map(renderNotifItem).join('');
+  }
+</script>
+@endpush

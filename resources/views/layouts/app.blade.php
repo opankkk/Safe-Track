@@ -8,7 +8,10 @@
 
 {{-- kalau halaman auth (login/register/forgot), tampilkan konten saja --}}
 @if(View::hasSection('is-auth'))
-  @yield('content')
+  <div class="auth-wrapper">
+    {{ $slot ?? '' }}
+    @yield('content')
+  </div>
 @else
 <div class="wrapper">
 
@@ -26,6 +29,7 @@
     @include('layouts.partials.content-header')
 
     <section class="content">
+      {{ $slot ?? '' }}
       @yield('content')
     </section>
   </div>

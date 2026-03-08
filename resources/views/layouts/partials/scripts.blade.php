@@ -7,4 +7,6 @@
 <!-- AdminLTE demo (opsional, boleh hapus kalau tidak perlu) -->
 <script src="{{ asset('adminlte3/dist/js/demo.js') }}"></script>
 
+@livewireScripts
+
 @stack('scripts')

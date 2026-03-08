@@ -9,7 +9,10 @@
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <!-- AdminLTE -->
 <link rel="stylesheet" href="{{ asset('adminlte3/dist/css/adminlte.min.css') }}">
+<link rel="stylesheet" href="{{ asset('adminlte3/dist/css/custom.css') }}">
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+@livewireStyles
 
 @stack('styles')
