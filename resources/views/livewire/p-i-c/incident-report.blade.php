@@ -67,8 +67,6 @@
               <th style="width:240px;">Temuan</th>
               <th style="width:190px;">Jenis</th>
               <th style="width:170px;">Tanggal &amp; Waktu</th>
-              <th style="width:240px;">Dampak</th>
-              <th style="width:240px;">Perbaikan</th>
               <th style="width:165px;" class="text-center">Bukti Tindak Lanjut</th>
               <th style="width:150px;" class="text-center">Bukti Perbaikan</th>
               <th style="width:110px;" class="text-center">Bukti</th>
@@ -96,18 +94,6 @@
               </td>
 
               <td>24 Nov 2025 08:30</td>
-
-              <td>
-                <div class="wrap-full" title="Potensi cedera kepala/anggota tubuh karena tidak menggunakan APD.">
-                  Potensi cedera kepala/anggota tubuh karena tidak menggunakan APD.
-                </div>
-              </td>
-
-              <td>
-                <div class="wrap-full" title="Briefing ulang wajib APD, berikan APD yang sesuai, dan lakukan pengawasan rutin.">
-                  Briefing ulang wajib APD, berikan APD yang sesuai, dan lakukan pengawasan rutin.
-                </div>
-              </td>
 
               <td class="text-center js-bukti-tindak-lanjut-cell">
                 <span class="text-muted small">-</span>
@@ -180,17 +166,6 @@
 
               <td>01 Jan 2026 09:10</td>
 
-              <td>
-                <div class="wrap-full" title="Risiko terpeleset/cedera dan potensi kecelakaan material handling.">
-                  Risiko terpeleset/cedera dan potensi kecelakaan material handling.
-                </div>
-              </td>
-
-              <td>
-                <div class="wrap-full" title="Pasang rambu wet floor, bersihkan tumpahan, dan lakukan inspeksi area berkala.">
-                  Pasang rambu wet floor, bersihkan tumpahan, dan lakukan inspeksi area berkala.
-                </div>
-              </td>
 
               <td class="text-center js-bukti-tindak-lanjut-cell">
                 <button type="button" class="btn btn-outline-primary btn-sm" style="border-radius:.4rem;" title="Lihat Bukti Tindak Lanjut">
@@ -253,18 +228,6 @@
 
               <td>02 Jan 2026 10:05</td>
 
-              <td>
-                <div class="wrap-full" title="Risiko tersandung dan jatuh, kerusakan peralatan, serta potensi korsleting.">
-                  Risiko tersandung dan jatuh, kerusakan peralatan, serta potensi korsleting.
-                </div>
-              </td>
-
-              <td>
-                <div class="wrap-full" title="Rapikan kabel dengan cable protector, pasang jalur kabel, dan buat housekeeping checklist.">
-                  Rapikan kabel dengan cable protector, pasang jalur kabel, dan buat housekeeping checklist.
-                </div>
-              </td>
-
               <td class="text-center js-bukti-tindak-lanjut-cell">
                 <button type="button" class="btn btn-outline-primary btn-sm" style="border-radius:.4rem;" title="Lihat Bukti Tindak Lanjut">
                   <i class="far fa-file-alt"></i>
@@ -324,18 +287,6 @@
               </td>
 
               <td>03 Jan 2026 14:20</td>
-
-              <td>
-                <div class="wrap-full" title="Risiko cedera serius akibat benda jatuh (struck by).">
-                  Risiko cedera serius akibat benda jatuh (struck by).
-                </div>
-              </td>
-
-              <td>
-                <div class="wrap-full" title="Stop work, berikan helm, lakukan briefing, dan pastikan kepatuhan APD.">
-                  Stop work, berikan helm, lakukan briefing, dan pastikan kepatuhan APD.
-                </div>
-              </td>
 
               <td class="col-bukti-tl js-bukti-tindak-lanjut-cell">
                 <span class="text-muted small">-</span>
