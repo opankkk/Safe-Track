@@ -21,7 +21,6 @@
   <li class="breadcrumb-item active">Laporan Kerusakan</li>
 @endsection
 
-{{-- ================= CONTENT ================= --}}
 @section('content')
 <div class="page-hse-accident">
 <div class="container-fluid">
@@ -43,9 +42,9 @@
           </select>
 
           <div class="input-group input-group-sm" style="width:220px;">
-            <input type="text" class="form-control" placeholder="Cari...">
+            <input type="text" id="accidentSearchInput" class="form-control" placeholder="Cari...">
             <div class="input-group-append">
-              <button class="btn btn-default">
+              <button class="btn btn-default" id="accidentSearchBtn" type="button">
                 <i class="fas fa-search"></i>
               </button>
             </div>
@@ -60,15 +59,13 @@
         <table class="table table-striped projects mb-0" id="accidentTable">
           <thead>
             <tr>
-              <th class="text-center" style="width:150px;">No Laporan</th>
-              <th>Jenis Insiden</th>
-              <th style="width:140px;">Departemen</th>
-              <th style="width:160px;">Lokasi</th>
-              <th style="width:170px;">Tanggal & Waktu</th>
-              <th style="min-width:260px;">Uraian Insiden</th>
-              <th style="width:190px;">Tindak Lanjut Korban</th>
-              <th class="text-center" style="width:160px;">Status</th>
+              <th class="text-center" style="width:160px;">No Laporan</th>
+              <th style="width:180px;">Jenis Insiden</th>
+              <th style="width:180px;">Tanggal &amp; Waktu</th>
+              <th class="text-center" style="width:150px;">Bukti Tindak Lanjut</th>
+              <th class="text-center" style="width:150px;">Bukti Perbaikan</th>
               <th class="text-center" style="width:110px;">Bukti</th>
+              <th class="text-center" style="width:150px;">Status</th>
               <th class="text-right" style="width:280px;">Aksi</th>
             </tr>
           </thead>
@@ -79,15 +76,25 @@
             <tr data-id="1" data-process-status="pending" data-approval="none">
               <td class="text-center font-weight-bold">AR-2026-0001</td>
               <td>First Aid</td>
-              <td>Workshop</td>
-              <td>Area Loading</td>
               <td>24 Nov 2025, 09:15</td>
-              <td>
-                <div class="truncate-2">
-                  Tangan tergores saat pemindahan material, korban langsung dibersihkan dan diberi antiseptik.
-                </div>
+
+              <td class="text-center js-bukti-tindak-lanjut-cell">
+                <span class="text-muted small">-</span>
               </td>
-              <td>Penanganan P3K</td>
+
+              <td class="text-center js-bukti-perbaikan-cell">
+                <span class="text-muted small">-</span>
+              </td>
+
+              <td class="text-center">
+                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#modalBuktiAccident"
+                        data-pdf="{{ asset('storage/bukti/accident-1.pdf') }}">
+                  <i class="far fa-file-pdf"></i>
+                </button>
+              </td>
 
               <td class="text-center js-status-cell">
                 <span class="badge badge-pillish st-pending">
@@ -95,15 +102,9 @@
                 </span>
               </td>
 
-              <td class="text-center">
-                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf">
-                  <i class="far fa-file-pdf"></i>
-                </button>
-              </td>
-
               <td class="text-right">
-                {{-- Tambahkan data attributes untuk modal --}}
-                <button class="btn btn-success btn-sm btn-action js-approve" 
+                <button class="btn btn-success btn-sm btn-action js-approve"
+                        type="button"
                         data-id="1"
                         data-no-laporan="AR-2026-0001"
                         data-jenis="First Aid"
@@ -114,7 +115,7 @@
                         data-tindak-lanjut="Penanganan P3K">
                   <i class="fas fa-check mr-1"></i> Setujui
                 </button>
-                <button class="btn btn-danger btn-sm btn-action js-reject" data-id="1">
+                <button class="btn btn-danger btn-sm btn-action js-reject" type="button" data-id="1">
                   <i class="fas fa-times mr-1"></i> Tolak
                 </button>
               </td>
@@ -124,15 +125,27 @@
             <tr data-id="2" data-process-status="open" data-approval="approved">
               <td class="text-center font-weight-bold">AR-2026-0002</td>
               <td>Property Damage</td>
-              <td>Produksi</td>
-              <td>Gudang</td>
               <td>01 Jan 2026, 13:40</td>
-              <td>
-                <div class="truncate-2">
-                  Forklift menyenggol rak, menyebabkan kerusakan panel dan 1 pallet jatuh.
-                </div>
+
+              <td class="text-center js-bukti-tindak-lanjut-cell">
+                <button class="btn btn-outline-primary btn-sm btn-round-sm" type="button" title="Lihat Bukti Tindak Lanjut">
+                  <i class="far fa-file-alt"></i>
+                </button>
               </td>
-              <td>Tidak ada korban</td>
+
+              <td class="text-center js-bukti-perbaikan-cell">
+                <span class="text-muted small">-</span>
+              </td>
+
+              <td class="text-center">
+                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#modalBuktiAccident"
+                        data-pdf="{{ asset('storage/bukti/accident-2.pdf') }}">
+                  <i class="far fa-file-pdf"></i>
+                </button>
+              </td>
 
               <td class="text-center js-status-cell">
                 <span class="status-wrap">
@@ -143,17 +156,11 @@
                 </span>
               </td>
 
-              <td class="text-center">
-                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf">
-                  <i class="far fa-file-pdf"></i>
-                </button>
-              </td>
-
               <td class="text-right">
-                <button class="btn btn-success btn-sm btn-action" disabled>
+                <button class="btn btn-success btn-sm btn-action" type="button" disabled>
                   <i class="fas fa-check mr-1"></i> Setujui
                 </button>
-                <button class="btn btn-danger btn-sm btn-action" disabled>
+                <button class="btn btn-danger btn-sm btn-action" type="button" disabled>
                   <i class="fas fa-times mr-1"></i> Tolak
                 </button>
               </td>
@@ -163,15 +170,29 @@
             <tr data-id="3" data-process-status="close" data-approval="approved">
               <td class="text-center font-weight-bold">AR-2026-0003</td>
               <td>Nearmiss</td>
-              <td>Engineering</td>
-              <td>Workshop A</td>
               <td>02 Jan 2026, 08:05</td>
-              <td>
-                <div class="truncate-2">
-                  Material hampir jatuh dari rak karena penguncian kurang sempurna.
-                </div>
+
+              <td class="text-center js-bukti-tindak-lanjut-cell">
+                <button class="btn btn-outline-primary btn-sm btn-round-sm" type="button" title="Lihat Bukti Tindak Lanjut">
+                  <i class="far fa-file-alt"></i>
+                </button>
               </td>
-              <td>Preventive action</td>
+
+              <td class="text-center js-bukti-perbaikan-cell">
+                <button class="btn btn-outline-success btn-sm btn-round-sm" type="button" title="Lihat Bukti Perbaikan">
+                  <i class="fas fa-tools"></i>
+                </button>
+              </td>
+
+              <td class="text-center">
+                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#modalBuktiAccident"
+                        data-pdf="{{ asset('storage/bukti/accident-3.pdf') }}">
+                  <i class="far fa-file-pdf"></i>
+                </button>
+              </td>
 
               <td class="text-center js-status-cell">
                 <span class="badge badge-pillish st-close">
@@ -179,17 +200,11 @@
                 </span>
               </td>
 
-              <td class="text-center">
-                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf">
-                  <i class="far fa-file-pdf"></i>
-                </button>
-              </td>
-
               <td class="text-right">
-                <button class="btn btn-success btn-sm btn-action" disabled>
+                <button class="btn btn-success btn-sm btn-action" type="button" disabled>
                   <i class="fas fa-check mr-1"></i> Setujui
                 </button>
-                <button class="btn btn-danger btn-sm btn-action" disabled>
+                <button class="btn btn-danger btn-sm btn-action" type="button" disabled>
                   <i class="fas fa-times mr-1"></i> Tolak
                 </button>
               </td>
@@ -199,15 +214,25 @@
             <tr data-id="4" data-process-status="close" data-approval="rejected">
               <td class="text-center font-weight-bold">AR-2026-0004</td>
               <td>First Aid</td>
-              <td>Workshop</td>
-              <td>Area Loading</td>
               <td>03 Jan 2026, 17:20</td>
-              <td>
-                <div class="truncate-2">
-                  Pelaporan terlambat dan bukti tidak lengkap, perlu pengajuan ulang sesuai SOP.
-                </div>
+
+              <td class="text-center js-bukti-tindak-lanjut-cell">
+                <span class="text-muted small">-</span>
               </td>
-              <td>Penanganan P3K</td>
+
+              <td class="text-center js-bukti-perbaikan-cell">
+                <span class="text-muted small">-</span>
+              </td>
+
+              <td class="text-center">
+                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf"
+                        type="button"
+                        data-toggle="modal"
+                        data-target="#modalBuktiAccident"
+                        data-pdf="{{ asset('storage/bukti/accident-4.pdf') }}">
+                  <i class="far fa-file-pdf"></i>
+                </button>
+              </td>
 
               <td class="text-center js-status-cell">
                 <span class="badge badge-pillish st-close">
@@ -215,17 +240,11 @@
                 </span>
               </td>
 
-              <td class="text-center">
-                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf">
-                  <i class="far fa-file-pdf"></i>
-                </button>
-              </td>
-
               <td class="text-right">
-                <button class="btn btn-success btn-sm btn-action" disabled>
+                <button class="btn btn-success btn-sm btn-action" type="button" disabled>
                   <i class="fas fa-check mr-1"></i> Setujui
                 </button>
-                <button class="btn btn-danger btn-sm btn-action" disabled>
+                <button class="btn btn-danger btn-sm btn-action" type="button" disabled>
                   <i class="fas fa-times mr-1"></i> Tolak
                 </button>
               </td>
@@ -254,7 +273,31 @@
 </div>
 </div>
 
-{{-- ================= MODAL FORM APPROVAL ================= --}}
+{{-- ================= MODAL BUKTI PDF ================= --}}
+<div class="modal fade" id="modalBuktiAccident" tabindex="-1" role="dialog" aria-labelledby="modalBuktiAccidentLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalBuktiAccidentLabel">
+          <i class="far fa-file-pdf mr-1"></i> Bukti Laporan Kerusakan (PDF)
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body p-0" style="height:80vh;">
+        <iframe id="pdfFrameAccident" src="" style="border:0;width:100%;height:100%;"></iframe>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- ================= MODAL UPLOAD DOKUMEN ================= --}}
 <div class="modal fade" id="modalApprovalAccident"
      data-backdrop="static" data-keyboard="false"
      tabindex="-1" role="dialog"
@@ -265,7 +308,7 @@
 
       <div class="modal-header">
         <h5 class="modal-title" id="modalApprovalAccidentLabel">
-          <i class="fas fa-clipboard-list mr-2"></i>Form Persetujuan Laporan
+          <i class="fas fa-file-upload mr-2"></i>Form Upload Dokumen Laporan Kerusakan
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -276,7 +319,6 @@
         <div class="modal-body">
           <input type="hidden" id="aaId" name="report_id" value="">
 
-          {{-- Read-only fields dengan bg-light --}}
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
@@ -324,19 +366,23 @@
 
           <hr class="my-4">
 
-          {{-- Input fields yang wajib diisi --}}
-          <div class="form-group">
-            <label for="aaTanggalApproval">Tanggal Persetujuan <span class="text-danger">*</span></label>
-            <input type="date" class="form-control" id="aaTanggalApproval" name="tanggal_approval" required>
-            <div class="invalid-feedback">Harap pilih tanggal persetujuan.</div>
-          </div>
-
           <div class="form-group mb-0">
-            <label for="aaPengendalian">Pengendalian yang Disarankan <span class="text-danger">*</span></label>
-            <textarea class="form-control" id="aaPengendalian" name="pengendalian_disarankan"
-                      rows="4" placeholder="Contoh: Lakukan safety briefing, pasang guardrail, periksa APD, dll..." required></textarea>
-            <div class="invalid-feedback">Harap isi pengendalian yang disarankan.</div>
-            <small class="form-text text-muted">Isikan rekomendasi tindakan pencegahan atau pengendalian risiko.</small>
+            <label for="aaDokumen">Upload Dokumen <span class="text-danger">*</span></label>
+            <div class="custom-file">
+              <input type="file"
+                     class="custom-file-input"
+                     id="aaDokumen"
+                     name="dokumen"
+                     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                     required>
+              <label class="custom-file-label" for="aaDokumen">Pilih dokumen...</label>
+            </div>
+            <div class="invalid-feedback d-block" id="aaDokumenError" style="display:none !important;">
+              Harap upload dokumen terlebih dahulu.
+            </div>
+            <small class="form-text text-muted">
+              Format yang diperbolehkan: PDF, DOC, DOCX, JPG, JPEG, PNG.
+            </small>
           </div>
 
         </div>
@@ -346,7 +392,7 @@
             <i class="fas fa-times mr-1"></i> Batal
           </button>
           <button type="submit" class="btn btn-primary btn-sm">
-            <i class="fas fa-save mr-1"></i> Simpan Tindak Lanjut
+            <i class="fas fa-save mr-1"></i> Upload & Simpan
           </button>
         </div>
       </form>
@@ -358,29 +404,41 @@
 
 @push('scripts')
 <script>
-  // Helper: normalize text untuk filter
-  function normalizeText(s){ return (s || '').toString().toLowerCase().trim(); }
+  function normalizeText(s){
+    return (s || '').toString().toLowerCase().trim();
+  }
 
-  // Variable untuk menyimpan ID row yang sedang diproses
   let __pendingApproveRowId = null;
 
-  // === MODAL APPROVAL LOGIC ===
-  
-  // 1. Buka modal ketika tombol Setujui diklik (hanya untuk status pending)
+  $(document).on('click', '.js-open-pdf', function () {
+    const pdfUrl = $(this).data('pdf');
+    $('#pdfFrameAccident').attr('src', pdfUrl);
+  });
+
+  $('#modalBuktiAccident').on('hidden.bs.modal', function () {
+    $('#pdfFrameAccident').attr('src', '');
+  });
+
+  $(document).on('change', '#aaDokumen', function () {
+    const fileName = this.files && this.files.length ? this.files[0].name : 'Pilih dokumen...';
+    $(this).next('.custom-file-label').text(fileName);
+
+    if (this.files && this.files.length) {
+      $('#aaDokumenError').hide();
+    }
+  });
+
   $(document).on('click', '.js-approve', function () {
     const $btn = $(this);
     const id = $btn.data('id');
     const $row = $(`tr[data-id="${id}"]`);
-    
-    // Pastikan hanya row dengan approval='none' dan process-status='pending'
+
     if ($row.attr('data-approval') !== 'none' || $row.attr('data-process-status') !== 'pending') {
       return;
     }
 
-    // Simpan ID untuk digunakan saat submit
     __pendingApproveRowId = id;
 
-    // Populate form modal dengan data dari button
     $('#aaId').val(id);
     $('#aaNoLaporan').val($btn.data('no-laporan') || '');
     $('#aaJenis').val($btn.data('jenis') || '');
@@ -390,39 +448,42 @@
     $('#aaUraian').val($btn.data('uraian') || '');
     $('#aaTindakLanjut').val($btn.data('tindak-lanjut') || '');
 
-    // Reset form & set tanggal default hari ini
     $('#approvalAccidentForm').removeClass('was-validated');
-    $('#aaTanggalApproval').val(new Date().toISOString().split('T')[0]);
-    $('#aaPengendalian').val('');
+    $('#aaDokumen').val('');
+    $('#aaDokumen').next('.custom-file-label').text('Pilih dokumen...');
+    $('#aaDokumenError').hide();
 
-    // Tampilkan modal
     $('#modalApprovalAccident').modal('show');
   });
 
-  // 2. Handle submit form approval
   $('#approvalAccidentForm').on('submit', function (e) {
     e.preventDefault();
-    const form = this;
 
-    // Validasi Bootstrap
-    if (!form.checkValidity()) {
-      e.stopPropagation();
+    const form = this;
+    const id = __pendingApproveRowId;
+    const fileInput = document.getElementById('aaDokumen');
+
+    if (!fileInput.files || !fileInput.files.length) {
       $(form).addClass('was-validated');
+      $('#aaDokumenError').show();
       return;
     }
 
-    const id = __pendingApproveRowId;
     if (!id) return;
 
     const $row = $(`tr[data-id="${id}"]`);
-    const pengendalian = $('#aaPengendalian').val();
+    const uploadedFileName = fileInput.files[0].name;
 
-    // === UPDATE UI ROW ===
-    // Update data attributes
     $row.attr('data-approval', 'approved');
     $row.attr('data-process-status', 'open');
+    $row.attr('data-uploaded-file', uploadedFileName);
 
-    // Update badge status menjadi Open + note
+    $row.find('.js-bukti-tindak-lanjut-cell').html(`
+      <button class="btn btn-outline-primary btn-sm btn-round-sm" type="button" title="${uploadedFileName}">
+        <i class="far fa-file-alt"></i>
+      </button>
+    `);
+
     $row.find('.js-status-cell').html(`
       <div class="d-flex flex-column align-items-center" style="gap:.25rem;">
         <span class="badge badge-pillish st-open">
@@ -432,27 +493,36 @@
       </div>
     `);
 
-    // Disable tombol aksi
     $row.find('.js-approve, .js-reject').prop('disabled', true);
 
-    // Tutup modal & reset
     $('#modalApprovalAccident').modal('hide');
-    
-    // Refresh filter jika ada
     applyAccidentFilters();
   });
 
-  // 3. Reset modal ketika ditutup
   $('#modalApprovalAccident').on('hidden.bs.modal', function () {
-    document.getElementById('approvalAccidentForm').reset();
+    const form = document.getElementById('approvalAccidentForm');
+    form.reset();
+
     $('#approvalAccidentForm').removeClass('was-validated');
+    $('#aaDokumen').next('.custom-file-label').text('Pilih dokumen...');
+    $('#aaDokumenError').hide();
+
     __pendingApproveRowId = null;
+
+    $('#aaId').val('');
+    $('#aaNoLaporan').val('');
+    $('#aaJenis').val('');
+    $('#aaDepartemen').val('');
+    $('#aaLokasi').val('');
+    $('#aaTanggal').val('');
+    $('#aaUraian').val('');
+    $('#aaTindakLanjut').val('');
   });
 
-  // === REJECT LOGIC ===
   $(document).on('click', '.js-reject', function () {
     const id = $(this).data('id');
     const $row = $(`tr[data-id="${id}"]`);
+
     if ($row.attr('data-approval') !== 'none') return;
 
     $row.attr('data-approval', 'rejected');
@@ -465,26 +535,31 @@
     `);
 
     $row.find('.js-approve, .js-reject').prop('disabled', true);
+
     applyAccidentFilters();
   });
 
-  // === FILTER LOGIC ===
   function applyAccidentFilters(){
     const statusVal = $('#statusFilter').val();
-    const keyword = normalizeText($('input[placeholder="Cari..."]').val());
+    const keyword = normalizeText($('#accidentSearchInput').val());
     const $rows = $('#accidentTable tbody tr');
     const total = $rows.length;
-    let shown = 0, from = 0, to = 0;
+
+    let shown = 0;
+    let from = 0;
+    let to = 0;
 
     $rows.each(function(i){
       const $row = $(this);
       const rowStatus = normalizeText($row.attr('data-process-status'));
       const rowText = normalizeText($row.text());
+
       const okStatus = (statusVal === 'all') ? true : (rowStatus === statusVal);
       const okSearch = (!keyword) ? true : rowText.includes(keyword);
       const isShow = okStatus && okSearch;
-      
+
       $row.toggle(isShow);
+
       if (isShow) {
         shown++;
         if (from === 0) from = i + 1;
@@ -493,13 +568,17 @@
     });
 
     $('#showFrom').text(shown > 0 ? from : 0);
-    $('#showTo').text(to);
+    $('#showTo').text(shown > 0 ? to : 0);
     $('#totalRows').text(total);
     $('#filterHint').text(statusVal !== 'all' ? ` (Filter: ${statusVal})` : '');
   }
 
   $(document).on('change', '#statusFilter', applyAccidentFilters);
-  $(document).on('input', 'input[placeholder="Cari..."]', applyAccidentFilters);
-  $(document).ready(applyAccidentFilters);
+  $(document).on('input', '#accidentSearchInput', applyAccidentFilters);
+  $(document).on('click', '#accidentSearchBtn', applyAccidentFilters);
+
+  $(document).ready(function () {
+    applyAccidentFilters();
+  });
 </script>
 @endpush

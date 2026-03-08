@@ -50,23 +50,24 @@
           </a>
         </li>
 
-        {{-- LAPORAN KERUSAKAN (ACCIDENT) --}}
-        <li class="nav-item">
-          <a href="{{ route($routePrefix.'accident') }}"
-             class="nav-link @yield('menu-accident-active')">
-            <i class="nav-icon fas fa-notes-medical"></i>
-            <p>Laporan Kerusakan</p>
-          </a>
-        </li>
+        {{-- LAPORAN KERUSAKAN & TEMUAN - tidak tampil di HSE MANAGER --}}
+        @if ($module !== 'hse-manager')
+          <li class="nav-item">
+            <a href="{{ route($routePrefix.'accident') }}"
+              class="nav-link @yield('menu-accident-active')">
+              <i class="nav-icon fas fa-notes-medical"></i>
+              <p>Laporan Kerusakan</p>
+            </a>
+          </li>
 
-        {{-- LAPORAN TEMUAN (INCIDENT) --}}
-        <li class="nav-item">
-          <a href="{{ route($routePrefix.'incident') }}"
-             class="nav-link @yield('menu-incident-active')">
-            <i class="nav-icon fas fa-exclamation-triangle"></i>
-            <p>Laporan Temuan</p>
-          </a>
-        </li>
+          <li class="nav-item">
+            <a href="{{ route($routePrefix.'incident') }}"
+              class="nav-link @yield('menu-incident-active')">
+              <i class="nav-icon fas fa-exclamation-triangle"></i>
+              <p>Laporan Temuan</p>
+            </a>
+          </li>
+        @endif
 
         {{-- LAPORAN PERBAIKAN (RIWAYAT) - HSE & HSE MANAGER --}}
         @if (in_array($module, ['hse', 'hse-manager']))

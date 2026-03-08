@@ -25,7 +25,6 @@
       <h3 class="card-title">Laporan Temuan</h3>
 
       <div class="card-tools">
-        {{-- Inline utilities ala tailwind --}}
         <div class="d-flex align-items-center flex-wrap justify-content-end" style="gap:.5rem;">
 
           <select id="filterJenisIncident" class="form-control form-control-sm font-weight-bold" style="width:190px; border-radius:.4rem;">
@@ -64,16 +63,16 @@
         <table class="table table-striped projects mb-0" id="incidentTable">
           <thead>
             <tr>
-              <th style="width:160px;" class="text-center">ID Laporan</th>
+              <th style="width:160px;" class="text-center">No Laporan</th>
               <th style="width:240px;">Temuan</th>
               <th style="width:190px;">Jenis</th>
-              <th style="width:150px;">Departemen</th>
-              <th style="width:160px;">Lokasi</th>
               <th style="width:170px;">Tanggal &amp; Waktu</th>
               <th style="width:240px;">Dampak</th>
               <th style="width:240px;">Perbaikan</th>
-              <th style="width:140px;" class="text-center">Status</th>
+              <th style="width:165px;" class="text-center">Bukti Tindak Lanjut</th>
+              <th style="width:150px;" class="text-center">Bukti Perbaikan</th>
               <th style="width:110px;" class="text-center">Bukti</th>
+              <th style="width:140px;" class="text-center">Status</th>
               <th style="width:280px;" class="text-right">Aksi</th>
             </tr>
           </thead>
@@ -96,8 +95,6 @@
                 </span>
               </td>
 
-              <td>Workshop</td>
-              <td>Workshop A</td>
               <td>24 Nov 2025 08:30</td>
 
               <td>
@@ -112,10 +109,12 @@
                 </div>
               </td>
 
-              <td class="text-center js-status-cell">
-                <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#ff851b; border:0;">
-                  <i class="fas fa-clock"></i> Pending
-                </span>
+              <td class="text-center js-bukti-tindak-lanjut-cell">
+                <span class="text-muted small">-</span>
+              </td>
+
+              <td class="col-bukti-perbaikan js-bukti-perbaikan-cell">
+                <span class="text-muted small">-</span>
               </td>
 
               <td class="text-center">
@@ -128,6 +127,12 @@
                         data-pdf="{{ asset('storage/bukti/incident-1.pdf') }}">
                   <i class="far fa-file-pdf"></i>
                 </button>
+              </td>
+
+              <td class="text-center js-status-cell">
+                <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#ff851b; border:0;">
+                  <i class="fas fa-clock"></i> Pending
+                </span>
               </td>
 
               <td class="text-right">
@@ -173,8 +178,6 @@
                 </span>
               </td>
 
-              <td>Produksi</td>
-              <td>Area Loading</td>
               <td>01 Jan 2026 09:10</td>
 
               <td>
@@ -189,13 +192,14 @@
                 </div>
               </td>
 
-              <td class="text-center js-status-cell">
-                <div class="d-flex flex-column align-items-center" style="gap:.25rem;">
-                  <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#3c8dbc; border:0;">
-                    <i class="fas fa-folder-open"></i> Open
-                  </span>
-                  <small class="text-muted font-weight-bold" style="font-size:.75rem; white-space:nowrap;">Pending : PIC</small>
-                </div>
+              <td class="text-center js-bukti-tindak-lanjut-cell">
+                <button type="button" class="btn btn-outline-primary btn-sm" style="border-radius:.4rem;" title="Lihat Bukti Tindak Lanjut">
+                  <i class="far fa-file-alt"></i>
+                </button>
+              </td>
+
+              <td class="text-center js-bukti-perbaikan-cell">
+                <span class="text-muted small">-</span>
               </td>
 
               <td class="text-center">
@@ -208,6 +212,15 @@
                         data-pdf="{{ asset('storage/bukti/incident-2.pdf') }}">
                   <i class="far fa-file-pdf"></i>
                 </button>
+              </td>
+
+              <td class="text-center js-status-cell">
+                <div class="d-flex flex-column align-items-center" style="gap:.25rem;">
+                  <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#3c8dbc; border:0;">
+                    <i class="fas fa-folder-open"></i> Open
+                  </span>
+                  <small class="text-muted font-weight-bold" style="font-size:.75rem; white-space:nowrap;">Pending : PIC</small>
+                </div>
               </td>
 
               <td class="text-right">
@@ -238,8 +251,6 @@
                 </span>
               </td>
 
-              <td>Engineering</td>
-              <td>Gudang</td>
               <td>02 Jan 2026 10:05</td>
 
               <td>
@@ -254,10 +265,16 @@
                 </div>
               </td>
 
-              <td class="text-center js-status-cell">
-                <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#001f3f; border:0;">
-                  <i class="fas fa-lock"></i> Close
-                </span>
+              <td class="text-center js-bukti-tindak-lanjut-cell">
+                <button type="button" class="btn btn-outline-primary btn-sm" style="border-radius:.4rem;" title="Lihat Bukti Tindak Lanjut">
+                  <i class="far fa-file-alt"></i>
+                </button>
+              </td>
+
+              <td class="text-center js-bukti-perbaikan-cell">
+                <button type="button" class="btn btn-outline-success btn-sm" style="border-radius:.4rem;" title="Lihat Bukti Perbaikan">
+                  <i class="fas fa-tools"></i>
+                </button>
               </td>
 
               <td class="text-center">
@@ -270,6 +287,12 @@
                         data-pdf="{{ asset('storage/bukti/incident-3.pdf') }}">
                   <i class="far fa-file-pdf"></i>
                 </button>
+              </td>
+
+              <td class="text-center js-status-cell">
+                <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#001f3f; border:0;">
+                  <i class="fas fa-lock"></i> Close
+                </span>
               </td>
 
               <td class="text-right">
@@ -300,8 +323,6 @@
                 </span>
               </td>
 
-              <td>Workshop</td>
-              <td>Workshop A</td>
               <td>03 Jan 2026 14:20</td>
 
               <td>
@@ -316,10 +337,12 @@
                 </div>
               </td>
 
-              <td class="text-center js-status-cell">
-                <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#001f3f; border:0;">
-                  <i class="fas fa-lock"></i> Close
-                </span>
+              <td class="col-bukti-tl js-bukti-tindak-lanjut-cell">
+                <span class="text-muted small">-</span>
+              </td>
+
+              <td class="col-bukti-perbaikan js-bukti-perbaikan-cell">
+                <span class="text-muted small">-</span>
               </td>
 
               <td class="text-center">
@@ -332,6 +355,12 @@
                         data-pdf="{{ asset('storage/bukti/incident-4.pdf') }}">
                   <i class="far fa-file-pdf"></i>
                 </button>
+              </td>
+
+              <td class="text-center js-status-cell">
+                <span class="badge px-3 py-2" style="border-radius:.4rem; color:#fff; font-weight:700; background:#001f3f; border:0;">
+                  <i class="fas fa-lock"></i> Close
+                </span>
               </td>
 
               <td class="text-right">
@@ -390,7 +419,7 @@
   </div>
 </div>
 
-{{-- Modal Tindak Lanjut --}}
+{{-- Modal Upload Dokumen --}}
 <div class="modal fade" id="modalFollowUpIncident"
      data-backdrop="static" data-keyboard="false"
      tabindex="-1" role="dialog"
@@ -401,7 +430,7 @@
 
       <div class="modal-header">
         <h5 class="modal-title" id="modalFollowUpIncidentLabel">
-          <i class="fas fa-clipboard-list mr-1"></i> Form Tindak Lanjut Temuan
+          <i class="fas fa-file-upload mr-1"></i> Form Upload Dokumen Laporan Temuan
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -455,10 +484,24 @@
           <hr class="my-3">
 
           <div class="form-group mb-0">
-            <label for="ifuPengendalian">Pengendalian yang disarankan <span class="text-danger">*</span></label>
-            <textarea class="form-control" id="ifuPengendalian" name="pengendalian_disarankan"
-                      rows="4" placeholder="Tuliskan pengendalian yang disarankan..." required></textarea>
-            <div class="invalid-feedback">Harap isi pengendalian yang disarankan.</div>
+            <label for="ifuDokumen">Upload Dokumen <span class="text-danger">*</span></label>
+            <div class="custom-file">
+              <input type="file"
+                     class="custom-file-input"
+                     id="ifuDokumen"
+                     name="dokumen"
+                     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                     required>
+              <label class="custom-file-label" for="ifuDokumen">Pilih dokumen...</label>
+            </div>
+
+            <div class="invalid-feedback d-block" id="ifuDokumenError" style="display:none !important;">
+              Harap upload dokumen terlebih dahulu.
+            </div>
+
+            <small class="form-text text-muted">
+              Format yang diperbolehkan: PDF, DOC, DOCX, JPG, JPEG, PNG.
+            </small>
           </div>
 
         </div>
@@ -468,7 +511,7 @@
             <i class="fas fa-times mr-1"></i> Batal
           </button>
           <button type="submit" class="btn btn-primary btn-sm">
-            <i class="fas fa-save mr-1"></i> Simpan Tindak Lanjut
+            <i class="fas fa-save mr-1"></i> Upload &amp; Simpan
           </button>
         </div>
       </form>
@@ -484,12 +527,15 @@
   $(document).on('click', '.js-open-pdf', function () {
     $('#pdfFrameIncident').attr('src', $(this).data('pdf'));
   });
+
   $('#modalBuktiIncident').on('hidden.bs.modal', function () {
     $('#pdfFrameIncident').attr('src', '');
   });
 
   // Filter
-  function normalizeText(s){ return (s || '').toString().toLowerCase().trim(); }
+  function normalizeText(s){
+    return (s || '').toString().toLowerCase().trim();
+  }
 
   function applyIncidentFilters(){
     const jenisVal  = $('#filterJenisIncident').val();
@@ -528,9 +574,12 @@
     $('#incidentSearchInput').val('');
     applyIncidentFilters();
   });
-  $(document).ready(applyIncidentFilters);
 
-  // Approve -> modal
+  $(document).ready(function(){
+    applyIncidentFilters();
+  });
+
+  // Approve -> modal upload dokumen
   let __pendingApproveRowId = null;
 
   $(document).on('click', '.js-approve', function () {
@@ -551,8 +600,21 @@
     $('#ifuPerbaikan').val($(this).data('perbaikan') || '');
 
     $('#followUpIncidentForm').removeClass('was-validated');
-    $('#ifuPengendalian').val('');
+    $('#ifuDokumen').val('');
+    $('#ifuDokumen').next('.custom-file-label').text('Pilih dokumen...');
+    $('#ifuDokumenError').hide();
+
     $('#modalFollowUpIncident').modal('show');
+  });
+
+  // Tampilkan nama file
+  $(document).on('change', '#ifuDokumen', function () {
+    const fileName = this.files && this.files.length ? this.files[0].name : 'Pilih dokumen...';
+    $(this).next('.custom-file-label').text(fileName);
+
+    if (this.files && this.files.length) {
+      $('#ifuDokumenError').hide();
+    }
   });
 
   // Reject -> close + disable
@@ -574,24 +636,34 @@
     applyIncidentFilters();
   });
 
-  // Submit follow-up -> open + note
+  // Submit upload -> open + note
   $('#followUpIncidentForm').on('submit', function (e) {
     e.preventDefault();
-
-    const form = this;
-    if (!form.checkValidity()) {
-      e.stopPropagation();
-      $(form).addClass('was-validated');
-      return;
-    }
 
     const id = __pendingApproveRowId;
     if (!id) return;
 
+    const form = this;
+    const fileInput = document.getElementById('ifuDokumen');
+
+    if (!fileInput.files || !fileInput.files.length) {
+      $(form).addClass('was-validated');
+      $('#ifuDokumenError').show();
+      return;
+    }
+
     const $row = $(`tr[data-id="${id}"]`);
+    const uploadedFileName = fileInput.files[0].name;
 
     $row.attr('data-approval', 'approved');
     $row.attr('data-process-status', 'open');
+    $row.attr('data-uploaded-file', uploadedFileName);
+
+    $row.find('.js-bukti-tindak-lanjut-cell').html(`
+      <button type="button" class="btn btn-outline-primary btn-sm" style="border-radius:.4rem;" title="${uploadedFileName}">
+        <i class="far fa-file-alt"></i>
+      </button>
+    `);
 
     $row.find('.js-status-cell').html(`
       <div class="d-flex flex-column align-items-center" style="gap:.25rem;">
@@ -615,7 +687,10 @@
 
     $('#ifuId').val('');
     $('#ifuIdLaporan,#ifuJenis,#ifuDepartemen,#ifuLokasi,#ifuTanggal').val('');
-    $('#ifuTemuan,#ifuDampak,#ifuPerbaikan,#ifuPengendalian').val('');
+    $('#ifuTemuan,#ifuDampak,#ifuPerbaikan').val('');
+    $('#ifuDokumen').val('');
+    $('#ifuDokumen').next('.custom-file-label').text('Pilih dokumen...');
+    $('#ifuDokumenError').hide();
   });
 </script>
 @endpush

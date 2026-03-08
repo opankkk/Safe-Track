@@ -21,7 +21,6 @@
   <li class="breadcrumb-item active">Plan Tindak Lanjut</li>
 @endsection
 
-{{-- ================= CONTENT ================= --}}
 @section('content')
 <div class="page-hse-plan">
 <div class="container-fluid">
@@ -61,8 +60,6 @@
           </thead>
 
           <tbody>
-            {{-- Dummy rows (frontend only) --}}
-
             {{-- 1 Pending --}}
             <tr data-id="1" data-process-status="pending" data-approval="none">
               <td class="text-center font-weight-bold">PL-2026-0001</td>
@@ -87,7 +84,15 @@
               </td>
 
               <td class="text-right">
-                <button class="btn btn-success btn-sm btn-action js-approve" type="button" data-id="1">
+                <button
+                  class="btn btn-success btn-sm btn-action js-approve"
+                  type="button"
+                  data-id="1"
+                  data-id_laporan="PL-2026-0001"
+                  data-tanggal="02 Mar 2026, 09:15"
+                  data-pic="Budi Santoso"
+                  data-no_telp="0812-3456-7890"
+                >
                   <i class="fas fa-check mr-1"></i> Setujui
                 </button>
                 <button class="btn btn-danger btn-sm btn-action js-reject" type="button" data-id="1">
@@ -185,7 +190,6 @@
 
 </div>
 </div>
-@endsection
 
 {{-- Modal Bukti PDF --}}
 <div class="modal fade" id="modalBuktiPlan" tabindex="-1" role="dialog" aria-labelledby="modalBuktiPlanLabel" aria-hidden="true">
@@ -211,18 +215,96 @@
   </div>
 </div>
 
+{{-- Modal Follow Up (approve flow) --}}
+<div class="modal fade" id="modalFollowUpPlan"
+     data-backdrop="static" data-keyboard="false"
+     tabindex="-1" role="dialog"
+     aria-labelledby="modalFollowUpPlanLabel" aria-hidden="true">
+
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalFollowUpPlanLabel">
+          <i class="fas fa-clipboard-list mr-1"></i> Form Plan Tindak Lanjut
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form id="followUpPlanForm" novalidate>
+        <div class="modal-body">
+
+          <input type="hidden" id="ppuId" name="plan_id" value="">
+
+          <div class="form-group">
+            <label for="ppuIdLaporan">ID Laporan</label>
+            <input type="text" class="form-control" id="ppuIdLaporan" name="id_laporan" value="" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="ppuTanggal">Tanggal & Waktu</label>
+            <input type="text" class="form-control" id="ppuTanggal" name="tanggal" value="" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="ppuPic">Nama PIC</label>
+            <input type="text" class="form-control" id="ppuPic" name="pic" value="" readonly>
+          </div>
+
+          <div class="form-group">
+            <label for="ppuNoTelp">No Telp</label>
+            <input type="text" class="form-control" id="ppuNoTelp" name="no_telp" value="" readonly>
+          </div>
+
+          <hr class="my-3">
+
+          <div class="form-group mb-0">
+            <label for="ppuCatatan">Catatan plan tindak lanjut <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control"
+              id="ppuCatatan"
+              name="catatan_tindak_lanjut"
+              rows="4"
+              placeholder="Tuliskan plan catatan tindak lanjut..."
+              required
+            ></textarea>
+            <div class="invalid-feedback">Harap isi catatan tindak lanjut.</div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+            <i class="fas fa-times mr-1"></i> Batal
+          </button>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="fas fa-save mr-1"></i> Simpan Tindak Lanjut
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+@endsection
+
 @push('scripts')
 <script>
   // Bukti PDF
   $(document).on('click', '.js-open-pdf', function () {
     $('#pdfFramePlan').attr('src', $(this).data('pdf'));
   });
+
   $('#modalBuktiPlan').on('hidden.bs.modal', function () {
     $('#pdfFramePlan').attr('src', '');
   });
 
-  // Filter/Search sederhana (frontend)
-  function normalizeText(s){ return (s || '').toString().toLowerCase().trim(); }
+  // Filter/Search sederhana
+  function normalizeText(s){
+    return (s || '').toString().toLowerCase().trim();
+  }
 
   function applyPlanSearch(){
     const keyword = normalizeText($('#planSearchInput').val());
@@ -234,6 +316,7 @@
       const $row = $(this);
       const rowText = normalizeText($row.text());
       const isShow = (!keyword) ? true : rowText.includes(keyword);
+
       $row.toggle(isShow);
       if (isShow) shown++;
     });
@@ -248,10 +331,13 @@
     $('#planSearchInput').val('');
     applyPlanSearch();
   });
-  $(document).ready(applyPlanSearch);
 
-  // Dummy approve/reject -> update status + disable tombol
-  function renderStatus(status){
+  $(document).ready(function(){
+    applyPlanSearch();
+  });
+
+  // Render status
+  function renderStatus(status, note = ''){
     if (status === 'pending') {
       return `
         <span class="badge badge-pillish st-pending">
@@ -259,16 +345,18 @@
         </span>
       `;
     }
+
     if (status === 'open') {
       return `
         <span class="status-wrap">
           <span class="badge badge-pillish st-open">
             <i class="fas fa-folder-open"></i> Open
           </span>
-          <small class="status-note">Pending : PIC</small>
+          ${note ? `<small class="status-note">${note}</small>` : ``}
         </span>
       `;
     }
+
     return `
       <span class="badge badge-pillish st-close">
         <i class="fas fa-lock"></i> Close
@@ -276,32 +364,82 @@
     `;
   }
 
+  // Approve flow via modal
+  let __pendingApprovePlanRowId = null;
+
   $(document).on('click', '.js-approve', function(){
     const id = $(this).data('id');
     const $row = $(`tr[data-id="${id}"]`);
     if ($row.attr('data-approval') !== 'none') return;
 
-    // approve -> open
-    $row.attr('data-approval', 'approved');
-    $row.attr('data-process-status', 'open');
-    $row.find('.js-status-cell').html(renderStatus('open'));
-    $row.find('.js-approve, .js-reject').prop('disabled', true);
+    __pendingApprovePlanRowId = id;
 
-    applyPlanSearch();
+    $('#ppuId').val(id);
+    $('#ppuIdLaporan').val($(this).data('id_laporan') || '');
+    $('#ppuTanggal').val($(this).data('tanggal') || '');
+    $('#ppuPic').val($(this).data('pic') || '');
+    $('#ppuNoTelp').val($(this).data('no_telp') || '');
+
+    $('#followUpPlanForm').removeClass('was-validated');
+    $('#ppuCatatan').val('');
+
+    $('#modalFollowUpPlan').modal('show');
   });
 
+  // Reject
   $(document).on('click', '.js-reject', function(){
     const id = $(this).data('id');
     const $row = $(`tr[data-id="${id}"]`);
     if ($row.attr('data-approval') !== 'none') return;
 
-    // reject -> close
     $row.attr('data-approval', 'rejected');
     $row.attr('data-process-status', 'close');
     $row.find('.js-status-cell').html(renderStatus('close'));
     $row.find('.js-approve, .js-reject').prop('disabled', true);
 
     applyPlanSearch();
+  });
+
+  // Submit follow-up -> OPEN + note
+  $('#followUpPlanForm').on('submit', function(e){
+    e.preventDefault();
+
+    const form = this;
+    if (!form.checkValidity()) {
+      e.stopPropagation();
+      $(form).addClass('was-validated');
+      return;
+    }
+
+    const id = __pendingApprovePlanRowId;
+    if (!id) return;
+
+    const $row = $(`tr[data-id="${id}"]`);
+
+    $row.attr('data-approval', 'approved');
+    $row.attr('data-process-status', 'open');
+
+    $row.find('.js-status-cell').html(
+      renderStatus('open', 'Pending : PIC')
+    );
+
+    $row.find('.js-approve, .js-reject').prop('disabled', true);
+
+    $('#modalFollowUpPlan').modal('hide');
+    applyPlanSearch();
+  });
+
+  // Reset modal
+  $('#modalFollowUpPlan').on('hidden.bs.modal', function () {
+    const form = document.getElementById('followUpPlanForm');
+    form.reset();
+    $('#followUpPlanForm').removeClass('was-validated');
+
+    __pendingApprovePlanRowId = null;
+
+    $('#ppuId').val('');
+    $('#ppuIdLaporan, #ppuTanggal, #ppuPic, #ppuNoTelp').val('');
+    $('#ppuCatatan').val('');
   });
 </script>
 @endpush

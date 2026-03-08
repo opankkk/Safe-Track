@@ -1,4 +1,4 @@
-{{-- resources/views/livewire/h-s-e-manager/accident-report.blade.php --}}
+
 @extends('layouts.app')
 
 @section('title', 'Laporan Kerusakan | Sistem HSE')
