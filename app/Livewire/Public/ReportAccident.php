@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Report;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportAccident extends Component
 {
@@ -46,8 +47,8 @@ class ReportAccident extends Component
     {
         return [
             'jenis_insiden' => 'required|string',
-            'lampiran_pelaporan' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'lampiran_investigasi' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'lampiran_pelaporan' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'lampiran_investigasi' => 'nullable|file|mimes:pdf|max:2048',
             'nama_pelapor' => 'required|string|max:255',
             'no_handphone' => 'required|string|max:20',
             'jenis_kelamin' => 'required|string',
@@ -58,7 +59,7 @@ class ReportAccident extends Component
             'tanggal' => 'required|date',
             'pukul' => 'required|date_format:H:i',
             'uraian_insiden' => 'required|string',
-            'foto_insiden' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'foto_insiden' => 'required|file|mimes:jpg,jpeg,png|max:2048',
             'apd' => 'required|string',
             'apd_alasan' => 'nullable|string',
             'kondisi_korban' => 'required|string',
@@ -79,13 +80,12 @@ class ReportAccident extends Component
                 'type' => 'accident',
                 'reporter_name' => $this->nama_pelapor,
                 'superior_email' => $this->email_atasan,
-                'status' => 'pending'
+                'status' => 'pending',
+                'sub_status' => Report::SUB_PENDING_HSE
             ]);
 
-            // Format kondisi korban (max 1 diset array sesuai skema db json)
             $kondisiFix = $this->kondisi_korban === 'Yang lain' ? $this->kondisi_lain : $this->kondisi_korban;
 
-            // Format tindak lanjut
             $tindakLanjutFix = $this->tindak_lanjut === 'Lainnya' ? $this->tindak_lanjut_lain : $this->tindak_lanjut;
 
             $report->accidentDetail()->create([
@@ -101,7 +101,7 @@ class ReportAccident extends Component
                 'uraian_insiden' => $this->uraian_insiden,
                 'apd' => $this->apd,
                 'apd_alasan' => $this->apd === 'Tidak / Lainnya' ? $this->apd_alasan : null,
-                'kondisi_korban' => json_encode([$kondisiFix]),
+                'kondisi_korban' => [$kondisiFix],
                 'kerusakan_property' => $this->kerusakan_property,
                 'pencemaran_lingkungan' => $this->pencemaran_lingkungan,
                 'tindak_lanjut' => $tindakLanjutFix,
@@ -109,13 +109,13 @@ class ReportAccident extends Component
 
             $year = date('Y');
             $month = date('m');
-            $folder = "public/reports/accident/{$year}/{$month}";
+            $folder = "reports/accident/{$year}/{$month}";
 
             if ($this->foto_insiden) {
                 $filename = 'evidence_' . time() . '_' . uniqid() . '.' . $this->foto_insiden->getClientOriginalExtension();
-                $path = $this->foto_insiden->storeAs($folder, $filename);
+                $path = $this->foto_insiden->storeAs($folder, $filename, 'public');
                 $report->attachments()->create([
-                    'file_path' => str_replace('public/', '', $path),
+                    'file_path' => $path,
                     'file_name' => $this->foto_insiden->getClientOriginalName(),
                     'category' => 'evidence'
                 ]);
@@ -123,9 +123,9 @@ class ReportAccident extends Component
 
             if ($this->lampiran_pelaporan) {
                 $filename = 'form_pelaporan_' . time() . '_' . uniqid() . '.' . $this->lampiran_pelaporan->getClientOriginalExtension();
-                $path = $this->lampiran_pelaporan->storeAs($folder, $filename);
+                $path = $this->lampiran_pelaporan->storeAs($folder, $filename, 'public');
                 $report->attachments()->create([
-                    'file_path' => str_replace('public/', '', $path),
+                    'file_path' => $path,
                     'file_name' => $this->lampiran_pelaporan->getClientOriginalName(),
                     'category' => 'lampiran_pelaporan'
                 ]);
@@ -133,22 +133,97 @@ class ReportAccident extends Component
 
             if ($this->lampiran_investigasi) {
                 $filename = 'form_investigasi_' . time() . '_' . uniqid() . '.' . $this->lampiran_investigasi->getClientOriginalExtension();
-                $path = $this->lampiran_investigasi->storeAs($folder, $filename);
+                $path = $this->lampiran_investigasi->storeAs($folder, $filename, 'public');
                 $report->attachments()->create([
-                    'file_path' => str_replace('public/', '', $path),
+                    'file_path' => $path,
                     'file_name' => $this->lampiran_investigasi->getClientOriginalName(),
                     'category' => 'lampiran_investigasi'
                 ]);
             }
 
+            $report->load('attachments');
+            $pdf = Pdf::loadView('pdf.accident', [
+                'report' => $report,
+                'detail' => $report->accidentDetail
+            ]);
+            $pdfFilename = 'pdf_report_' . time() . '_' . uniqid() . '.pdf';
+            $pdfPath = $folder . '/' . $pdfFilename;
+            \Illuminate\Support\Facades\Storage::disk('public')->put($pdfPath, $pdf->output());
+
+            $report->attachments()->create([
+                'file_path' => $pdfPath,
+                'file_name' => $pdfFilename,
+                'category' => 'pdf_report'
+            ]);
+
+            // PDF Merging Logic
+            $originalPdfPath = \Illuminate\Support\Facades\Storage::disk('public')->path($pdfPath);
+            $hasMerge = false;
+            $fpdi = new \setasign\Fpdi\Fpdi();
+            
+            try {
+                // 1. Add pages from the main PDF (DomPDF generated)
+                $pageCount = $fpdi->setSourceFile($originalPdfPath);
+                for ($n = 1; $n <= $pageCount; $n++) {
+                    $tplIdx = $fpdi->importPage($n);
+                    $size = $fpdi->getTemplateSize($tplIdx);
+                    $fpdi->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                    $fpdi->useTemplate($tplIdx);
+                }
+                
+                // 2. Add pages from lampiran_pelaporan (if PDF)
+                if ($this->lampiran_pelaporan && strtolower($this->lampiran_pelaporan->getClientOriginalExtension()) === 'pdf') {
+                    $path = $this->lampiran_pelaporan->getRealPath();
+                    $pageCount = $fpdi->setSourceFile($path);
+                    for ($n = 1; $n <= $pageCount; $n++) {
+                        $tplIdx = $fpdi->importPage($n);
+                        $size = $fpdi->getTemplateSize($tplIdx);
+                        $fpdi->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                        $fpdi->useTemplate($tplIdx);
+                    }
+                    $hasMerge = true;
+                }
+                
+                // 3. Add pages from lampiran_investigasi
+                if ($this->lampiran_investigasi && strtolower($this->lampiran_investigasi->getClientOriginalExtension()) === 'pdf') {
+                    $path = $this->lampiran_investigasi->getRealPath();
+                    $pageCount = $fpdi->setSourceFile($path);
+                    for ($n = 1; $n <= $pageCount; $n++) {
+                        $tplIdx = $fpdi->importPage($n);
+                        $size = $fpdi->getTemplateSize($tplIdx);
+                        $fpdi->AddPage($size['orientation'], [$size['width'], $size['height']]);
+                        $fpdi->useTemplate($tplIdx);
+                    }
+                    $hasMerge = true;
+                }
+                
+                if ($hasMerge) {
+                    $fpdi->Output($originalPdfPath, 'F');
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error('PDF Merge Error: ' . $e->getMessage());
+            }
+
             DB::commit();
 
-            session()->flash('success', 'Laporan Accident berhasil dikirim dengan Nomor: ' . $report->report_number);
-            return redirect()->route('public.report.accident');
+            $this->dispatch('swal:toast', type: 'success', message: 'Laporan Accident berhasil dikirim dengan Nomor: ' . $report->report_number);
+            
+            $this->reset([
+                'jenis_insiden', 'lampiran_pelaporan', 'lampiran_investigasi', 
+                'nama_pelapor', 'no_handphone', 'jenis_kelamin', 'lokasi_kerja', 
+                'departemen', 'nama_korban', 'tempat', 'tanggal', 'pukul', 
+                'uraian_insiden', 'foto_insiden', 'apd', 'apd_alasan', 
+                'kondisi_korban', 'kondisi_lain', 'kerusakan_property', 
+                'pencemaran_lingkungan', 'tindak_lanjut', 'tindak_lanjut_lain', 
+                'email_atasan'
+            ]);
+
+            $this->dispatch('scrollToTop');
 
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            $this->dispatch('swal:toast', type: 'error', message: 'Terjadi kesalahan: ' . $e->getMessage());
+            $this->dispatch('scrollToTop');
         }
     }
 

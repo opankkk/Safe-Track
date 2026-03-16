@@ -4,113 +4,65 @@
 @section('is-auth', true)
 <div class="auth-bg"></div>
 
-<div class="login-box">
-  <div class="login-logo mb-3">
-    <a href="#" class="text-white">
-      <span class="d-inline-block px-3 py-2 rounded shadow-sm auth-brand">
-        <b>Sistem</b>HSE
-      </span>
-    </a>
-  </div>
+  <div class="login-box">
+    <div class="card card-outline card-primary shadow auth-card">
+      <div class="card-header text-center border-0 pb-0">
+        <h1 class="h5 mb-1 font-weight-bold">Reset Password Baru</h1>
+        <p class="text-muted mb-0">Silahkan Masukkan Password Baru Anda Di Bawah Ini</p>
+      </div>
 
-  <div class="card card-outline card-primary shadow auth-card">
-    <div class="card-header text-center border-0 pb-0">
-      <h1 class="h5 mb-1 font-weight-bold">Reset Password</h1>
-      <p class="text-muted mb-0">Masukkan password baru Anda di bawah ini.</p>
-    </div>
-
-    <div class="card-body login-card-body pt-4">
-      <form wire:submit.prevent="resetPassword">
-        <input type="hidden" wire:model="token">
-        
-        <div class="input-group mb-3">
-          <input type="email" wire:model="email" class="form-control" placeholder="Email" readonly>
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+      <div class="card-body login-card-body pt-4">
+        <form wire:submit.prevent="resetPassword">
+          <input type="hidden" wire:model="token">
+          
+          <div class="input-group mb-3">
+            <input type="email" wire:model="email" class="form-control" placeholder="Email" readonly>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
             </div>
           </div>
-        </div>
-        @error('email') <span class="text-danger small mt-n2 mb-3 d-block">{{ $message }}</span> @enderror
+          @error('email') <span class="text-danger small mt-n2 mb-3 d-block">{{ $message }}</span> @enderror
 
-        <div class="input-group mb-3">
-          <input type="password" wire:model="password" class="form-control" placeholder="Password Baru">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+          <div class="input-group mb-3">
+            <input type="password" wire:model="password" class="form-control" placeholder="Password Baru">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
             </div>
           </div>
-        </div>
-        @error('password') <span class="text-danger small mt-n2 mb-3 d-block">{{ $message }}</span> @enderror
+          @error('password') <span class="text-danger small mt-n2 mb-3 d-block">{{ $message }}</span> @enderror
 
-        <div class="input-group mb-3">
-          <input type="password" wire:model="password_confirmation" class="form-control" placeholder="Konfirmasi Password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+          <div class="input-group mb-3">
+            <input type="password" wire:model="password_confirmation" class="form-control" placeholder="Konfirmasi Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
             </div>
           </div>
+
+          <button type="submit" class="btn btn-primary btn-block btn-lg auth-btn">
+            <span class="fas fa-save mr-2"></span>
+            Simpan Password Baru
+          </button>
+        </form>
+
+        <div class="mt-3 text-center">
+          <a href="{{ route('user.login') }}" class="small text-primary font-weight-semibold">
+            <span class="fas fa-arrow-left mr-1"></span> Kembali Ke Login
+          </a>
         </div>
 
-        <button type="submit" class="btn btn-primary btn-block btn-lg auth-btn">
-          <span class="fas fa-save mr-2"></span>
-          Simpan Password Baru
-        </button>
-      </form>
-
-      <div class="mt-3 text-center">
-        <a href="{{ route('user.login') }}" class="small text-primary font-weight-semibold">
-          <span class="fas fa-arrow-left mr-1"></span> Kembali ke Login
-        </a>
+        <div class="mt-4 text-center text-muted small">
+          <span class="d-inline-flex align-items-center">
+            <span class="fas fa-shield-alt mr-2"></span>
+            Sistem HSE • Secure Access
+          </span>
+        </div>
       </div>
     </div>
   </div>
-  </div>
-</div>
-</div>
-
-@push('styles')
-<style>
-  .auth-page{
-    position: relative;
-    min-height: 100vh;
-    overflow: hidden;
-    background: #0b1220;
-  }
-  .auth-bg{
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(1200px 600px at 20% 10%, rgba(0,123,255,.35), transparent 60%),
-      radial-gradient(900px 500px at 90% 30%, rgba(0,123,255,.25), transparent 55%),
-      linear-gradient(135deg, #0b1220 0%, #111b2e 50%, #0b1220 100%);
-    z-index: 0;
-  }
-  .login-box{ position: relative; z-index: 1; }
-  .auth-brand{
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,.12);
-  }
-  .auth-card{
-    border-radius: 14px;
-    overflow: hidden;
-  }
-  .auth-card .form-control{
-    border-radius: 10px;
-  }
-  .auth-card .input-group-text{
-    border-radius: 0 10px 10px 0;
-  }
-  .auth-btn{
-    border-radius: 12px;
-    font-weight: 600;
-    box-shadow: 0 10px 25px rgba(0,123,255,.20);
-  }
-  .auth-btn:hover{
-    box-shadow: 0 14px 30px rgba(0,123,255,.28);
-  }
-  .font-weight-semibold{ font-weight: 600; }
-</style>
-@endpush
 </div>

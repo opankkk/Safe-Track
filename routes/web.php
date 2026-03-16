@@ -30,11 +30,12 @@ Route::prefix('public/report')->name('public.report.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('hse')->name('hse.')->group(function () {
-    Route::view('/dashboard', 'livewire.h-s-e.dashboard')->name('dashboard');
-    Route::view('/accident',  'livewire.h-s-e.accident-report')->name('accident');
-    Route::view('/incident',  'livewire.h-s-e.incident-report')->name('incident');
-    Route::view('/report', 'livewire.h-s-e.report')->name('report');
+    Route::get('/dashboard',  \App\Livewire\HSE\Dashboard::class)->name('dashboard');
+    Route::get('/accident',   \App\Livewire\HSE\AccidentReport::class)->name('accident');
+    Route::get('/incident',   \App\Livewire\HSE\IncidentReport::class)->name('incident');
+    Route::get('/report',     \App\Livewire\HSE\ReportPage::class)->name('report');
 });
+
 
 /*
 |--------------------------------------------------------------------------
@@ -42,9 +43,9 @@ Route::prefix('hse')->name('hse.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('pic')->name('pic.')->group(function () {
-    Route::view('/dashboard', 'livewire.p-i-c.dashboard')->name('dashboard');
-    Route::view('/accident',  'livewire.p-i-c.accident-report')->name('accident');
-    Route::view('/incident',  'livewire.p-i-c.incident-report')->name('incident');
+    Route::get('/dashboard',  \App\Livewire\PIC\Dashboard::class)->name('dashboard');
+    Route::get('/accident',   \App\Livewire\PIC\AccidentReport::class)->name('accident');
+    Route::get('/incident',   \App\Livewire\PIC\IncidentReport::class)->name('incident');
 });
 
 /*
@@ -53,16 +54,11 @@ Route::prefix('pic')->name('pic.')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('hse-manager')->name('hse.manager.')->group(function () {
-    Route::view('/dashboard', 'livewire.h-s-e-manager.dashboard')
-        ->name('dashboard');
-    Route::view('/accident', 'livewire.h-s-e-manager.accident-report')
-        ->name('accident');
-    Route::view('/incident', 'livewire.h-s-e-manager.incident-report')
-        ->name('incident');
-    Route::view('/report', 'livewire.h-s-e-manager.report')
-        ->name('report');
-    Route::view('/plan-tindak-lanjut', 'livewire.h-s-e-manager.plan')
-        ->name('plan-tindak-lanjut');
+    Route::get('/dashboard',  \App\Livewire\HSEManager\Dashboard::class)->name('dashboard');
+    Route::get('/accident',   \App\Livewire\HSEManager\AccidentReport::class)->name('accident');
+    Route::get('/incident',   \App\Livewire\HSEManager\IncidentReport::class)->name('incident');
+    Route::get('/report',               \App\Livewire\HSEManager\Report::class)->name('report');
+    Route::get('/plan-tindak-lanjut',   \App\Livewire\HSEManager\Plan::class)->name('plan-tindak-lanjut');
 });
 
 Route::post('/logout', function () {
@@ -71,5 +67,5 @@ Route::post('/logout', function () {
     request()->session()->invalidate();
     request()->session()->regenerateToken();
     
-    return redirect('/auth/login'); // ← Ganti dari /login ke /auth/login
+    return redirect('/auth/login'); 
 })->name('logout');

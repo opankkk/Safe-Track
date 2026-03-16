@@ -62,6 +62,21 @@
             <i class="fas fa-times-circle mr-1"></i> {{ session('error') }}
           </div>
         @endif
+        @if ($errors->any())
+          <div class="alert alert-danger m-3">
+            <i class="fas fa-exclamation-triangle mr-1"></i> <b>Periksa kembali isian Anda:</b>
+            <ul class="mb-0 mt-1 pl-3">
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+          <script>
+            setTimeout(() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
+          </script>
+        @endif
 
         <div class="card-body">
 
@@ -95,6 +110,7 @@
                   </div>
                 @endforeach
               </div>
+              @error('jenis_insiden') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
             </div>
           </div>
 
@@ -109,23 +125,27 @@
               <div class="form-group">
                 <label>Formulir Pelaporan Kecelakaan (Sertakan Lampiran Dokumentasi)</label>
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="lampiran_pelaporan" wire:model="lampiran_pelaporan">
+                  <input type="file" class="custom-file-input" id="lampiran_pelaporan" wire:model="lampiran_pelaporan" accept="image/png, image/jpeg, image/jpg, application/pdf">
                   <label class="custom-file-label" for="lampiran_pelaporan">
                     {{ $lampiran_pelaporan && is_object($lampiran_pelaporan) ? $lampiran_pelaporan->getClientOriginalName() : 'Tambahkan file' }}
                   </label>
                 </div>
                 <div wire:loading wire:target="lampiran_pelaporan" class="text-info mt-1 small"><i class="fas fa-spinner fa-spin"></i> Mengunggah...</div>
+                @error('lampiran_pelaporan') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
+                <small class="text-muted d-block mt-1">PNG, JPG, JPEG, PDF (Maks. 2MB).</small>
               </div>
 
               <div class="form-group mb-0">
                 <label>Formulir Investigasi Kecelakaan (Sertakan Lampiran Daftar Hadir)</label>
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="lampiran_investigasi" wire:model="lampiran_investigasi">
+                  <input type="file" class="custom-file-input" id="lampiran_investigasi" wire:model="lampiran_investigasi" accept="application/pdf">
                   <label class="custom-file-label" for="lampiran_investigasi">
-                    {{ $lampiran_investigasi && is_object($lampiran_investigasi) ? $lampiran_investigasi->getClientOriginalName() : 'Tambahkan file' }}
+                    {{ $lampiran_investigasi && is_object($lampiran_investigasi) ? $lampiran_investigasi->getClientOriginalName() : 'Pilih file PDF' }}
                   </label>
                 </div>
                 <div wire:loading wire:target="lampiran_investigasi" class="text-info mt-1 small"><i class="fas fa-spinner fa-spin"></i> Mengunggah...</div>
+                @error('lampiran_investigasi') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
+                <small class="text-muted d-block mt-1">PDF (Maks. 2MB).</small>
               </div>
 
             </div>
@@ -144,6 +164,7 @@
                   <div class="form-group">
                     <label class="required">Nama Pelapor</label>
                     <input type="text" class="form-control" wire:model="nama_pelapor" placeholder="Nama lengkap">
+                    @error('nama_pelapor') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>
 
@@ -151,6 +172,7 @@
                   <div class="form-group">
                     <label class="required">No Handphone</label>
                     <input type="text" class="form-control" wire:model="no_handphone" placeholder="Contoh: 081234567890">
+                    @error('no_handphone') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>
               </div>
@@ -166,9 +188,10 @@
                       </div>
                       <div class="custom-control custom-radio">
                         <input class="custom-control-input" type="radio" id="jk_p" name="jenis_kelamin" wire:model.live="jenis_kelamin" value="Perempuan">
-                        <label class="custom-control-label" for="jk_p">Perempuan</label>
+                         <label class="custom-control-label" for="jk_p">Perempuan</label>
                       </div>
                     </div>
+                    @error('jenis_kelamin') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
                   </div>
                 </div>
               </div>
@@ -178,6 +201,7 @@
                   <div class="form-group">
                     <label class="required">Lokasi Kerja</label>
                     <input type="text" class="form-control" wire:model="lokasi_kerja" placeholder="Contoh: Site A / Workshop / Gudang">
+                    @error('lokasi_kerja') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>
 
@@ -185,6 +209,7 @@
                   <div class="form-group">
                     <label class="required">Department/Bagian</label>
                     <input type="text" class="form-control" wire:model="departemen" placeholder="Contoh: Produksi / Maintenance / HSE">
+                    @error('departemen') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>
               </div>
@@ -197,7 +222,7 @@
             </div>
           </div>
 
-          {{-- 4) TEMPAT & WAKTU --}}
+          {{-- 4 TEMPAT & WAKTU --}}
           <div class="card section-card mb-3">
             <div class="card-header">
               <p class="section-title">Tempat dan Waktu Terjadinya Insiden</p>
@@ -210,18 +235,21 @@
                   <div class="form-group">
                     <label class="required">Tempat</label>
                     <input type="text" class="form-control" wire:model="tempat" placeholder="Contoh: Area Loading / Workshop A">
+                    @error('tempat') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="required">Tanggal</label>
                     <input type="date" class="form-control" wire:model="tanggal">
+                    @error('tanggal') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
                     <label class="required">Pukul</label>
                     <input type="time" class="form-control" wire:model="pukul">
+                    @error('pukul') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>
               </div>
@@ -229,18 +257,20 @@
               <div class="form-group">
                 <label class="required">Uraian Terjadinya Insiden</label>
                 <textarea class="form-control" rows="4" wire:model="uraian_insiden" placeholder="Jelaskan kronologi singkat kejadian..."></textarea>
+                @error('uraian_insiden') <small class="text-danger">{{ $message }}</small> @enderror
               </div>
 
               <div class="form-group">
-                <label class="required">Gambar/Foto</label>
+                <label class="required">Gambar/Foto (Kejadian)</label>
                 <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="foto_insiden" wire:model="foto_insiden" accept="image/*,application/pdf">
+                  <input type="file" class="custom-file-input" id="foto_insiden" wire:model="foto_insiden" accept="image/png, image/jpeg, image/jpg">
                   <label class="custom-file-label" for="foto_insiden">
                     {{ $foto_insiden && is_object($foto_insiden) ? $foto_insiden->getClientOriginalName() : 'Tambahkan file' }}
                   </label>
                 </div>
                 <div wire:loading wire:target="foto_insiden" class="text-info mt-1 small"><i class="fas fa-spinner fa-spin"></i> Mengunggah...</div>
-                <small class="text-muted d-block mt-1">Format umum: JPG/PNG/PDF.</small>
+                @error('foto_insiden') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
+                <small class="text-muted d-block mt-1">PNG, JPG, JPEG (Maks. 2MB).</small>
               </div>
 
               <div class="form-group mb-0">
@@ -255,15 +285,16 @@
                     <label class="custom-control-label" for="apd_lain">Yang lain:</label>
                   </div>
                 </div>
-                @if($apd === 'Tidak / Lainnya')
+                 @if($apd === 'Tidak / Lainnya')
                 <input type="text" class="form-control mt-2" wire:model="apd_alasan" placeholder="Jika tidak memakai APD, jelaskan alasannya...">
                 @endif
+                @error('apd') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
               </div>
 
             </div>
           </div>
 
-          {{-- 5) KONDISI KORBAN --}}
+          {{-- 5 KONDISI KORBAN --}}
           <div class="card section-card mb-3">
             <div class="card-header">
               <p class="section-title">Kondisi Korban/Penderita (jika ada)</p>
@@ -288,6 +319,7 @@
                   </div>
                 @endforeach
               </div>
+              @error('kondisi_korban') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
 
               @if($kondisi_korban === 'Yang lain')
               <div class="form-group mb-0 mt-2">
@@ -298,7 +330,7 @@
             </div>
           </div>
 
-          {{-- 6) KERUSAKAN PROPERTI --}}
+          {{-- 6 KERUSAKAN PROPERTI --}}
           <div class="card section-card mb-3">
             <div class="card-header">
               <p class="section-title required">Ada Kerusakan Property? (Jika ada jelaskan)</p>
@@ -306,10 +338,11 @@
             </div>
             <div class="card-body pt-3">
               <textarea class="form-control" rows="3" wire:model="kerusakan_property" placeholder="Jelaskan kerusakan, aset terdampak, dsb..."></textarea>
+              @error('kerusakan_property') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
           </div>
 
-          {{-- 7) PENCEMARAN LINGKUNGAN --}}
+          {{-- 7 PENCEMARAN LINGKUNGAN --}}
           <div class="card section-card mb-3">
             <div class="card-header">
               <p class="section-title required">Apakah Ada Pencemaran Lingkungan? (Jika ada jelaskan)</p>
@@ -317,10 +350,11 @@
             </div>
             <div class="card-body pt-3">
               <textarea class="form-control" rows="3" wire:model="pencemaran_lingkungan" placeholder="Jelaskan pencemaran & penanganan awal..."></textarea>
+              @error('pencemaran_lingkungan') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
           </div>
 
-          {{-- 8) TINDAK LANJUT KORBAN --}}
+          {{-- 8 TINDAK LANJUT KORBAN --}}
           <div class="card section-card mb-3">
             <div class="card-header">
               <p class="section-title required">Tindak Lanjut Korban</p>
@@ -339,13 +373,14 @@
                 <input class="custom-control-input" type="radio" id="tl_lain" name="tindak_lanjut" wire:model.live="tindak_lanjut" value="Lainnya">
                 <label class="custom-control-label" for="tl_lain">Yang lain</label>
               </div>
-              @if($tindak_lanjut === 'Lainnya')
+               @if($tindak_lanjut === 'Lainnya')
               <input type="text" class="form-control mt-2" wire:model="tindak_lanjut_lain" placeholder="Jika lainnya, jelaskan...">
               @endif
+              @error('tindak_lanjut') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
             </div>
           </div>
 
-          {{-- 9) EMAIL ATASAN --}}
+          {{-- 9 EMAIL ATASAN --}}
           <div class="card section-card mb-0">
             <div class="card-header">
               <p class="section-title required">Email Atasan</p>
@@ -371,8 +406,9 @@
                 <option value="fajar@pamitra.co.id">fajar@pamitra.co.id</option>
                 <option value="eko.wardiyanto@pamitra.co.id">eko.wardiyanto@pamitra.co.id</option>
                 <option value="gilanggusti@pamitra.co.id">gilanggusti@pamitra.co.id</option>
-                <option value="antariksa@pamitra.co.id">antariksa@pamitra.co.id</option>
+                 <option value="antariksa@pamitra.co.id">antariksa@pamitra.co.id</option>
               </select>
+              @error('email_atasan') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
               <small class="text-muted d-block mt-2">
                 *Sebaiknya sumber data email atasan dari master user/atasan agar tidak hardcode.
               </small>
@@ -390,8 +426,9 @@
           <a href="#" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left mr-1"></i> Kembali
           </a>
-          <button type="submit" class="btn btn-info-match">
-            <i class="fas fa-paper-plane mr-1"></i> Kirim Laporan
+          <button type="submit" class="btn btn-info-match" wire:loading.attr="disabled" wire:target="save">
+            <span wire:loading wire:target="save" class="spinner-border spinner-border-sm mr-1"></span>
+            <i class="fas fa-paper-plane mr-1" wire:loading.remove wire:target="save"></i> Kirim Laporan
           </button>
         </div>
       </form>
@@ -415,8 +452,12 @@
         label.textContent = (input.files.length === 1)
           ? input.files[0].name
           : input.files.length + ' files selected';
-      }
+       }
     }
+  });
+
+  window.addEventListener('scrollToTop', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 </script>
 @endpush

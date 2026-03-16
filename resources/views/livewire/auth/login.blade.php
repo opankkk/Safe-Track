@@ -8,20 +8,11 @@
 
   <div class="login-box">
 
-    {{-- Brand --}}
-    <div class="login-logo mb-3">
-      <a href="#" class="text-white">
-        <span class="d-inline-block px-3 py-2 rounded shadow-sm auth-brand">
-          <b>Sistem</b>HSE
-        </span>
-      </a>
-    </div>
-
     <div class="card card-outline card-primary shadow auth-card">
 
       <div class="card-header text-center border-0 pb-0">
-        <h1 class="h5 mb-1 font-weight-bold">Selamat datang kembali</h1>
-        <p class="text-muted mb-0">Silakan login untuk melanjutkan</p>
+        <h1 class="h5 mb-1 font-weight-bold">Selamat Datang Kembali</h1>
+        <p class="text-muted mb-0">Silahkan Login Untuk Melanjutkan</p>
       </div>
 
       <div class="card-body login-card-body pt-4">
