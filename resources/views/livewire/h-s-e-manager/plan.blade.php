@@ -1,18 +1,42 @@
-{{-- resources/views/livewire/h-s-e-manager/plan.blade.php --}}
-@extends('layouts.app')
-
+<div>
 @section('title', 'Plan Tindak Lanjut | Sistem HSE')
 @section('menu-plan-tindak-lanjut-active', 'active')
 @section('hide-navbar', true)
 
 @section('page-title')
   <div class="d-flex flex-column">
-    <small class="text-muted">Approval</small>
-    <span class="font-weight-bold" style="font-size: 1.6rem;">
-      Plan Tindak Lanjut
-    </span>
+    <small class="text-muted">Manager Approval</small>
+    <span class="font-weight-bold" style="font-size: 1.6rem;">Verifikasi Plan Tindak Lanjut</span>
   </div>
 @endsection
+
+@push('styles')
+<style>
+  .badge-status {
+    border-radius: .4rem;
+    padding: .4rem .8rem;
+    font-weight: 700;
+    font-size: .75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-transform: uppercase;
+    border: none;
+  }
+  .badge-status-open { background: #007bff; color: white; }
+  .badge-status-closed { background: #343a40; color: white; }
+  .status-text {
+    display: block;
+    font-weight: 700;
+    font-size: .72rem;
+    margin-top: 0.25rem;
+    white-space: nowrap;
+  }
+  .text-orange-status { color: #fd7e14 !important; }
+  .text-red-status { color: #dc3545 !important; }
+  .text-grey-status { color: #6c757d !important; }
+</style>
+@endpush
 
 @section('breadcrumb')
   <li class="breadcrumb-item">
@@ -21,7 +45,6 @@
   <li class="breadcrumb-item active">Plan Tindak Lanjut</li>
 @endsection
 
-@section('content')
 <div class="page-hse-plan">
 <div class="container-fluid">
 
@@ -30,153 +53,172 @@
       <h3 class="card-title">Plan Tindak Lanjut</h3>
 
       <div class="card-tools">
-        <div class="d-flex align-items-center" style="gap:.5rem;">
+        <div class="d-flex align-items-center flex-wrap justify-content-end" style="gap:.5rem;">
+
+          <select wire:model.live="filterType" class="form-control form-control-sm font-weight-bold" style="width:200px; border-radius:.4rem;">
+            <option value="all">Semua Jenis</option>
+            <option value="accident">Accident</option>
+            <option value="unsafe_action">Unsafe Action</option>
+            <option value="unsafe_condition">Unsafe Condition</option>
+          </select>
 
           <div class="input-group input-group-sm" style="width:220px;">
-            <input type="text" id="planSearchInput" class="form-control" placeholder="Cari...">
+            <input type="text" wire:model.live.debounce.300ms="search" class="form-control" placeholder="Cari by ID/PIC...">
             <div class="input-group-append">
-              <button class="btn btn-default" id="planSearchBtn" type="button">
+              <button class="btn btn-default" type="button">
                 <i class="fas fa-search"></i>
               </button>
             </div>
           </div>
+
+          <button type="button" class="btn btn-outline-secondary btn-sm font-weight-bold" 
+                  title="Reset filter & pencarian" style="border-radius:.4rem;" 
+                  wire:click="$set('filterType', 'all'); $set('search', '');">
+            <i class="fas fa-undo mr-1"></i> Reset
+          </button>
+
         </div>
       </div>
     </div>
 
     <div class="card-body p-0">
+      
+      {{-- Notifikasi sekarang ditangani oleh Sistem Toast Global (SweetAlert2) --}}
+
       <div class="table-responsive">
-        <table class="table table-striped projects mb-0" id="planTable">
+        <table class="table table-striped projects mb-0" id="planTable" style="table-layout: fixed; min-width: 1030px;">
           <thead>
-            <tr>
-              <th class="text-center" style="width:170px;">ID Laporan</th>
-              <th style="width:190px;">Tanggal &amp; Waktu</th>
-              <th style="width:220px;">Nama PIC</th>
-              <th style="width:160px;">No Telp</th>
-              <th class="text-center" style="width:150px;">Status</th>
-              <th class="text-center" style="width:110px;">Bukti</th>
-              <th class="text-right" style="width:280px;">Aksi</th>
+              <th class="text-center" style="width:130px; white-space:nowrap;">No Laporan</th>
+              <th class="text-center" style="width:160px; white-space:nowrap;">Jenis Laporan</th>
+              <th class="text-center" style="width:180px; white-space:nowrap;">Tanggal &amp; Waktu</th>
+              <th class="text-center" style="width:110px;">Bukti Awal</th>
+              <th class="text-center" style="width:110px;">Plan</th>
+              <th class="text-center" style="width:130px;">Status</th>
+              <th class="text-center" style="width:210px;">Aksi</th>
             </tr>
           </thead>
 
           <tbody>
-            {{-- 1 Pending --}}
-            <tr data-id="1" data-process-status="pending" data-approval="none">
-              <td class="text-center font-weight-bold">PL-2026-0001</td>
-              <td>02 Mar 2026, 09:15</td>
-              <td>Budi Santoso</td>
-              <td>0812-3456-7890</td>
-
-              <td class="text-center js-status-cell">
-                <span class="badge badge-pillish st-pending">
-                  <i class="fas fa-clock"></i> Pending
-                </span>
-              </td>
-
+            @forelse($this->reports as $report)
+            <tr>
+              <td class="text-center font-weight-bold">{{ $report->report_number }}</td>
               <td class="text-center">
-                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf"
-                        type="button"
-                        data-toggle="modal"
-                        data-target="#modalBuktiPlan"
-                        data-pdf="{{ asset('storage/bukti/plan-1.pdf') }}">
-                  <i class="far fa-file-pdf"></i>
-                </button>
-              </td>
-
-              <td class="text-right">
-                <button
-                  class="btn btn-success btn-sm btn-action js-approve"
-                  type="button"
-                  data-id="1"
-                  data-id_laporan="PL-2026-0001"
-                  data-tanggal="02 Mar 2026, 09:15"
-                  data-pic="Budi Santoso"
-                  data-no_telp="0812-3456-7890"
-                >
-                  <i class="fas fa-check mr-1"></i> Setujui
-                </button>
-                <button class="btn btn-danger btn-sm btn-action js-reject" type="button" data-id="1">
-                  <i class="fas fa-times mr-1"></i> Tolak
-                </button>
-              </td>
-            </tr>
-
-            {{-- 2 Open --}}
-            <tr data-id="2" data-process-status="open" data-approval="approved">
-              <td class="text-center font-weight-bold">PL-2026-0002</td>
-              <td>01 Mar 2026, 14:05</td>
-              <td>Siti Rahma</td>
-              <td>0821-1111-2222</td>
-
-              <td class="text-center js-status-cell">
-                <span class="status-wrap">
-                  <span class="badge badge-pillish st-open">
-                    <i class="fas fa-folder-open"></i> Open
+                @if($report->type === 'unsafe_action')
+                <span class="badge badge-warning badge-pillish" style="color: #000 !important;">  
+                  <i class="fas fa-user-shield"></i> Unsafe Action
+                </span>
+              @elseif($report->type === 'unsafe_condition')
+                <span class="badge badge-info badge-pillish">   
+                  <i class="fas fa-exclamation-triangle"></i> Unsafe Condition
+                </span>
+                @else
+                  <span class="badge badge-pillish badge-accident" style="background:#dc3545; color:#fff;">
+                    <i class="fas fa-ambulance"></i> Accident
                   </span>
-                  <small class="status-note">Pending : PIC</small>
-                </span>
+                @endif
+              </td>
+              
+              <td class="text-center">{{ $report->plan ? \Carbon\Carbon::parse($report->plan->created_at)->timezone('Asia/Jakarta')->format('d M Y, H:i') : '-' }}</td>
+
+              <td class="text-center">
+                @if($report->attachments && $report->attachments->count() > 0)
+                  @php $pdfAt = $report->attachments->where('category', 'pdf_report')->first() ?? $report->attachments->first(); @endphp
+                  <a href="{{ asset('storage/' . $pdfAt->file_path) }}" 
+                     target="_blank"
+                     class="btn btn-outline-danger btn-sm btn-round-sm"
+                     title="Lihat Bukti PDF">
+                    <i class="far fa-file-pdf"></i>
+                  </a>
+                @else
+                  <span class="text-muted small">-</span>
+                @endif
               </td>
 
               <td class="text-center">
-                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf"
-                        type="button"
-                        data-toggle="modal"
-                        data-target="#modalBuktiPlan"
-                        data-pdf="{{ asset('storage/bukti/plan-2.pdf') }}">
-                  <i class="far fa-file-pdf"></i>
-                </button>
-              </td>
-
-              <td class="text-right">
-                <button class="btn btn-success btn-sm btn-action" type="button" disabled>
-                  <i class="fas fa-check mr-1"></i> Setujui
-                </button>
-                <button class="btn btn-danger btn-sm btn-action" type="button" disabled>
-                  <i class="fas fa-times mr-1"></i> Tolak
-                </button>
-              </td>
-            </tr>
-
-            {{-- 3 Close --}}
-            <tr data-id="3" data-process-status="close" data-approval="approved">
-              <td class="text-center font-weight-bold">PL-2026-0003</td>
-              <td>28 Feb 2026, 10:30</td>
-              <td>Andi Pratama</td>
-              <td>0857-9999-0000</td>
-
-              <td class="text-center js-status-cell">
-                <span class="badge badge-pillish st-close">
-                  <i class="fas fa-lock"></i> Close
-                </span>
+                @if($report->plan && $report->plan->file_path)
+                  <a href="{{ asset('storage/' . $report->plan->file_path) }}" target="_blank" class="btn btn-outline-primary btn-sm btn-round-sm">
+                    <i class="fas fa-file-invoice"></i>
+                  </a>
+                @else
+                  <span class="text-muted small">-</span>
+                @endif
               </td>
 
               <td class="text-center">
-                <button class="btn btn-outline-danger btn-sm btn-round-sm js-open-pdf"
-                        type="button"
-                        data-toggle="modal"
-                        data-target="#modalBuktiPlan"
-                        data-pdf="{{ asset('storage/bukti/plan-3.pdf') }}">
-                  <i class="far fa-file-pdf"></i>
-                </button>
+                @php
+                  $sub = $report->sub_status;
+                  $badgeClass = ($sub === 'closed') ? 'badge-status-closed' : 'badge-status-open';
+                  $badgeText = ($sub === 'closed') ? 'CLOSED' : 'OPEN';
+                  $badgeIcon = ($sub === 'closed') ? 'fa-lock' : 'fa-folder-open';
+                  
+                  $subLabel = \App\Models\Report::subStatusLabel($sub);
+                  $subColor = 'text-grey-status';
+                  if (str_contains($sub, 'pending') || str_contains($sub, 'verification')) {
+                      $subColor = 'text-orange-status';
+                  } elseif (str_contains($sub, 'rejected')) {
+                      $subColor = 'text-red-status';
+                  }
+                  
+                  // Specific color for Verifikasi Hasil HSE (should be grey as it's with HSE)
+                  if ($sub === 'report_verification_hse') {
+                      $subColor = 'text-grey-status';
+                  }
+                @endphp
+                
+                <div class="d-flex flex-column align-items-center">
+                  <span class="badge-status {{ $badgeClass }}">
+                    <i class="fas {{ $badgeIcon }}"></i> {{ $badgeText }}
+                  </span>
+                  @if($subLabel)
+                    <small class="status-text {{ $subColor }}">
+                      {{ $subLabel }}
+                    </small>
+                  @endif
+                </div>
               </td>
 
-              <td class="text-right">
-                <button class="btn btn-success btn-sm btn-action" type="button" disabled>
-                  <i class="fas fa-check mr-1"></i> Setujui
-                </button>
-                <button class="btn btn-danger btn-sm btn-action" type="button" disabled>
-                  <i class="fas fa-times mr-1"></i> Tolak
-                </button>
+              <td class="text-center">
+                <div class="d-flex justify-content-center flex-nowrap" style="gap:.5rem;">
+                @if($report->sub_status === 'plan_verification')
+                  <button class="btn btn-success btn-sm btn-action" style="white-space:nowrap;" wire:click="openApproveModal({{ $report->id }})">
+                    <i class="fas fa-check mr-1"></i> Setujui
+                  </button>
+                  <button class="btn btn-danger btn-sm btn-action" style="white-space:nowrap;" wire:click="openRejectModal({{ $report->id }})">
+                    <i class="fas fa-times mr-1"></i> Tolak
+                  </button>
+                @elseif(in_array($report->sub_status, ['report_verification_manager', 'report_pending_hse']))
+                  <button class="btn btn-success btn-sm btn-action" style="white-space:nowrap;" wire:click="approveResult({{ $report->id }})">
+                    <i class="fas fa-check mr-1"></i> Setujui
+                  </button>
+                  <button class="btn btn-danger btn-sm btn-action" style="white-space:nowrap;" wire:click="openRejectReportModal({{ $report->id }})">
+                    <i class="fas fa-times mr-1"></i> Tolak
+                  </button>
+                @else
+                  <button class="btn btn-success btn-sm btn-action" style="white-space:nowrap;" disabled>
+                    <i class="fas fa-check mr-1"></i> Setujui
+                  </button>
+                  <button class="btn btn-danger btn-sm btn-action" style="white-space:nowrap;" disabled>
+                    <i class="fas fa-times mr-1"></i> Tolak
+                  </button>
+                @endif
+                </div>
               </td>
             </tr>
-
+            @empty
+            <tr>
+              <td colspan="8" class="text-center text-muted py-5">
+                <i class="fas fa-inbox" style="font-size:2.5rem; opacity:.3;"></i>
+                <div class="mt-2">Belum ada plan masuk.</div>
+              </td>
+            </tr>
+            @endforelse
           </tbody>
         </table>
       </div>
 
       <div class="d-flex justify-content-between align-items-center p-3">
         <small class="text-muted">
-          Menampilkan <b id="planShownCount">3</b> data dari <b id="planTotalCount">3</b> data
+          Menampilkan <b id="planShownCount">{{ $this->reports->count() > 0 ? 1 : 0 }}</b> sampai <b id="planTotalCount">{{ $this->reports->count() }}</b> dari {{ $this->reports->count() }} data
         </small>
 
         <div class="btn-group btn-group-sm">
@@ -191,88 +233,40 @@
 </div>
 </div>
 
-{{-- Modal Bukti PDF --}}
-<div class="modal fade" id="modalBuktiPlan" tabindex="-1" role="dialog" aria-labelledby="modalBuktiPlanLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalBuktiPlanLabel">
-          <i class="far fa-file-pdf mr-1"></i> Bukti Plan (PDF)
-        </h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
 
-      <div class="modal-body p-0" style="height:80vh;">
-        <iframe id="pdfFramePlan" src="" style="border:0;width:100%;height:100%;"></iframe>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Tutup</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 {{-- Modal Follow Up (approve flow) --}}
 <div class="modal fade" id="modalFollowUpPlan"
      data-backdrop="static" data-keyboard="false"
-     tabindex="-1" role="dialog"
-     aria-labelledby="modalFollowUpPlanLabel" aria-hidden="true">
+     tabindex="-1" role="dialog" wire:ignore.self>
 
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
 
       <div class="modal-header">
-        <h5 class="modal-title" id="modalFollowUpPlanLabel">
-          <i class="fas fa-clipboard-list mr-1"></i> Form Plan Tindak Lanjut
+        <h5 class="modal-title">
+          <i class="fas fa-clipboard-list mr-1"></i> Form Setujui Plan Tindak Lanjut
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
 
-      <form id="followUpPlanForm" novalidate>
+      <form wire:submit.prevent="submitApprovePlan">
         <div class="modal-body">
-
-          <input type="hidden" id="ppuId" name="plan_id" value="">
-
-          <div class="form-group">
-            <label for="ppuIdLaporan">ID Laporan</label>
-            <input type="text" class="form-control" id="ppuIdLaporan" name="id_laporan" value="" readonly>
-          </div>
-
-          <div class="form-group">
-            <label for="ppuTanggal">Tanggal & Waktu</label>
-            <input type="text" class="form-control" id="ppuTanggal" name="tanggal" value="" readonly>
-          </div>
-
-          <div class="form-group">
-            <label for="ppuPic">Nama PIC</label>
-            <input type="text" class="form-control" id="ppuPic" name="pic" value="" readonly>
-          </div>
-
-          <div class="form-group">
-            <label for="ppuNoTelp">No Telp</label>
-            <input type="text" class="form-control" id="ppuNoTelp" name="no_telp" value="" readonly>
-          </div>
-
-          <hr class="my-3">
-
           <div class="form-group mb-0">
-            <label for="ppuCatatan">Catatan plan tindak lanjut <span class="text-danger">*</span></label>
+            <label>Catatan Plan Tindak Lanjut <span class="text-danger">*</span></label>
             <textarea
-              class="form-control"
-              id="ppuCatatan"
-              name="catatan_tindak_lanjut"
+              class="form-control @error('managerNote') is-invalid @enderror"
+              wire:model="managerNote"
               rows="4"
               placeholder="Tuliskan plan catatan tindak lanjut..."
               required
             ></textarea>
-            <div class="invalid-feedback">Harap isi catatan tindak lanjut.</div>
+            @error('managerNote')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
           </div>
-
         </div>
 
         <div class="modal-footer">
@@ -280,7 +274,7 @@
             <i class="fas fa-times mr-1"></i> Batal
           </button>
           <button type="submit" class="btn btn-primary btn-sm">
-            <i class="fas fa-save mr-1"></i> Simpan Tindak Lanjut
+            <i class="fas fa-save mr-1"></i> Simpan Persetujuan
           </button>
         </div>
       </form>
@@ -288,158 +282,128 @@
     </div>
   </div>
 </div>
-@endsection
+
+{{-- Modal Reject Plan --}}
+<div class="modal fade" id="modalRejectPlan"
+     data-backdrop="static" data-keyboard="false"
+     tabindex="-1" role="dialog" wire:ignore.self>
+
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="fas fa-times-circle text-danger mr-1"></i> Tolak Plan Tindak Lanjut
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <form wire:submit.prevent="submitRejectPlan">
+        <div class="modal-body">
+          <div class="form-group mb-0">
+            <label>Catatan Penolakan <span class="text-danger">*</span></label>
+            <textarea
+              class="form-control @error('managerRejectNote') is-invalid @enderror"
+              wire:model="managerRejectNote"
+              rows="4"
+              placeholder="Tulis alasan mengapa plan ditolak..."
+              required
+            ></textarea>
+            @error('managerRejectNote')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+            <i class="fas fa-times mr-1"></i> Batal
+          </button>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i class="fas fa-times-circle mr-1"></i> Tolak Plan
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+ 
+ {{-- Modal Reject Report/Result --}}
+ <div class="modal fade" id="modalRejectReport"
+      data-backdrop="static" data-keyboard="false"
+      tabindex="-1" role="dialog" wire:ignore.self>
+ 
+   <div class="modal-dialog modal-lg" role="document">
+     <div class="modal-content">
+ 
+       <div class="modal-header bg-danger text-white">
+         <h5 class="modal-title">
+           <i class="fas fa-times-circle mr-1"></i> Tolak Hasil Tindak Lanjut
+         </h5>
+         <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
+       </div>
+ 
+       <form wire:submit.prevent="submitRejectResult">
+         <div class="modal-body">
+ 
+           <div class="form-group mb-0">
+             <label>Catatan Penolakan Hasil <span class="text-danger">*</span></label>
+             <textarea
+               class="form-control @error('managerRejectNote') is-invalid @enderror"
+               wire:model="managerRejectNote"
+               rows="4"
+               placeholder="Jelaskan mengapa hasil tidak sesuai..."
+               required
+             ></textarea>
+             @error('managerRejectNote')
+               <div class="invalid-feedback">{{ $message }}</div>
+             @enderror
+           </div>
+         </div>
+ 
+         <div class="modal-footer">
+           <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+             <i class="fas fa-times mr-1"></i> Batal
+           </button>
+           <button type="submit" class="btn btn-primary btn-sm">
+             <i class="fas fa-times-circle mr-1"></i> Tolak Hasil
+           </button>
+         </div>
+       </form>
+ 
+     </div>
+   </div>
+ </div>
+ </div>
 
 @push('scripts')
 <script>
-  // Bukti PDF
-  $(document).on('click', '.js-open-pdf', function () {
-    $('#pdfFramePlan').attr('src', $(this).data('pdf'));
+
+
+  document.addEventListener('livewire:load', function () {
+      Livewire.on('open-modal', function (data) {
+          $('#' + data.modal).modal('show');
+      });
+      Livewire.on('close-modal', function (data) {
+          $('#' + data.modal).modal('hide');
+          $('.modal-backdrop').remove();
+          $('body').removeClass('modal-open');
+      });
   });
-
-  $('#modalBuktiPlan').on('hidden.bs.modal', function () {
-    $('#pdfFramePlan').attr('src', '');
+  
+  // Also register event listeners for Livewire v3
+  document.addEventListener('open-modal', (event) => {
+      $('#' + event.detail.modal).modal('show');
   });
-
-  // Filter/Search sederhana
-  function normalizeText(s){
-    return (s || '').toString().toLowerCase().trim();
-  }
-
-  function applyPlanSearch(){
-    const keyword = normalizeText($('#planSearchInput').val());
-    const $rows = $('#planTable tbody tr');
-    const total = $rows.length;
-    let shown = 0;
-
-    $rows.each(function(){
-      const $row = $(this);
-      const rowText = normalizeText($row.text());
-      const isShow = (!keyword) ? true : rowText.includes(keyword);
-
-      $row.toggle(isShow);
-      if (isShow) shown++;
-    });
-
-    $('#planShownCount').text(shown);
-    $('#planTotalCount').text(total);
-  }
-
-  $(document).on('input', '#planSearchInput', applyPlanSearch);
-  $(document).on('click', '#planSearchBtn', applyPlanSearch);
-  $(document).on('click', '#planResetBtn', function(){
-    $('#planSearchInput').val('');
-    applyPlanSearch();
-  });
-
-  $(document).ready(function(){
-    applyPlanSearch();
-  });
-
-  // Render status
-  function renderStatus(status, note = ''){
-    if (status === 'pending') {
-      return `
-        <span class="badge badge-pillish st-pending">
-          <i class="fas fa-clock"></i> Pending
-        </span>
-      `;
-    }
-
-    if (status === 'open') {
-      return `
-        <span class="status-wrap">
-          <span class="badge badge-pillish st-open">
-            <i class="fas fa-folder-open"></i> Open
-          </span>
-          ${note ? `<small class="status-note">${note}</small>` : ``}
-        </span>
-      `;
-    }
-
-    return `
-      <span class="badge badge-pillish st-close">
-        <i class="fas fa-lock"></i> Close
-      </span>
-    `;
-  }
-
-  // Approve flow via modal
-  let __pendingApprovePlanRowId = null;
-
-  $(document).on('click', '.js-approve', function(){
-    const id = $(this).data('id');
-    const $row = $(`tr[data-id="${id}"]`);
-    if ($row.attr('data-approval') !== 'none') return;
-
-    __pendingApprovePlanRowId = id;
-
-    $('#ppuId').val(id);
-    $('#ppuIdLaporan').val($(this).data('id_laporan') || '');
-    $('#ppuTanggal').val($(this).data('tanggal') || '');
-    $('#ppuPic').val($(this).data('pic') || '');
-    $('#ppuNoTelp').val($(this).data('no_telp') || '');
-
-    $('#followUpPlanForm').removeClass('was-validated');
-    $('#ppuCatatan').val('');
-
-    $('#modalFollowUpPlan').modal('show');
-  });
-
-  // Reject
-  $(document).on('click', '.js-reject', function(){
-    const id = $(this).data('id');
-    const $row = $(`tr[data-id="${id}"]`);
-    if ($row.attr('data-approval') !== 'none') return;
-
-    $row.attr('data-approval', 'rejected');
-    $row.attr('data-process-status', 'close');
-    $row.find('.js-status-cell').html(renderStatus('close'));
-    $row.find('.js-approve, .js-reject').prop('disabled', true);
-
-    applyPlanSearch();
-  });
-
-  // Submit follow-up -> OPEN + note
-  $('#followUpPlanForm').on('submit', function(e){
-    e.preventDefault();
-
-    const form = this;
-    if (!form.checkValidity()) {
-      e.stopPropagation();
-      $(form).addClass('was-validated');
-      return;
-    }
-
-    const id = __pendingApprovePlanRowId;
-    if (!id) return;
-
-    const $row = $(`tr[data-id="${id}"]`);
-
-    $row.attr('data-approval', 'approved');
-    $row.attr('data-process-status', 'open');
-
-    $row.find('.js-status-cell').html(
-      renderStatus('open', 'Pending : PIC')
-    );
-
-    $row.find('.js-approve, .js-reject').prop('disabled', true);
-
-    $('#modalFollowUpPlan').modal('hide');
-    applyPlanSearch();
-  });
-
-  // Reset modal
-  $('#modalFollowUpPlan').on('hidden.bs.modal', function () {
-    const form = document.getElementById('followUpPlanForm');
-    form.reset();
-    $('#followUpPlanForm').removeClass('was-validated');
-
-    __pendingApprovePlanRowId = null;
-
-    $('#ppuId').val('');
-    $('#ppuIdLaporan, #ppuTanggal, #ppuPic, #ppuNoTelp').val('');
-    $('#ppuCatatan').val('');
+  document.addEventListener('close-modal', (event) => {
+      $('#' + event.detail.modal).modal('hide');
+      $('.modal-backdrop').remove();
+      $('body').removeClass('modal-open');
   });
 </script>
 @endpush
