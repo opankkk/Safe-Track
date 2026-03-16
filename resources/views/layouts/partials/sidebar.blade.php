@@ -1,4 +1,7 @@
 @php
+  // Apakah user ini adalah manager?
+  $isManager = auth()->check() && auth()->user()->role === 'manager';
+
   // Deteksi module dari URL: hse/*, pic/*, hse-manager/*
   $module = request()->segment(1);
 
@@ -14,23 +17,30 @@
     default => 'hse.',
   };
 
-  // label brand (opsional)
-  $brandText = match ($module) {
-    'pic' => 'Sistem HSE - PIC',
-    'hse-manager' => 'Sistem HSE - Manager',
-    default => 'Sistem HSE - HSE',
-  };
+  // label brand: Manager selalu tampil sebagai Manager, tak peduli di halaman mana
+  $brandText = $isManager
+    ? 'Sistem HSE - Manager'
+    : match ($module) {
+        'pic' => 'Sistem HSE - PIC',
+        'hse-manager' => 'Sistem HSE - Manager',
+        default => 'Sistem HSE - HSE',
+      };
 @endphp
 
 <aside class="main-sidebar sidebar-light-primary elevation-4 d-flex flex-column">
 
   {{-- Brand --}}
-  <a href="{{ route($routePrefix.'dashboard') }}" class="brand-link">
-    <img src="{{ asset('adminlte3/dist/img/AdminLTELogo.png') }}"
-         alt="Logo"
-         class="brand-image img-circle elevation-3"
-         style="opacity: .8">
-    <span class="brand-text font-weight-light">{{ $brandText }}</span>
+  <a href="{{ route($routePrefix.'dashboard') }}" class="brand-link text-center border-bottom-0 d-flex flex-column align-items-center py-3">
+    <div class="brand-logo-wrapper mb-2">
+      <img src="https://pamitra.co.id/landing/images/logo-gray.png"
+           alt="Pamitra Logo"
+           class="brand-image-xl"
+           style="width: 140px; height: auto; max-height: none; float: none; display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));">
+    </div>
+    <br>
+    <span class="brand-text font-weight-bolder" style="font-size: 0.95rem; line-height: 1.2; color: #002E5B; white-space: normal; letter-spacing: 0.5px; text-transform: uppercase;">
+      Sistem Pelaporan HSE
+    </span>
   </a>
 
   <div class="sidebar">
@@ -50,13 +60,13 @@
           </a>
         </li>
 
-        {{-- LAPORAN KERUSAKAN & TEMUAN - tidak tampil di HSE MANAGER --}}
+        {{-- LAPORAN KECELAKAAN & TEMUAN - tidak tampil di HSE MANAGER --}}
         @if ($module !== 'hse-manager')
           <li class="nav-item">
             <a href="{{ route($routePrefix.'accident') }}"
               class="nav-link @yield('menu-accident-active')">
               <i class="nav-icon fas fa-notes-medical"></i>
-              <p>Laporan Kerusakan</p>
+              <p>Laporan Kecelakaan</p>
             </a>
           </li>
 
@@ -69,17 +79,6 @@
           </li>
         @endif
 
-        {{-- LAPORAN PERBAIKAN (RIWAYAT) - HSE & HSE MANAGER --}}
-        @if (in_array($module, ['hse', 'hse-manager']))
-          <li class="nav-item">
-            <a href="{{ route($routePrefix.'report') }}"
-               class="nav-link @yield('menu-perbaikan-active')">
-              <i class="nav-icon fas fa-tools"></i>
-              <p>Laporan Perbaikan</p>
-            </a>
-          </li>
-        @endif
-
         {{-- PLAN TINDAK LANJUT - hanya HSE MANAGER --}}
         @if ($module === 'hse-manager')
           <li class="nav-item">
@@ -87,6 +86,17 @@
                class="nav-link @yield('menu-plan-tindak-lanjut-active')">
               <i class="nav-icon fas fa-clipboard-check"></i>
               <p>Plan Tindak Lanjut</p>
+            </a>
+          </li>
+        @endif
+
+        {{-- LAPORAN PENANGANAN (RIWAYAT) - HSE & HSE MANAGER --}}
+        @if (in_array($module, ['hse', 'hse-manager']))
+          <li class="nav-item">
+            <a href="{{ route($routePrefix.'report') }}"
+               class="nav-link @yield('menu-perbaikan-active')">
+              <i class="nav-icon fas fa-tools"></i>
+              <p>Laporan Penanganan</p>
             </a>
           </li>
         @endif

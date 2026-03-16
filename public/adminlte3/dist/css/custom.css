@@ -2,702 +2,962 @@
    AUTH PAGE
 ================================= */
 
-body.auth-page{
+body.auth-page {
   position: relative;
   min-height: 100vh;
   overflow: hidden;
   background: #0b1220;
 }
 
-.auth-bg{
-  position:absolute;
-  inset:0;
+.auth-bg {
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(1200px 600px at 20% 10%, rgba(0,123,255,.35), transparent 60%),
-    radial-gradient(900px 500px at 90% 30%, rgba(40,167,69,.25), transparent 55%),
-    radial-gradient(800px 450px at 40% 90%, rgba(255,193,7,.18), transparent 55%),
-    linear-gradient(135deg,#0b1220 0%,#111b2e 50%,#0b1220 100%);
-  filter:saturate(1.05);
-  z-index:0;
+    radial-gradient(1200px 600px at 20% 10%, rgba(0, 123, 255, .35), transparent 60%),
+    radial-gradient(900px 500px at 90% 30%, rgba(40, 167, 69, .25), transparent 55%),
+    radial-gradient(800px 450px at 40% 90%, rgba(255, 193, 7, .18), transparent 55%),
+    linear-gradient(135deg, #0b1220 0%, #111b2e 50%, #0b1220 100%);
+  filter: saturate(1.05);
+  z-index: 0;
 }
 
-.login-box{
-  position:relative;
-  z-index:1;
+.login-box {
+  position: relative;
+  z-index: 1;
 }
 
-.auth-brand{
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(6px);
-  border:1px solid rgba(255,255,255,.12);
+.auth-brand {
+  background: rgba(255, 255, 255, .12);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, .12);
 }
 
-.auth-card{
-  border-radius:14px;
-  overflow:hidden;
+.auth-card {
+  border-radius: 14px;
+  overflow: hidden;
 }
 
-.auth-card .card-body{
-  border-radius:0 0 14px 14px;
+.auth-card .card-body {
+  border-radius: 0 0 14px 14px;
 }
 
-.auth-card .form-control{
-  border-radius:10px;
+.auth-card .form-control {
+  border-radius: 10px;
 }
 
-.auth-card .input-group-text{
-  border-radius:0 10px 10px 0;
+.auth-card .input-group-text {
+  border-radius: 0 10px 10px 0;
 }
 
-.auth-btn{
-  border-radius:12px;
-  font-weight:600;
-  letter-spacing:.2px;
-  box-shadow:0 10px 25px rgba(0,123,255,.20);
+.auth-btn {
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: .2px;
+  box-shadow: 0 10px 25px rgba(0, 123, 255, .20);
 }
 
-.auth-btn:hover{
-  box-shadow:0 14px 30px rgba(0,123,255,.28);
+.auth-btn:hover {
+  box-shadow: 0 14px 30px rgba(0, 123, 255, .28);
 }
 
-.font-weight-semibold{
-  font-weight:600;
+.font-weight-semibold {
+  font-weight: 600;
 }
 
-.auth-page{
-    position: relative;
-    min-height: 100vh;
-    overflow: hidden;
-    background: #0b1220;
-  }
+.auth-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #0b1220;
+}
 
-  .auth-bg{
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(1200px 600px at 20% 10%, rgba(0,123,255,.35), transparent 60%),
-      radial-gradient(900px 500px at 90% 30%, rgba(0,123,255,.25), transparent 55%),
-      linear-gradient(135deg, #0b1220 0%, #111b2e 50%, #0b1220 100%);
-    z-index: 0;
-  }
+.auth-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(0, 123, 255, .35), transparent 60%),
+    radial-gradient(900px 500px at 90% 30%, rgba(0, 123, 255, .25), transparent 55%),
+    linear-gradient(135deg, #0b1220 0%, #111b2e 50%, #0b1220 100%);
+  z-index: 0;
+}
 
-  .login-box{ position: relative; z-index: 1; }
+.login-box {
+  position: relative;
+  z-index: 1;
+}
 
-  .auth-brand{
-    background: rgba(255,255,255,.12);
-    backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,.12);
-  }
+.auth-brand {
+  background: rgba(255, 255, 255, .12);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, .12);
+}
 
-  .auth-card{
-    border-radius: 14px;
-    overflow: hidden;
-  }
+.auth-card {
+  border-radius: 14px;
+  overflow: hidden;
+}
 
-  .auth-card .form-control{
-    border-radius: 10px;
-  }
+.auth-card .form-control {
+  border-radius: 10px;
+}
 
-  .auth-card .input-group-text{
-    border-radius: 0 10px 10px 0;
-  }
+.auth-card .input-group-text {
+  border-radius: 0 10px 10px 0;
+}
 
-  .auth-btn{
-    border-radius: 12px;
-    font-weight: 600;
-    letter-spacing: .2px;
-    box-shadow: 0 10px 25px rgba(0,123,255,.20);
-  }
+.auth-btn {
+  border-radius: 12px;
+  font-weight: 600;
+  letter-spacing: .2px;
+  box-shadow: 0 10px 25px rgba(0, 123, 255, .20);
+}
 
-  .auth-btn:hover{
-    box-shadow: 0 14px 30px rgba(0,123,255,.28);
-  }
+.auth-btn:hover {
+  box-shadow: 0 14px 30px rgba(0, 123, 255, .28);
+}
 
-  .font-weight-semibold{ font-weight: 600; }
+.font-weight-semibold {
+  font-weight: 600;
+}
 
 .page-hse-accident .table td,
-.page-hse-accident .table th{
+.page-hse-accident .table th {
   vertical-align: middle;
 }
 
 /* Button */
-.page-hse-accident .btn-round-sm{
-  padding:.25rem .55rem;
-  border-radius:.4rem;
+.page-hse-accident .btn-round-sm {
+  padding: .25rem .55rem;
+  border-radius: .4rem;
 }
-.page-hse-accident .btn-action{
-  font-weight:600;
-  border-radius:.4rem;
-  padding:.35rem .75rem;
+
+.page-hse-accident .btn-action {
+  font-weight: 600;
+  border-radius: .4rem;
+  padding: .35rem .75rem;
 }
 
 /* Badge */
-.page-hse-accident .badge-pillish{
-  padding:.5rem .75rem;
-  border-radius:.4rem;
-  display:inline-flex;
-  align-items:center;
-  gap:.35rem;
-  font-weight:600;
-  color:#fff !important;
-  border:0 !important;
+.page-hse-accident .badge-pillish {
+  padding: .5rem .75rem;
+  border-radius: .4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-weight: 600;
+  color: #fff !important;
+  border: 0 !important;
 }
-.page-hse-accident .st-pending{ background:#ff851b !important; }
-.page-hse-accident .st-open{ background:#3c8dbc !important; }
-.page-hse-accident .st-close{ background:#001f3f !important; }
+
+.page-hse-accident .st-pending {
+  background: #ff851b !important;
+}
+
+.page-hse-accident .st-open {
+  background: #3c8dbc !important;
+}
+
+.page-hse-accident .st-close {
+  background: #001f3f !important;
+}
 
 /* Status wrap */
-.page-hse-accident .status-wrap{
-  display:inline-flex;
-  flex-direction:column;
-  align-items:center;
-  line-height:1.1;
-  gap:.25rem;
+.page-hse-accident .status-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+  gap: .25rem;
 }
-.page-hse-accident .status-note{
-  font-size:.75rem;
-  color:#6c757d;
-  font-weight:600;
-  white-space:nowrap;
+
+.page-hse-accident .status-note {
+  font-size: .75rem;
+  color: #6c757d;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Truncate */
-.page-hse-accident .truncate-2{
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
+.page-hse-accident .truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Filter & Pager */
-.page-hse-accident .filter-select{
-  border-radius:.4rem;
-  font-weight:600;
+.page-hse-accident .filter-select {
+  border-radius: .4rem;
+  font-weight: 600;
 }
-.page-hse-accident .pager-btn{
-  border-radius:.4rem;
-  font-weight:600;
-  padding:.35rem .75rem;
+
+.page-hse-accident .pager-btn {
+  border-radius: .4rem;
+  font-weight: 600;
+  padding: .35rem .75rem;
 }
-.page-hse-accident .pager-btn:disabled{
-  opacity:.6;
-  cursor:not-allowed;
+
+.page-hse-accident .pager-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
 }
 
 /* Modal FollowUp */
-.page-hse-accident #modalFollowUp .modal-dialog{
-  max-width:900px;
+.page-hse-accident #modalFollowUp .modal-dialog {
+  max-width: 900px;
 }
-.page-hse-accident #modalFollowUp .modal-content{
-  max-height:calc(100vh - 3rem);
-  overflow:hidden;
+
+.page-hse-accident #modalFollowUp .modal-content {
+  max-height: calc(100vh - 3rem);
+  overflow: hidden;
 }
-.page-hse-accident #modalFollowUp .modal-body{
-  overflow-y:auto;
-  max-height:calc(100vh - 3rem - 120px);
+
+.page-hse-accident #modalFollowUp .modal-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 3rem - 120px);
 }
-.page-hse-accident #modalFollowUp .modal-footer{
-  position:sticky;
-  bottom:0;
-  background:#fff;
-  z-index:2;
-  border-top:1px solid rgba(0,0,0,.1);
+
+.page-hse-accident #modalFollowUp .modal-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 2;
+  border-top: 1px solid rgba(0, 0, 0, .1);
 }
+
 /* =================================
    HSE INCIDENT PAGE
 ================================= */
 
-#incidentTable{
+#incidentTable {
   table-layout: fixed;
-  width:100%;
+  width: 100%;
 }
 
 #incidentTable th,
-#incidentTable td{
+#incidentTable td {
   vertical-align: middle;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.clamp-2{
+.clamp-2 {
   white-space: normal !important;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.wrap-full{
-  white-space:normal !important;
-  overflow:visible;
-  text-overflow:initial;
-  line-height:1.5;
+.wrap-full {
+  white-space: normal !important;
+  overflow: visible;
+  text-overflow: initial;
+  line-height: 1.5;
 }
 
 /* Modal FollowUp Incident */
 
-#modalFollowUpIncident .modal-dialog{
-  max-width:900px;
+#modalFollowUpIncident .modal-dialog {
+  max-width: 900px;
 }
 
-#modalFollowUpIncident .modal-content{
-  max-height:calc(100vh - 3rem);
-  overflow:hidden;
+#modalFollowUpIncident .modal-content {
+  max-height: calc(100vh - 3rem);
+  overflow: hidden;
 }
 
-#modalFollowUpIncident .modal-body{
-  overflow-y:auto;
-  max-height:calc(100vh - 3rem - 120px);
+#modalFollowUpIncident .modal-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 3rem - 120px);
 }
 
-#modalFollowUpIncident .modal-footer{
-  position:sticky;
-  bottom:0;
-  background:#fff;
-  z-index:2;
-  border-top:1px solid rgba(0,0,0,.1);
+#modalFollowUpIncident .modal-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 2;
+  border-top: 1px solid rgba(0, 0, 0, .1);
 }
 
-.table td, .table th { vertical-align: middle; }
+.table td,
+.table th {
+  vertical-align: middle;
+}
 
-  /* bukti button kecil rapi */
-  .bukti-btn{ padding: .25rem .55rem; border-radius: .4rem; }
+/* bukti button kecil rapi */
+.bukti-btn {
+  padding: .25rem .55rem;
+  border-radius: .4rem;
+}
 
-  /* aksi ala AdminLTE projects (rapi, rounded) */
-  .aksi-btn{
-    font-weight: 600;
-    border-radius: .4rem;
-    padding: .35rem .75rem;
-  }
+/* aksi ala AdminLTE projects (rapi, rounded) */
+.aksi-btn {
+  font-weight: 600;
+  border-radius: .4rem;
+  padding: .35rem .75rem;
+}
 
-  /* badge konsisten */
-  .badge-pillish{
-    padding: .5rem .75rem;
-    border-radius: .4rem;
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
-    font-weight: 600;
-    white-space: nowrap;
-  }
+/* badge konsisten */
+.badge-pillish {
+  padding: .5rem .75rem;
+  border-radius: .4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
 
-  /* biar header card serasa AdminLTE */
-  .card{ border-radius: .75rem; }
+/* biar header card serasa AdminLTE */
+.card {
+  border-radius: .75rem;
+}
 
-  /* pagination button konsisten */
-  .pager-btn{
-    border-radius: .4rem;
-    font-weight: 600;
-    padding: .35rem .75rem;
-  }
-  .pager-btn:{ opacity: .6; cursor: not-allowed; }
+/* pagination button konsisten */
+.pager-btn {
+  border-radius: .4rem;
+  font-weight: 600;
+  padding: .35rem .75rem;
+}
 
-  /* tabel */
-  #reportTable{
-    table-layout: fixed;
-    width: 100%;
-  }
-  #reportTable th,
-  #reportTable td{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.pager-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
 
-  /* ID laporan jangan sampai turun baris */
-  .id-laporan{
-    font-weight: 800;
-    letter-spacing: .2px;
-    white-space: nowrap !important;
-  }
+/* tabel */
+#reportTable {
+  table-layout: fixed;
+  width: 100%;
+}
 
-  /* Aksi rapi */
-  .aksi-wrap{
-    display:flex;
-    justify-content:flex-end;
-    gap:.5rem;
-    flex-wrap: nowrap;
-  }
+#reportTable th,
+#reportTable td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  /* status open note kecil - FIX CENTERING */
-  .status-wrap{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.1;
-    gap: .25rem;
-    width: 100%;
-    text-align: center;
-  }
-  .status-note{
-    font-size: .75rem;
-    color: #6c757d;
-    font-weight: 600;
-    white-space: nowrap;
-  }
+/* ID laporan jangan sampai turun baris */
+.id-laporan {
+  font-weight: 800;
+  letter-spacing: .2px;
+  white-space: nowrap !important;
+}
 
-  /* Palette status (custom) */
-  .badge-status{
-    color:#fff !important;
-    border: 0 !important;
-  }
-  .badge-status.pending{ background:#ff851b !important; }
-  .badge-status.open{ background:#3c8dbc !important; }
-  .badge-status.status-close{ background:#001f3f !important; }
+/* Aksi rapi */
+.aksi-wrap {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  flex-wrap: nowrap;
+}
 
-  /* Accident badge (merah AdminLTE-ish) */
-  .badge-accident{
-    background:#dc3545 !important;
-    color:#fff !important;
-    border:0 !important;
-  }
+/* status open note kecil - FIX CENTERING */
+.status-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1;
+  gap: .25rem;
+  width: 100%;
+  text-align: center;
+}
 
-  /* FILTER BAR */
-  .filter-bar{
-    display:flex;
-    align-items:center;
-    gap:.5rem;
-    flex-wrap: wrap;
-    justify-content:flex-end;
-  }
-  .filter-bar .form-control{
-    border-radius: .4rem;
-    font-weight: 600;
-  }
-  .filter-bar .btn{
-    border-radius: .4rem;
-    font-weight: 700;
-  }
+.status-note {
+  font-size: .75rem;
+  color: #6c757d;
+  font-weight: 600;
+  white-space: nowrap;
+}
 
-  /* modal follow-up scroll */
-  #modalFollowUpReport .modal-dialog{ max-width: 900px; }
-  #modalFollowUpReport .modal-content{
-    max-height: calc(100vh - 3rem);
-    overflow: hidden;
-  }
-  #modalFollowUpReport .modal-body{
-    overflow-y: auto;
-    max-height: calc(100vh - 3rem - 120px);
-  }
-  #modalFollowUpReport .modal-footer{
-    position: sticky;
-    bottom: 0;
-    background: #fff;
-    z-index: 2;
-    border-top: 1px solid rgba(0,0,0,.1);
-  }
+/* Palette status (custom) */
+.badge-status {
+  color: #fff !important;
+  border: 0 !important;
+}
 
-  .page-hse-accident .table td,
-.page-hse-accident .table th{
+.badge-status.pending {
+  background: #ff851b !important;
+}
+
+.badge-status.open {
+  background: #3c8dbc !important;
+}
+
+.badge-status.status-close {
+  background: #001f3f !important;
+}
+
+/* Accident badge (merah AdminLTE-ish) */
+.badge-accident {
+  background: #dc3545 !important;
+  color: #fff !important;
+  border: 0 !important;
+}
+
+/* FILTER BAR */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.filter-bar .form-control {
+  border-radius: .4rem;
+  font-weight: 600;
+}
+
+.filter-bar .btn {
+  border-radius: .4rem;
+  font-weight: 700;
+}
+
+/* modal follow-up scroll */
+#modalFollowUpReport .modal-dialog {
+  max-width: 900px;
+}
+
+#modalFollowUpReport .modal-content {
+  max-height: calc(100vh - 3rem);
+  overflow: hidden;
+}
+
+#modalFollowUpReport .modal-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 3rem - 120px);
+}
+
+#modalFollowUpReport .modal-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 2;
+  border-top: 1px solid rgba(0, 0, 0, .1);
+}
+
+.page-hse-accident .table td,
+.page-hse-accident .table th {
   vertical-align: middle;
 }
 
 /* Button */
-.page-hse-accident .btn-round-sm{
-  padding:.25rem .55rem;
-  border-radius:.4rem;
+.page-hse-accident .btn-round-sm {
+  padding: .25rem .55rem;
+  border-radius: .4rem;
 }
-.page-hse-accident .btn-action{
-  font-weight:600;
-  border-radius:.4rem;
-  padding:.35rem .75rem;
+
+.page-hse-accident .btn-action {
+  font-weight: 600;
+  border-radius: .4rem;
+  padding: .35rem .75rem;
 }
 
 /* Badge */
-.page-hse-accident .badge-pillish{
-  padding:.5rem .75rem;
-  border-radius:.4rem;
-  display:inline-flex;
-  align-items:center;
-  gap:.35rem;
-  font-weight:600;
-  color:#fff !important;
-  border:0 !important;
+.page-hse-accident .badge-pillish {
+  padding: .5rem .75rem;
+  border-radius: .4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-weight: 600;
+  color: #fff !important;
+  border: 0 !important;
 }
-.page-hse-accident .st-pending{ background:#ff851b !important; }
-.page-hse-accident .st-open{ background:#3c8dbc !important; }
-.page-hse-accident .st-close{ background:#001f3f !important; }
+
+.page-hse-accident .st-pending {
+  background: #ff851b !important;
+}
+
+.page-hse-accident .st-open {
+  background: #3c8dbc !important;
+}
+
+.page-hse-accident .st-close {
+  background: #001f3f !important;
+}
 
 /* Status wrap */
-.page-hse-accident .status-wrap{
-  display:inline-flex;
-  flex-direction:column;
-  align-items:center;
-  line-height:1.1;
-  gap:.25rem;
-}
-.page-hse-accident .status-note{
-  font-size:.75rem;
-  color:#6c757d;
-  font-weight:600;
-  white-space:nowrap;
+.page-hse-accident .status-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+  gap: .25rem;
 }
 
-
-.page-hse-accident .truncate-2{
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
+.page-hse-accident .status-note {
+  font-size: .75rem;
+  color: #6c757d;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 
-.page-hse-accident .filter-select{
-  border-radius:.4rem;
-  font-weight:600;
-}
-.page-hse-accident .pager-btn{
-  border-radius:.4rem;
-  font-weight:600;
-  padding:.35rem .75rem;
-}
-.page-hse-accident .pager-btn:disabled{
-  opacity:.6;
-  cursor:not-allowed;
+.page-hse-accident .truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 
-.page-hse-accident #modalFollowUp .modal-dialog{
-  max-width:900px;
-}
-.page-hse-accident #modalFollowUp .modal-content{
-  max-height:calc(100vh - 3rem);
-  overflow:hidden;
-}
-.page-hse-accident #modalFollowUp .modal-body{
-  overflow-y:auto;
-  max-height:calc(100vh - 3rem - 120px);
-}
-.page-hse-accident #modalFollowUp .modal-footer{
-  position:sticky;
-  bottom:0;
-  background:#fff;
-  z-index:2;
-  border-top:1px solid rgba(0,0,0,.1);
+.page-hse-accident .filter-select {
+  border-radius: .4rem;
+  font-weight: 600;
 }
 
-  #incidentTable{ table-layout: fixed; width:100%; }
-  #incidentTable th, #incidentTable td{ vertical-align: middle; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.page-hse-accident .pager-btn {
+  border-radius: .4rem;
+  font-weight: 600;
+  padding: .35rem .75rem;
+}
 
-  .clamp-2{
-    white-space: normal !important;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .wrap-full{
-    white-space: normal !important;
-    overflow: visible;
-    text-overflow: initial;
-    line-height: 1.5;
-  }
+.page-hse-accident .pager-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
 
-  #modalFollowUpIncident .modal-dialog{ max-width: 900px; }
-  #modalFollowUpIncident .modal-content{ max-height: calc(100vh - 3rem); overflow:hidden; }
-  #modalFollowUpIncident .modal-body{ overflow-y:auto; max-height: calc(100vh - 3rem - 120px); }
-  #modalFollowUpIncident .modal-footer{
-    position: sticky; bottom:0; background:#fff; z-index:2;
-    border-top: 1px solid rgba(0,0,0,.1);
-  }
 
-  .table td, .table th { vertical-align: middle; }
+.page-hse-accident #modalFollowUp .modal-dialog {
+  max-width: 900px;
+}
 
-  /* bukti button kecil rapi */
-  .bukti-btn{ padding: .25rem .55rem; border-radius: .4rem; }
+.page-hse-accident #modalFollowUp .modal-content {
+  max-height: calc(100vh - 3rem);
+  overflow: hidden;
+}
 
-  /* aksi ala AdminLTE projects (rapi, rounded) */
-  .aksi-btn{
-    font-weight: 600;
-    border-radius: .4rem;
-    padding: .35rem .75rem;
-  }
+.page-hse-accident #modalFollowUp .modal-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 3rem - 120px);
+}
 
-  /* badge konsisten */
-  .badge-pillish{
-    padding: .5rem .75rem;
-    border-radius: .4rem;
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
-    font-weight: 600;
-    white-space: nowrap;
-  }
+.page-hse-accident #modalFollowUp .modal-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 2;
+  border-top: 1px solid rgba(0, 0, 0, .1);
+}
 
-  /* biar header card serasa AdminLTE */
-  .card{ border-radius: .75rem; }
+#incidentTable {
+  table-layout: fixed;
+  width: 100%;
+}
 
-  /* pagination button konsisten */
-  .pager-btn{
-    border-radius: .4rem;
-    font-weight: 600;
-    padding: .35rem .75rem;
-  }
-  .pager-btn:{ opacity: .6; cursor: not-allowed; }
+#incidentTable th,
+#incidentTable td {
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  /* tabel */
-  #reportTable{
-    table-layout: fixed;
-    width: 100%;
-  }
-  #reportTable th,
-  #reportTable td{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.clamp-2 {
+  white-space: normal !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
-  /* ID laporan jangan sampai turun baris */
-  .id-laporan{
-    font-weight: 800;
-    letter-spacing: .2px;
-    white-space: nowrap !important;
-  }
+.wrap-full {
+  white-space: normal !important;
+  overflow: visible;
+  text-overflow: initial;
+  line-height: 1.5;
+}
 
-  /* Aksi rapi */
-  .aksi-wrap{
-    display:flex;
-    justify-content:flex-end;
-    gap:.5rem;
-    flex-wrap: nowrap;
-  }
+#modalFollowUpIncident .modal-dialog {
+  max-width: 900px;
+}
 
-  /* status open note kecil - FIX CENTERING */
-  .status-wrap{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.1;
-    gap: .25rem;
-    width: 100%;
-    text-align: center;
-  }
-  .status-note{
-    font-size: .75rem;
-    color: #6c757d;
-    font-weight: 600;
-    white-space: nowrap;
-  }
+#modalFollowUpIncident .modal-content {
+  max-height: calc(100vh - 3rem);
+  overflow: hidden;
+}
 
-  /* Palette status (custom) */
-  .badge-status{
-    color:#fff !important;
-    border: 0 !important;
-  }
-  .badge-status.pending{ background:#ff851b !important; }
-  .badge-status.open{ background:#3c8dbc !important; }
-  .badge-status.status-close{ background:#001f3f !important; }
+#modalFollowUpIncident .modal-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 3rem - 120px);
+}
 
-  /* Accident badge (merah AdminLTE-ish) */
-  .badge-accident{
-    background:#dc3545 !important;
-    color:#fff !important;
-    border:0 !important;
-  }
+#modalFollowUpIncident .modal-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 2;
+  border-top: 1px solid rgba(0, 0, 0, .1);
+}
 
-  /* FILTER BAR */
-  .filter-bar{
-    display:flex;
-    align-items:center;
-    gap:.5rem;
-    flex-wrap: wrap;
-    justify-content:flex-end;
-  }
-  .filter-bar .form-control{
-    border-radius: .4rem;
-    font-weight: 600;
-  }
-  .filter-bar .btn{
-    border-radius: .4rem;
-    font-weight: 700;
-  }
+.table td,
+.table th {
+  vertical-align: middle;
+}
 
-  /* modal follow-up scroll */
-  #modalFollowUpReport .modal-dialog{ max-width: 900px; }
-  #modalFollowUpReport .modal-content{
-    max-height: calc(100vh - 3rem);
-    overflow: hidden;
-  }
-  #modalFollowUpReport .modal-body{
-    overflow-y: auto;
-    max-height: calc(100vh - 3rem - 120px);
-  }
-  #modalFollowUpReport .modal-footer{
-    position: sticky;
-    bottom: 0;
-    background: #fff;
-    z-index: 2;
-    border-top: 1px solid rgba(0,0,0,.1);
-  }
+/* bukti button kecil rapi */
+.bukti-btn {
+  padding: .25rem .55rem;
+  border-radius: .4rem;
+}
 
-  .page-hse-plan .table td,
-.page-hse-plan .table th{
+/* aksi ala AdminLTE projects (rapi, rounded) */
+.aksi-btn {
+  font-weight: 600;
+  border-radius: .4rem;
+  padding: .35rem .75rem;
+}
+
+/* badge konsisten */
+.badge-pillish {
+  padding: .5rem .75rem;
+  border-radius: .4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* biar header card serasa AdminLTE */
+.card {
+  border-radius: .75rem;
+}
+
+/* pagination button konsisten */
+.pager-btn {
+  border-radius: .4rem;
+  font-weight: 600;
+  padding: .35rem .75rem;
+}
+
+.pager-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* tabel */
+#reportTable {
+  table-layout: fixed;
+  width: 100%;
+}
+
+#reportTable th,
+#reportTable td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ID laporan jangan sampai turun baris */
+.id-laporan {
+  font-weight: 800;
+  letter-spacing: .2px;
+  white-space: nowrap !important;
+}
+
+/* Aksi rapi */
+.aksi-wrap {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  flex-wrap: nowrap;
+}
+
+/* status open note kecil - FIX CENTERING */
+.status-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1;
+  gap: .25rem;
+  width: 100%;
+  text-align: center;
+}
+
+.status-note {
+  font-size: .75rem;
+  color: #6c757d;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Palette status (custom) */
+.badge-status {
+  color: #fff !important;
+  border: 0 !important;
+}
+
+.badge-status.pending {
+  background: #ff851b !important;
+}
+
+.badge-status.open {
+  background: #3c8dbc !important;
+}
+
+.badge-status.status-close {
+  background: #001f3f !important;
+}
+
+/* Accident badge (merah AdminLTE-ish) */
+.badge-accident {
+  background: #dc3545 !important;
+  color: #fff !important;
+  border: 0 !important;
+}
+
+/* FILTER BAR */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.filter-bar .form-control {
+  border-radius: .4rem;
+  font-weight: 600;
+}
+
+.filter-bar .btn {
+  border-radius: .4rem;
+  font-weight: 700;
+}
+
+/* modal follow-up scroll */
+#modalFollowUpReport .modal-dialog {
+  max-width: 900px;
+}
+
+#modalFollowUpReport .modal-content {
+  max-height: calc(100vh - 3rem);
+  overflow: hidden;
+}
+
+#modalFollowUpReport .modal-body {
+  overflow-y: auto;
+  max-height: calc(100vh - 3rem - 120px);
+}
+
+#modalFollowUpReport .modal-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  z-index: 2;
+  border-top: 1px solid rgba(0, 0, 0, .1);
+}
+
+.page-hse-plan .table td,
+.page-hse-plan .table th {
   vertical-align: middle;
 }
 
 /* Button */
-.page-hse-plan .btn-round-sm{
-  padding:.25rem .55rem;
-  border-radius:.4rem;
+.page-hse-plan .btn-round-sm {
+  padding: .25rem .55rem;
+  border-radius: .4rem;
 }
-.page-hse-plan .btn-action{
-  font-weight:600;
-  border-radius:.4rem;
-  padding:.35rem .75rem;
+
+.page-hse-plan .btn-action {
+  font-weight: 600;
+  border-radius: .4rem;
+  padding: .35rem .75rem;
 }
 
 /* Truncate (optional) */
-.page-hse-plan .truncate-2{
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
+.page-hse-plan .truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Filter & Pager */
-.page-hse-plan .filter-select{
-  border-radius:.4rem;
-  font-weight:600;
+.page-hse-plan .filter-select {
+  border-radius: .4rem;
+  font-weight: 600;
 }
-.page-hse-plan .pager-btn{
-  border-radius:.4rem;
-  font-weight:600;
-  padding:.35rem .75rem;
+
+.page-hse-plan .pager-btn {
+  border-radius: .4rem;
+  font-weight: 600;
+  padding: .35rem .75rem;
 }
-.page-hse-plan .pager-btn:disabled{
-  opacity:.6;
-  cursor:not-allowed;
+
+.page-hse-plan .pager-btn:disabled {
+  opacity: .6;
+  cursor: not-allowed;
 }
 
 /* Badge Status (samakan feel dengan accident-report) */
-.page-hse-plan .badge-pillish{
-  padding:.5rem .75rem;
-  border-radius:.4rem;
-  display:inline-flex;
-  align-items:center;
-  gap:.35rem;
-  font-weight:600;
-  color:#fff !important;
-  border:0 !important;
+.page-hse-plan .badge-pillish {
+  padding: .5rem .75rem;
+  border-radius: .4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  font-weight: 600;
+  color: #fff !important;
+  border: 0 !important;
 }
-.page-hse-plan .st-pending{ background:#ff851b !important; }
-.page-hse-plan .st-open{ background:#3c8dbc !important; }
-.page-hse-plan .st-close{ background:#001f3f !important; }
+
+.page-hse-plan .st-pending {
+  background: #ff851b !important;
+}
+
+.page-hse-plan .st-open {
+  background: #3c8dbc !important;
+}
+
+.page-hse-plan .st-close {
+  background: #001f3f !important;
+}
 
 /* Status wrap (kalau mau note) */
-.page-hse-plan .status-wrap{
-  display:inline-flex;
-  flex-direction:column;
-  align-items:center;
-  line-height:1.1;
-  gap:.25rem;
+.page-hse-plan .status-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.1;
+  gap: .25rem;
 }
-.page-hse-plan .status-note{
-  font-size:.75rem;
-  color:#6c757d;
-  font-weight:600;
-  white-space:nowrap;
+
+.page-hse-plan .status-note {
+  font-size: .75rem;
+  color: #6c757d;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* =================================
+   RESPONSIVENESS FIXES
+================================= */
+
+@media (max-width: 991.98px) {
+
+  /* Sidebar overlap fix */
+  .sidebar-open .content-wrapper {
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 767.98px) {
+
+  /* General Table fixes for Mobile */
+  .table-responsive {
+    border: 0;
+  }
+
+  #incidentTable,
+  #reportTable,
+  #planTable {
+    table-layout: auto !important;
+  }
+
+  #incidentTable th,
+  #incidentTable td,
+  #reportTable th,
+  #reportTable td,
+  #planTable th,
+  #planTable td {
+    white-space: normal !important;
+    word-wrap: break-word;
+    min-width: 120px;
+  }
+
+  /* Force Action buttons to wrap on mobile */
+  .aksi-wrap {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+  }
+
+  .id-laporan {
+    font-size: 0.85rem;
+  }
+
+  /* Card Header fixes */
+  .card-header .filter-bar {
+    justify-content: center !important;
+    margin-top: 10px;
+  }
+}
+
+/* Specific fix for Tablet portrait where sidebar often overlaps */
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+  .content-wrapper,
+  .main-footer,
+  .main-header {
+    margin-left: 0 !important;
+  }
+
+  body:not(.sidebar-mini-md) .content-wrapper,
+  body:not(.sidebar-mini-md) .main-footer,
+  body:not(.sidebar-mini-md) .main-header {
+    margin-left: 0 !important;
+  }
+}
+
+/* Styling untuk Logo Pamitra di Sidebar */
+.main-sidebar .brand-link {
+  padding: 1.5rem 0.5rem !important;
+  transition: all 0.3s ease;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.sidebar-collapse .brand-link img {
+  width: 33px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .brand-link img {
+  width: 150px !important;
+}
+
+.sidebar-collapse .brand-link .brand-text {
+  display: none !important;
+}
+
+.sidebar-mini.sidebar-collapse .main-sidebar:hover .brand-link .brand-text {
+  display: block !important;
+}
+
+/* Sidebar Brand Refinements */
+.brand-link {
+  transition: all 0.3s ease;
+  background: #ffffff;
+}
+
+.brand-link:hover {
+  background: #f4f6f9 !important;
+}
+
+.brand-logo-wrapper {
+  transition: transform 0.3s ease;
+}
+
+.brand-link:hover .brand-logo-wrapper {
+  transform: scale(1.02);
+}
+
+.brand-text {
+  transition: color 0.3s ease;
 }

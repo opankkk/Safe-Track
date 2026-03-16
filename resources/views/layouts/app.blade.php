@@ -4,7 +4,7 @@
   @include('layouts.partials.head')
 </head>
 
-<body class="@yield('body-class', 'hold-transition sidebar-mini')">
+<body class="@yield('body-class', 'hold-transition sidebar-mini sidebar-mini-md layout-fixed')">
 
 {{-- kalau halaman auth (login/register/forgot), tampilkan konten saja --}}
 @if(View::hasSection('is-auth'))
@@ -16,9 +16,13 @@
 <div class="wrapper">
 
   {{-- Navbar --}}
-@if(!View::hasSection('hide-navbar'))
+  @php
+    $showNavbar = !View::hasSection('hide-navbar');
+  @endphp
+  
+  <div class="{{ $showNavbar ? '' : 'd-lg-none' }}">
     @include('layouts.partials.navbar')
-@endif
+  </div>
 
 {{-- Sidebar --}}
 @if(!View::hasSection('hide-sidebar'))
