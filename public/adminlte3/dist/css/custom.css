@@ -843,75 +843,7 @@ body.auth-page {
   white-space: nowrap;
 }
 
-/* =================================
-   RESPONSIVENESS FIXES
-================================= */
 
-@media (max-width: 991.98px) {
-
-  /* Sidebar overlap fix */
-  .sidebar-open .content-wrapper {
-    margin-left: 0 !important;
-  }
-}
-
-@media (max-width: 767.98px) {
-
-  /* General Table fixes for Mobile */
-  .table-responsive {
-    border: 0;
-  }
-
-  #incidentTable,
-  #reportTable,
-  #planTable {
-    table-layout: auto !important;
-  }
-
-  #incidentTable th,
-  #incidentTable td,
-  #reportTable th,
-  #reportTable td,
-  #planTable th,
-  #planTable td {
-    white-space: normal !important;
-    word-wrap: break-word;
-    min-width: 120px;
-  }
-
-  /* Force Action buttons to wrap on mobile */
-  .aksi-wrap {
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    gap: 8px !important;
-  }
-
-  .id-laporan {
-    font-size: 0.85rem;
-  }
-
-  /* Card Header fixes */
-  .card-header .filter-bar {
-    justify-content: center !important;
-    margin-top: 10px;
-  }
-}
-
-/* Specific fix for Tablet portrait where sidebar often overlaps */
-@media (min-width: 768px) and (max-width: 991.98px) {
-
-  .content-wrapper,
-  .main-footer,
-  .main-header {
-    margin-left: 0 !important;
-  }
-
-  body:not(.sidebar-mini-md) .content-wrapper,
-  body:not(.sidebar-mini-md) .main-footer,
-  body:not(.sidebar-mini-md) .main-header {
-    margin-left: 0 !important;
-  }
-}
 
 /* Styling untuk Logo Pamitra di Sidebar */
 .main-sidebar .brand-link {
@@ -960,4 +892,369 @@ body.auth-page {
 
 .brand-text {
   transition: color 0.3s ease;
+}
+
+/* =========================================================
+   GLOBAL: CEGAH HORIZONTAL SCROLL DI SEMUA HALAMAN
+   Berlaku untuk semua blade / semua role
+   ========================================================= */
+
+html,
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
+
+/* Wrapper AdminLTE juga tidak boleh overflow ke kanan */
+.wrapper,
+.content-wrapper,
+.main-sidebar,
+.main-header {
+  max-width: 100vw;
+}
+
+/* Pastikan tidak ada elemen yang memaksa lebar lebih dari 100vw */
+* {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   RESPONSIVE OVERHAUL — Mobile & Tablet
+   Breakpoints:
+     xs  < 576px  (phone portrait)
+     sm  576–767px  (phone landscape)
+     md  768–991px  (tablet portrait)
+     lg  992–1199px (tablet landscape / small desktop)
+   ========================================================= */
+
+/* ── 1. SIDEBAR & WRAPPER ──────────────────────────────── */
+/* Di mobile: sidebar mini harus benar-benar tersembunyi (tidak ada ruang kiri) */
+@media (max-width: 767.98px) {
+  /* Sembunyikan sidebar sepenuhnya — tidak boleh ada sisa space di kiri */
+  .main-sidebar {
+    margin-left: -250px !important;
+    box-shadow: none !important;
+  }
+
+  /* Saat sidebar dibuka (sidebar-open), tampilkan kembali sebagai overlay */
+  body.sidebar-open .main-sidebar {
+    margin-left: 0 !important;
+    box-shadow: 3px 0 8px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  /* Content wrapper full-width tanpa offset kiri */
+  .content-wrapper,
+  .main-footer,
+  .main-header {
+    margin-left: 0 !important;
+  }
+}
+
+
+/* ── 2. NAVBAR ─────────────────────────────────────────── */
+/* Di mobile/tablet: sembunyikan semua ikon navbar KECUALI tombol hamburger ☰ */
+@media (max-width: 991.98px) {
+  /* Sembunyikan semua ikon kanan: notifications, messages, user, control-sidebar */
+  .main-header .navbar-nav.ml-auto,
+  .main-header .form-inline {
+    display: none !important;
+  }
+
+  /* Navbar tipis hanya berisi hamburger */
+  .main-header.navbar {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    min-height: 44px;
+  }
+}
+
+/* ── 3. CONTENT HEADER (breadcrumb) ────────────────────── */
+@media (max-width: 575.98px) {
+  .content-header h1 {
+    font-size: 1.2rem !important;
+  }
+
+  .content-header .breadcrumb {
+    float: none !important;
+    margin-top: 4px;
+    padding: 0;
+    font-size: 0.8rem;
+  }
+
+  .content-header .col-sm-6 {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
+  }
+}
+
+/* ── 4. CARD HEADER — FILTER & TOOLS ──────────────────── */
+@media (max-width: 767.98px) {
+  /* Card header: tumpuk judul & tools secara vertikal */
+  .card-header {
+    flex-wrap: wrap !important;
+  }
+
+  .card-header .card-title {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .card-header .card-tools {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+
+  /* Filter bar full-width & rata kiri di mobile */
+  .card-header .card-tools .d-flex,
+  .card-header .filter-bar {
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  /* Filter select & input-group: full-width di mobile */
+  .card-header .card-tools select.form-control,
+  .card-header .card-tools .input-group {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 140px !important;
+  }
+}
+
+/* ── 5. TABEL DATA (accident, incident, report) ─────────── */
+/* Semua halaman tabel admin sudah pakai .table-responsive,
+   kita perlu pastikan scroll horizontal aktif & row-card di mobile */
+
+@media (max-width: 767.98px) {
+  /* Tabel: izinkan horizontal scroll, konten tidak terpotong */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+  }
+
+  /* Ubah min-width yang besar jadi auto di mobile */
+  #accidentTable,
+  #incidentTable,
+  #reportTable,
+  #planTable {
+    min-width: 700px !important; /* cukup kecil agar bisa scroll, tapi masih terbaca */
+    table-layout: auto !important;
+  }
+
+  /* Kolom Uraian & Temuan: boleh wrap supaya tidak terlalu panjang */
+  #accidentTable td:nth-child(5),
+  #incidentTable td:nth-child(3) {
+    white-space: normal !important;
+    min-width: 160px;
+    max-width: 200px;
+    word-break: break-word;
+  }
+
+  /* Tombol aksi di tabel: wrap jika sempit */
+  .table td .d-flex.flex-nowrap {
+    flex-wrap: wrap !important;
+    gap: 4px !important;
+  }
+
+  /* Pager bar di bawah tabel */
+  .card-body > .d-flex.justify-content-between {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* ── 6. DASHBOARD — METRIC CARDS ───────────────────────── */
+@media (max-width: 575.98px) {
+  /* Semua metric card full-width di HP portrait */
+  .container-fluid .row > [class*="col-lg-3"],
+  .container-fluid .row > [class*="col-lg-4"],
+  .container-fluid .row > [class*="col-md-6"] {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  /* Metric card: 2 kolom di HP landscape */
+  .container-fluid .row > [class*="col-md-6"] {
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+  }
+}
+
+/* ── 7. DASHBOARD — CHART + NOTIF ──────────────────────── */
+@media (max-width: 991.98px) {
+  /* Chart dan Notifikasi: stack vertikal di tablet & mobile */
+  .container-fluid .row > .col-lg-9,
+  .container-fluid .row > .col-lg-3 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Chart: kurangi min-height agar tidak terlalu panjang di mobile */
+  .container-fluid .row [style*="min-height:420px"],
+  .container-fluid .row [style*="min-height: 420px"] {
+    min-height: auto !important;
+  }
+
+  /* Canvas chart: height adaptif */
+  #chartLagging {
+    max-height: 280px !important;
+  }
+
+  /* Notif panel: max-height lebih kecil */
+  .card-body .overflow-auto[style*="max-height:480px"],
+  .card-body .overflow-auto[style*="max-height: 480px"] {
+    max-height: 300px !important;
+  }
+}
+
+/* ── 8. AUTH PAGE (login, forgot, reset) ───────────────── */
+@media (max-width: 575.98px) {
+  .auth-wrapper,
+  .auth-page {
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+
+  .login-box {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+  }
+
+  .auth-card {
+    border-radius: 12px !important;
+  }
+
+  .auth-btn {
+    font-size: 0.95rem;
+  }
+}
+
+/* ── 9. PUBLIC FORM (report-accident, report-unsafe) ────── */
+@media (max-width: 767.98px) {
+  /* Kurangi padding atas halaman publik */
+  .public-page {
+    padding: 16px 0 28px !important;
+  }
+
+  /* Stepper: tampilkan 2 step per baris di mobile */
+  .stepper {
+    gap: 8px !important;
+  }
+
+  .step {
+    flex: 1 1 calc(50% - 8px) !important;
+    min-width: 0 !important;
+    padding: 8px 10px !important;
+  }
+
+  .step-text b {
+    font-size: 0.78rem !important;
+  }
+
+  .step-text small {
+    font-size: 0.72rem !important;
+  }
+
+  /* Container: no extra horizontal padding */
+  .public-page .container {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* Section card: kurangi padding inner */
+  .section-card .card-body {
+    padding: 12px !important;
+  }
+
+  /* Card footer submit row */
+  .card-footer.d-flex {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .card-footer .btn {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  /* Stepper: 1 kolom di HP portrait sangat kecil */
+  .step {
+    flex: 1 1 100% !important;
+  }
+
+  /* Radio group baris penuh */
+  .d-flex.flex-wrap[style*="gap:14px"] {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+
+  /* Form row: tumpuk kolom */
+  .public-page .row > [class*="col-md-"] {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* ── 10. SIDEBAR — COLLAPSE DI MOBILE ──────────────────── */
+@media (max-width: 767.98px) {
+  /* Sidebar logout button: full width */
+  .main-sidebar .mt-auto .btn-block {
+    padding: 0.5rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* Sidebar brand logo: lebih kecil */
+  .main-sidebar .brand-image-xl {
+    width: 110px !important;
+  }
+}
+
+/* ── 11. MODAL — Responsive ─────────────────────────────── */
+@media (max-width: 575.98px) {
+  .modal-dialog {
+    margin: 0.5rem !important;
+    max-width: calc(100% - 1rem) !important;
+  }
+
+  .modal-lg {
+    max-width: calc(100% - 1rem) !important;
+  }
+
+  .modal-footer {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .modal-footer .btn {
+    width: 100% !important;
+  }
+}
+
+/* ── 12. UTILITY ─────────────────────────────────────────── */
+/* Pastikan text tidak overflow container kecil */
+@media (max-width: 767.98px) {
+  .font-weight-bold[style*="font-size: 1.6rem"],
+  .font-weight-bold[style*="font-size:1.6rem"] {
+    font-size: 1.2rem !important;
+  }
+
+  /* Badge status: wrap text jika perlu */
+  .badge-status {
+    white-space: normal !important;
+    text-align: center;
+  }
+
+  .status-text {
+    white-space: normal !important;
+    font-size: 0.68rem !important;
+  }
 }

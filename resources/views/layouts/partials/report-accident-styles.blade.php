@@ -166,6 +166,76 @@
   .text-muted{
     color:var(--hse-muted) !important;
   }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 767.98px) {
+    .public-page {
+      padding: 14px 0 24px !important;
+    }
+
+    .hero {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      padding: 12px 14px !important;
+    }
+
+    .hero-right {
+      align-self: flex-end;
+    }
+
+    .stepper {
+      gap: 6px !important;
+    }
+
+    .step {
+      flex: 1 1 calc(50% - 6px) !important;
+      min-width: 0 !important;
+      padding: 8px 10px !important;
+    }
+
+    .step-text b {
+      font-size: 0.78rem !important;
+    }
+
+    .step-text small {
+      font-size: 0.7rem !important;
+    }
+
+    .main-card {
+      border-radius: 10px !important;
+    }
+
+    .section-card {
+      border-radius: 10px !important;
+    }
+
+    .section-card .card-body {
+      padding: 12px !important;
+    }
+
+    .card-footer.d-flex {
+      flex-direction: column !important;
+      gap: 8px !important;
+    }
+
+    .card-footer .btn {
+      width: 100% !important;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .step {
+      flex: 1 1 100% !important;
+    }
+
+    .hero-title {
+      font-size: 15px !important;
+    }
+
+    .hero-sub {
+      font-size: 0.8rem !important;
+    }
+  }
 </style>
 @endpush
 @endonce

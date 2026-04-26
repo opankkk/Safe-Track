@@ -161,6 +161,65 @@
   .btn-info-match:focus{
     box-shadow:0 0 0 .2rem rgba(23, 162, 184, .25);
   }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 767.98px) {
+    .public-page {
+      padding: 14px 0 24px !important;
+    }
+
+    .hero {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      padding: 12px 14px !important;
+    }
+
+    /* Menu card small-box: kurangi height minimum di mobile */
+    .menu-card .small-box {
+      border-radius: 12px !important;
+    }
+
+    .menu-card .small-box .inner h3 {
+      font-size: 1.5rem !important;
+    }
+
+    /* Section card form */
+    .section-card .section-head {
+      padding: 10px 12px !important;
+    }
+
+    /* Card footer */
+    .card-footer.d-flex {
+      flex-direction: column !important;
+      gap: 8px !important;
+    }
+
+    .card-footer .btn {
+      width: 100% !important;
+    }
+
+    /* Modal full-width */
+    .modal-dialog {
+      margin: 8px !important;
+      max-width: calc(100% - 16px) !important;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    .hero-title {
+      font-size: 15px !important;
+    }
+
+    .hero-sub {
+      font-size: 0.8rem !important;
+    }
+
+    /* Menu card cols: stack */
+    .row > [class*="col-md-"] {
+      flex: 0 0 100% !important;
+      max-width: 100% !important;
+    }
+  }
 </style>
 @endpush
 @endonce
