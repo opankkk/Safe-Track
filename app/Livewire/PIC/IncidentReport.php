@@ -109,7 +109,11 @@ class IncidentReport extends Component
         $report = Report::findOrFail($id);
         if ($report->sub_status !== Report::SUB_PLAN_APPROVED_MANAGER) return;
 
-        $report->update(['status' => 'open', 'sub_status' => Report::SUB_PIC_WORKING]);
+        $report->update([
+            'status' => 'open', 
+            'sub_status' => Report::SUB_PIC_WORKING,
+            'due_date' => now()->addHours(48)
+        ]);
 
         ReportLog::create([
             'report_id'   => $report->id,

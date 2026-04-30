@@ -120,6 +120,7 @@ class AccidentReport extends Component
         $report->update([
             'status'     => 'open',
             'sub_status' => Report::SUB_PIC_WORKING,
+            'due_date'   => now()->addHours(48),
         ]);
 
         ReportLog::create([
