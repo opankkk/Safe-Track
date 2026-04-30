@@ -268,16 +268,16 @@
                     </button>
                   @elseif($sub === 'report_verification_hse' && !$isManager)
                     <button type="button"
-                            class="btn btn-success btn-sm font-weight-bold js-approve-final"
+                            class="btn btn-primary btn-sm font-weight-bold js-approve-final"
                             style="border-radius:.4rem; padding:.35rem .75rem; white-space:nowrap;"
                             data-id="{{ $report->id }}">
-                      <i class="fas fa-check mr-1"></i> Setujui
+                      <i class="fas fa-check-double mr-1"></i> Setujui Final
                     </button>
                     <button type="button"
-                            class="btn btn-danger btn-sm font-weight-bold js-reject-final"
+                            class="btn btn-warning btn-sm font-weight-bold js-reject-final"
                             style="border-radius:.4rem; padding:.35rem .75rem; white-space:nowrap;"
                             data-id="{{ $report->id }}">
-                      <i class="fas fa-times mr-1"></i> Tolak
+                      <i class="fas fa-undo mr-1"></i> Kembalikan
                     </button>
                   @else
                     <button type="button" class="btn btn-success btn-sm font-weight-bold {{ $isManager ? 'manager-readonly' : '' }}"
@@ -391,7 +391,7 @@
       <div class="modal-body">
         <input type="hidden" id="rejectFinalIncidentId">
         <div class="form-group mb-0">
-          <label>Catatan Pengembalian Hasi <span class="text-danger">*</span></label>
+          <label>Catatan Pengembalian Hasil <span class="text-danger">*</span></label>
           <textarea class="form-control" id="rejectFinalIncidentNote" rows="3"
                     placeholder="Tuliskan alasan pengembalian..."></textarea>
         </div>

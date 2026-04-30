@@ -132,7 +132,7 @@ class Report extends Component
         ]);
 
         $this->dispatch('swal:toast', type: 'error', message: 'Hasil PIC ditolak');
-        $this->dispatch('close-modal', modal: 'mod  alRejectReport');
+        $this->dispatch('close-modal', modal: 'modalRejectReport');
         $this->reset(['rejectReportId', 'managerRejectNote']);
     }
 

@@ -236,7 +236,7 @@
                        $incidentDesc = $detail?->uraian_insiden ?? $detail?->deskripsi_pengamatan ?? '-';
                     @endphp
                     <button type="button"
-                            class="btn btn-success btn-sm aksi-btn js-approve-final {{ $isManager ? 'manager-readonly' : '' }}"
+                            class="btn btn-primary btn-sm aksi-btn js-approve-final {{ $isManager ? 'manager-readonly' : '' }}"
                             style="white-space:nowrap;"
                             data-id="{{ $report->id }}"
                             data-no-laporan="{{ $report->report_number }}"
@@ -244,7 +244,7 @@
                             data-lokasi="{{ $incidentLocation }}"
                             data-tanggal="{{ $incidentTime }}"
                             data-uraian="{{ $incidentDesc }}">
-                      <i class="fas fa-check mr-1"></i> Setujui Final
+                      <i class="fas fa-check-double mr-1"></i> Setujui Final
                     </button>
                     <button type="button" class="btn btn-warning btn-sm aksi-btn js-reject-final {{ $isManager ? 'manager-readonly' : '' }}"
                             style="white-space:nowrap;"
