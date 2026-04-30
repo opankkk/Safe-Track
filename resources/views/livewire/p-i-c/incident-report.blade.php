@@ -246,6 +246,14 @@
                         {{ $subLabel }}
                       </small>
                     @endif
+                    @if($sub === 'pic_working' && $report->due_date)
+                      <div class="mt-1">
+                        <small class="badge badge-danger" style="font-size: 0.65rem;" title="Batas waktu pengerjaan">
+                          <i class="fas fa-clock mr-1"></i>
+                          Deadline: {{ \Carbon\Carbon::parse($report->due_date)->timezone('Asia/Jakarta')->format('d M, H:i') }}
+                        </small>
+                      </div>
+                    @endif
                   </div>
                 </td>
 
