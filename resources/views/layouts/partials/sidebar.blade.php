@@ -31,12 +31,12 @@
 
   {{-- Brand --}}
   <a href="{{ route($routePrefix.'dashboard') }}" class="brand-link text-center border-bottom-0 d-flex flex-column align-items-center py-3">
-    <div class="brand-logo-wrapper mb-2">
+    {{-- <div class="brand-logo-wrapper mb-2">
       <img src="https://pamitra.co.id/landing/images/logo-gray.png"
            alt="Pamitra Logo"
            class="brand-image-xl"
            style="width: 140px; height: auto; max-height: none; float: none; display: block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));">
-    </div>
+    </div> --}}
     <br>
     <span class="brand-text font-weight-bolder" style="font-size: 0.95rem; line-height: 1.2; color: #002E5B; white-space: normal; letter-spacing: 0.5px; text-transform: uppercase;">
       Sistem Pelaporan HSE
