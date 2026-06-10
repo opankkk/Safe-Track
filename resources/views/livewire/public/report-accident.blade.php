@@ -80,11 +80,11 @@
 
         <div class="card-body">
 
-          {{-- 1) JENIS INSIDEN --}}
+          {{-- 1) JENIS INSIDEN/ACCIDENT --}}
           <div class="card section-card mb-3">
             <div class="card-header">
-              <p class="section-title required">Jenis Insiden</p>
-              <p class="section-hint">Pilih salah satu kategori insiden.</p>
+              <p class="section-title required">Jenis Insiden/Accident</p>
+              <p class="section-hint">Pilih salah satu kategori insiden/kecelakaan.</p>
             </div>
             <div class="card-body pt-3">
               @php
@@ -180,6 +180,24 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
+                    <label>NIP</label>
+                    <input type="text" class="form-control" wire:model="nip" placeholder="Nomor Induk Pegawai (opsional)">
+                    @error('nip') <small class="text-danger">{{ $message }}</small> @enderror
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>No Telepon</label>
+                    <input type="text" class="form-control" wire:model="no_telepon" placeholder="Contoh: 031-1234567 (opsional)">
+                    @error('no_telepon') <small class="text-danger">{{ $message }}</small> @enderror
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
                     <label class="required">Jenis Kelamin</label>
                     <div class="d-flex flex-wrap" style="gap:14px;">
                       <div class="custom-control custom-radio">
@@ -200,7 +218,19 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="required">Lokasi Kerja</label>
-                    <input type="text" class="form-control" wire:model="lokasi_kerja" placeholder="Contoh: Site A / Workshop / Gudang">
+                    <select class="form-control" wire:model="lokasi_kerja">
+                      <option selected disabled value="">-- Pilih Lokasi Kerja --</option>
+                      <option value="Office Utama">Office Utama</option>
+                      <option value="Workshop">Workshop</option>
+                      <option value="Gudang">Gudang</option>
+                      <option value="Area Produksi">Area Produksi</option>
+                      <option value="Area Loading/Unloading">Area Loading/Unloading</option>
+                      <option value="Site A">Site A</option>
+                      <option value="Site B">Site B</option>
+                      <option value="Area Parkir">Area Parkir</option>
+                      <option value="Kantin">Kantin</option>
+                      <option value="Lainnya">Lainnya</option>
+                    </select>
                     @error('lokasi_kerja') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>
@@ -233,8 +263,23 @@
               <div class="row">
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label class="required">Tempat</label>
-                    <input type="text" class="form-control" wire:model="tempat" placeholder="Contoh: Area Loading / Workshop A">
+                    <label class="required">Tempat Kejadian</label>
+                    <select class="form-control" wire:model="tempat">
+                      <option selected disabled value="">-- Pilih Tempat --</option>
+                      <option value="Area Loading">Area Loading</option>
+                      <option value="Area Unloading">Area Unloading</option>
+                      <option value="Workshop A">Workshop A</option>
+                      <option value="Workshop B">Workshop B</option>
+                      <option value="Gudang Bahan Baku">Gudang Bahan Baku</option>
+                      <option value="Gudang Produk Jadi">Gudang Produk Jadi</option>
+                      <option value="Area Produksi">Area Produksi</option>
+                      <option value="Laboratorium">Laboratorium</option>
+                      <option value="Area Parkir">Area Parkir</option>
+                      <option value="Kantor/Office">Kantor/Office</option>
+                      <option value="Toilet/Kamar Mandi">Toilet/Kamar Mandi</option>
+                      <option value="Area Luar Gedung">Area Luar Gedung</option>
+                      <option value="Lainnya">Lainnya</option>
+                    </select>
                     @error('tempat') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>

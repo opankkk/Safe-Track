@@ -5,6 +5,7 @@ namespace App\Livewire\PIC;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Report;
+use App\Models\HseNotification;
 use Carbon\Carbon;
 
 #[Layout('layouts.app')]
@@ -55,14 +56,14 @@ class Dashboard extends Component
             ->whereYear('updated_at', $year)
             ->count();
 
-        // NOTIFIKASI:
-        $this->notifications = Report::whereIn('sub_status', [
+        // NOTIFIKASI: laporan aktif PIC
+        $workingNotifs = Report::whereIn('sub_status', [
                 'waiting_pic', 'plan_rejected_manager', 'plan_approved_manager',
                 'pic_working', 'report_rejected_manager', 'report_rejected_hse',
             ])
             ->latest()
             ->take(10)
-            ->get(['id', 'report_number', 'type', 'sub_status', 'created_at'])
+            ->get(['id', 'report_number', 'type', 'sub_status', 'created_at', 'updated_at'])
             ->map(fn($r) => [
                 'id'            => $r->id,
                 'report_number' => $r->report_number,
@@ -74,7 +75,38 @@ class Dashboard extends Component
                 'href'          => $this->typeHref($r->type),
                 'bg'            => $this->subStatusBg($r->sub_status),
                 'icon'          => $this->subStatusIcon($r->sub_status),
-            ])
+                'updated_at'    => $r->updated_at,
+            ]);
+
+        // Notif system (auto-close & peringatan)
+        $user = auth()->user();
+        $systemNotifs = collect();
+        if ($user) {
+            $systemNotifs = HseNotification::where('user_id', $user->id)
+                ->where('is_read', false)
+                ->latest()
+                ->take(10)
+                ->get()
+                ->map(fn($n) => [
+                    'id'            => $n->report_id,
+                    'report_number' => $n->report?->report_number ?? '-',
+                    'type'          => $n->report?->type ?? '',
+                    'sub_status'    => $n->type,
+                    'time_diff'     => $n->created_at->diffForHumans(),
+                    'label'         => $n->title,
+                    'sub_label'     => $n->body,
+                    'href'          => $n->href ?? '#',
+                    'bg'            => $n->type === 'expired_close' ? '#6c3483' : '#c0392b',
+                    'icon'          => $n->type === 'expired_close' ? 'fas fa-lock' : 'fas fa-exclamation-triangle',
+                    'updated_at'    => $n->created_at,
+                ]);
+        }
+
+        $this->notifications = $workingNotifs
+            ->concat($systemNotifs)
+            ->sortByDesc('updated_at')
+            ->take(15)
+            ->values()
             ->toArray();
 
         // CHART

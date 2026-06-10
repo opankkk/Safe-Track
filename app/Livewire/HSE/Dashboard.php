@@ -5,6 +5,7 @@ namespace App\Livewire\HSE;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Report;
+use App\Models\HseNotification;
 use Carbon\Carbon;
 
 #[Layout('layouts.app')]
@@ -47,8 +48,8 @@ class Dashboard extends Component
 
         $this->countVerifikasiHasil = Report::whereIn('sub_status', [Report::SUB_REPORT_PENDING_HSE, Report::SUB_REPORT_VERIFICATION_HSE])->count();
 
-        // NOTIFIKASI
-        $this->notifications = Report::where(function($q) {
+        // NOTIFIKASI: laporan pending + auto-closed
+        $pendingNotifs = Report::where(function($q) {
                 $q->where('status', 'pending')
                   ->orWhereIn('sub_status', [Report::SUB_REPORT_PENDING_HSE, Report::SUB_REPORT_VERIFICATION_HSE]);
             })
@@ -74,7 +75,38 @@ class Dashboard extends Component
                     default => 'fas fa-check-circle'
                 },
                 'status_label'  => Report::subStatusLabel($r->sub_status),
-            ])
+                'sort_key'      => $r->updated_at ?? $r->created_at,
+            ]);
+
+        // Notif auto-close & peringatan dari HseNotification
+        $user = auth()->user();
+        $systemNotifs = collect();
+        if ($user) {
+            $systemNotifs = HseNotification::where('user_id', $user->id)
+                ->where('is_read', false)
+                ->latest()
+                ->take(10)
+                ->get()
+                ->map(fn($n) => [
+                    'id'            => $n->report_id,
+                    'report_number' => $n->report?->report_number ?? '-',
+                    'type'          => $n->report?->type ?? '',
+                    'status'        => $n->type,
+                    'time_diff'     => $n->created_at->diffForHumans(),
+                    'label'         => $n->title,
+                    'href'          => $n->href ?? '#',
+                    'bg'            => $n->type === 'expired_close' ? '#6c3483' : '#c0392b',
+                    'icon'          => $n->type === 'expired_close' ? 'fas fa-lock' : 'fas fa-exclamation-triangle',
+                    'status_label'  => $n->body,
+                    'sort_key'      => $n->created_at,
+                ]);
+        }
+
+        $this->notifications = $pendingNotifs
+            ->concat($systemNotifs)
+            ->sortByDesc('sort_key')
+            ->take(15)
+            ->values()
             ->toArray();
 
 

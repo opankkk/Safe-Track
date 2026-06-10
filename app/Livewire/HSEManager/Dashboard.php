@@ -5,6 +5,7 @@ namespace App\Livewire\HSEManager;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Report;
+use App\Models\HseNotification;
 use Carbon\Carbon;
 
 #[Layout('layouts.app')]
@@ -86,6 +87,36 @@ class Dashboard extends Component
             ->sortByDesc('updated_at')
             ->take(15)
             ->toArray();
+
+        // Tambah notif system (auto-close & peringatan) dari HseNotification
+        $user = auth()->user();
+        if ($user) {
+            $systemNotifs = HseNotification::where('user_id', $user->id)
+                ->where('is_read', false)
+                ->latest()
+                ->take(10)
+                ->get()
+                ->map(fn($n) => [
+                    'id'            => $n->report_id,
+                    'report_number' => $n->report?->report_number ?? '-',
+                    'type'          => $n->report?->type ?? '',
+                    'created_at'    => $n->created_at,
+                    'updated_at'    => $n->created_at,
+                    'time_diff'     => $n->created_at->diffForHumans(),
+                    'label'         => $n->title,
+                    'status_label'  => $n->body,
+                    'href'          => $n->href ?? '#',
+                    'bg'            => $n->type === 'expired_close' ? '#6c3483' : '#c0392b',
+                    'icon'          => $n->type === 'expired_close' ? 'fas fa-lock' : 'fas fa-exclamation-triangle',
+                ]);
+
+            $this->notifications = collect($this->notifications)
+                ->concat($systemNotifs)
+                ->sortByDesc('updated_at')
+                ->take(15)
+                ->values()
+                ->toArray();
+        }
 
         // CHART
         $closed = Report::with('accidentDetail')

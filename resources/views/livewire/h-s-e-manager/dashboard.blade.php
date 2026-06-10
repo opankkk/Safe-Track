@@ -179,7 +179,8 @@
                      class="d-block text-decoration-none"
                      style="color:inherit; border-radius:14px; transition:opacity .2s;"
                      onmouseover="this.style.opacity='.85'"
-                     onmouseout="this.style.opacity='1'">
+                     onmouseout="this.style.opacity='1'"
+                     title="{{ $notif['status_label'] ?? '' }}">
                     <div class="d-flex text-white"
                          style="gap:12px; padding:12px 14px; border-radius:14px; background:{{ $notif['bg'] }};">
                       <div class="d-flex align-items-center justify-content-center"

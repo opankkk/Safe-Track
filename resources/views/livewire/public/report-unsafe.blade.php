@@ -107,6 +107,23 @@
                 </div>
               </div>
 
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mb-0">
+                    <label>NIP</label>
+                    <input type="text" class="form-control @error('ua_nip') is-invalid @enderror" wire:model="ua_nip" placeholder="Nomor Induk Pegawai (opsional)">
+                    @error('ua_nip') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-0">
+                    <label>No Telepon</label>
+                    <input type="text" class="form-control @error('ua_no_telepon') is-invalid @enderror" wire:model="ua_no_telepon" placeholder="Contoh: 081234567890 (opsional)">
+                    @error('ua_no_telepon') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -184,7 +201,7 @@
               </div>
 
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                   <div class="form-group">
                     <label class="required">Foto Sebelum (Before)</label>
                     <div class="custom-file">
@@ -197,25 +214,24 @@
                     <div wire:loading wire:target="ua_foto_sebelum" class="text-info mt-1 small"><i class="fas fa-spinner fa-spin"></i> Mengunggah...</div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Foto Sesudah (After)</label>
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input @error('ua_foto_sesudah') is-invalid @enderror" id="ua_foto_sesudah" wire:model="ua_foto_sesudah" accept="image/png, image/jpeg, image/jpg">
-                      <label class="custom-file-label" for="ua_foto_sesudah">
-                        {{ $ua_foto_sesudah ? $ua_foto_sesudah->getClientOriginalName() : 'Pilih file' }}
-                      </label>
-                    </div>
-                    @error('ua_foto_sesudah') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
-                    <div wire:loading wire:target="ua_foto_sesudah" class="text-info mt-1 small"><i class="fas fa-spinner fa-spin"></i> Mengunggah...</div>
-                  </div>
-                </div>
               </div>
               <small class="text-muted d-block mt-n2 mb-3">Format JPG, JPEG, PNG (Maks. 2MB).</small>
 
               <div class="form-group">
                 <label class="required">Lokasi</label>
-                <input type="text" class="form-control @error('ua_lokasi') is-invalid @enderror" wire:model="ua_lokasi" placeholder="Contoh: Workshop A / Gudang">
+                <select class="form-control @error('ua_lokasi') is-invalid @enderror" wire:model="ua_lokasi">
+                  <option selected disabled value="">-- Pilih Lokasi --</option>
+                  <option value="Workshop">Workshop</option>
+                  <option value="Gudang">Gudang</option>
+                  <option value="Area Produksi">Area Produksi</option>
+                  <option value="Area Loading">Area Loading</option>
+                  <option value="Area Unloading">Area Unloading</option>
+                  <option value="Area Parkir">Area Parkir</option>
+                  <option value="Kantor/Office">Kantor/Office</option>
+                  <option value="Laboratorium">Laboratorium</option>
+                  <option value="Toilet/Kamar Mandi">Toilet/Kamar Mandi</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
                 @error('ua_lokasi') <div class="invalid-feedback">{{ $message }}</div> @enderror
               </div>
 
@@ -342,6 +358,23 @@
                 </div>
               </div>
 
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mb-0">
+                    <label>NIP</label>
+                    <input type="text" class="form-control @error('uc_nip') is-invalid @enderror" wire:model="uc_nip" placeholder="Nomor Induk Pegawai (opsional)">
+                    @error('uc_nip') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-0">
+                    <label>No Telepon</label>
+                    <input type="text" class="form-control @error('uc_no_telepon') is-invalid @enderror" wire:model="uc_no_telepon" placeholder="Contoh: 081234567890 (opsional)">
+                    @error('uc_no_telepon') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -416,7 +449,7 @@
               </div>
 
               <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12">
                   <div class="form-group">
                     <label class="required">Foto Sebelum (Before)</label>
                     <div class="custom-file">
@@ -429,25 +462,27 @@
                     <div wire:loading wire:target="uc_foto_sebelum" class="text-info mt-1 small"><i class="fas fa-spinner fa-spin"></i> Mengunggah...</div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Foto Sesudah (After)</label>
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input @error('uc_foto_sesudah') is-invalid @enderror" id="uc_foto_sesudah" wire:model="uc_foto_sesudah" accept="image/png, image/jpeg, image/jpg">
-                      <label class="custom-file-label" for="uc_foto_sesudah">
-                        {{ $uc_foto_sesudah ? $uc_foto_sesudah->getClientOriginalName() : 'Pilih file' }}
-                      </label>
-                    </div>
-                    @error('uc_foto_sesudah') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
-                    <div wire:loading wire:target="uc_foto_sesudah" class="text-info mt-1 small"><i class="fas fa-spinner fa-spin"></i> Mengunggah...</div>
-                  </div>
-                </div>
               </div>
               <small class="text-muted d-block mt-n2 mb-3">Format JPG, JPEG, PNG (Maks. 2MB).</small>
 
               <div class="form-group">
                 <label class="required">Lokasi</label>
-                <input type="text" class="form-control @error('uc_lokasi') is-invalid @enderror" wire:model="uc_lokasi" placeholder="Lokasi">
+                <select class="form-control @error('uc_lokasi') is-invalid @enderror" wire:model="uc_lokasi">
+                  <option selected disabled value="">-- Pilih Lokasi --</option>
+                  <option value="Area Loading">Area Loading</option>
+                  <option value="Area Unloading">Area Unloading</option>
+                  <option value="Workshop A">Workshop A</option>
+                  <option value="Workshop B">Workshop B</option>
+                  <option value="Gudang Bahan Baku">Gudang Bahan Baku</option>
+                  <option value="Gudang Produk Jadi">Gudang Produk Jadi</option>
+                  <option value="Area Produksi">Area Produksi</option>
+                  <option value="Laboratorium">Laboratorium</option>
+                  <option value="Area Parkir">Area Parkir</option>
+                  <option value="Kantor/Office">Kantor/Office</option>
+                  <option value="Toilet/Kamar Mandi">Toilet/Kamar Mandi</option>
+                  <option value="Area Luar Gedung">Area Luar Gedung</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
                 @error('uc_lokasi') <div class="invalid-feedback">{{ $message }}</div> @enderror
               </div>
 

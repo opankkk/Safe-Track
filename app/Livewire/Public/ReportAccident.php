@@ -17,7 +17,9 @@ class ReportAccident extends Component
     public $lampiran_investigasi;
     
     public $nama_pelapor;
+    public $nip;
     public $no_handphone;
+    public $no_telepon;
     public $jenis_kelamin;
     public $lokasi_kerja;
     public $departemen;
@@ -50,7 +52,9 @@ class ReportAccident extends Component
             'lampiran_pelaporan' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'lampiran_investigasi' => 'nullable|file|mimes:pdf|max:2048',
             'nama_pelapor' => 'required|string|max:255',
+            'nip' => 'nullable|string|max:50',
             'no_handphone' => 'required|string|max:20',
+            'no_telepon' => 'nullable|string|max:20',
             'jenis_kelamin' => 'required|string',
             'lokasi_kerja' => 'required|string|max:255',
             'departemen' => 'required|string|max:255',
@@ -91,6 +95,8 @@ class ReportAccident extends Component
             $report->accidentDetail()->create([
                 'jenis_insiden' => $this->jenis_insiden,
                 'no_handphone' => $this->no_handphone,
+                'nip' => $this->nip,
+                'no_telepon' => $this->no_telepon,
                 'jenis_kelamin' => $this->jenis_kelamin,
                 'lokasi_kerja' => $this->lokasi_kerja,
                 'departemen' => $this->departemen,
@@ -146,7 +152,7 @@ class ReportAccident extends Component
                 'report' => $report,
                 'detail' => $report->accidentDetail
             ]);
-            $pdfFilename = 'pdf_report_' . time() . '_' . uniqid() . '.pdf';
+            $pdfFilename = 'Report-' . str_replace('/', '-', $report->report_number) . '.pdf';
             $pdfPath = $folder . '/' . $pdfFilename;
             \Illuminate\Support\Facades\Storage::disk('public')->put($pdfPath, $pdf->output());
 
@@ -210,7 +216,7 @@ class ReportAccident extends Component
             
             $this->reset([
                 'jenis_insiden', 'lampiran_pelaporan', 'lampiran_investigasi', 
-                'nama_pelapor', 'no_handphone', 'jenis_kelamin', 'lokasi_kerja', 
+                'nama_pelapor', 'nip', 'no_handphone', 'no_telepon', 'jenis_kelamin', 'lokasi_kerja', 
                 'departemen', 'nama_korban', 'tempat', 'tanggal', 'pukul', 
                 'uraian_insiden', 'foto_insiden', 'apd', 'apd_alasan', 
                 'kondisi_korban', 'kondisi_lain', 'kerusakan_property', 

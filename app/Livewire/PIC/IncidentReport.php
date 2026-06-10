@@ -75,7 +75,9 @@ class IncidentReport extends Component
             return;
         }
 
-        $path = $this->planFile->store('reports/plans', 'public');
+        $folder = 'reports/plans/' . date('Y/m');
+        $filename = 'Plan-' . str_replace('/', '-', $report->report_number) . '-' . time() . '.' . $this->planFile->getClientOriginalExtension();
+        $path = $this->planFile->storeAs($folder, $filename, 'public');
 
         if ($report->plan) {
             Storage::disk('public')->delete($report->plan->file_path);
@@ -143,7 +145,9 @@ class IncidentReport extends Component
             return;
         }
 
-        $path = $this->resultFile->store('reports/results', 'public');
+        $folder = 'reports/results/' . date('Y/m');
+        $filename = 'Result-' . str_replace('/', '-', $report->report_number) . '-' . time() . '.' . $this->resultFile->getClientOriginalExtension();
+        $path = $this->resultFile->storeAs($folder, $filename, 'public');
 
         if ($report->action) {
             Storage::disk('public')->delete($report->action->file_path);
