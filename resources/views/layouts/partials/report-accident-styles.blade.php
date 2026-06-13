@@ -103,6 +103,28 @@
     padding:14px 16px;
   }
 
+  .modal .section-card{
+    margin-bottom:12px;
+  }
+
+  .modal .section-card .section-head{
+    padding:12px 14px;
+    background:linear-gradient(135deg, rgba(45,108,223,.08), rgba(111,66,193,.08));
+    border-bottom:1px solid rgba(0,0,0,.06);
+  }
+
+  .modal .section-card .section-head .t{
+    margin:0;
+    font-weight:900;
+    color:var(--hse-text);
+  }
+
+  .modal .section-card .section-head .s{
+    margin:2px 0 0;
+    color:var(--hse-muted);
+    font-size:.88rem;
+  }
+
   .section-title{
     font-weight:900;
     margin:0;

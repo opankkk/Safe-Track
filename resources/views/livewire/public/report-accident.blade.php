@@ -124,28 +124,37 @@
 
               <div class="form-group">
                 <label>Formulir Pelaporan Kecelakaan (Sertakan Lampiran Dokumentasi)</label>
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="lampiran_pelaporan" wire:model="lampiran_pelaporan" accept="image/png, image/jpeg, image/jpg, application/pdf">
-                  <label class="custom-file-label" for="lampiran_pelaporan">
-                    {{ $lampiran_pelaporan && is_object($lampiran_pelaporan) ? $lampiran_pelaporan->getClientOriginalName() : 'Tambahkan file' }}
-                  </label>
+                <div class="d-flex flex-wrap align-items-center" style="gap: 8px;">
+                  <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#modalTestPelaporanKecelakaan">
+                    <i class="fas fa-file-signature mr-1"></i>
+                    {{ $generated_pelaporan_path ? 'Ubah Formulir' : 'Form Pelaporan' }}
+                  </button>
+                  @if($generated_pelaporan_path)
+                    <button type="button" class="btn btn-outline-secondary" wire:click="downloadGeneratedPelaporan">
+                      <i class="fas fa-download mr-1"></i> Unduh PDF
+                    </button>
+                    <span class="text-success small">
+                      <i class="fas fa-check-circle mr-1"></i>{{ $generated_pelaporan_name }}
+                    </span>
+                  @endif
                 </div>
-                <div wire:loading wire:target="lampiran_pelaporan" class="text-info mt-1 small"><i class="fas fa-spinner fa-spin"></i> Mengunggah...</div>
-                @error('lampiran_pelaporan') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
-                <small class="text-muted d-block mt-1">PNG, JPG, JPEG, PDF (Maks. 2MB).</small>
+                <small class="text-muted d-block mt-1">Isi formulir, lalu sistem akan membuat lampiran PDF secara otomatis.</small>
               </div>
 
               <div class="form-group mb-0">
                 <label>Formulir Investigasi Kecelakaan (Sertakan Lampiran Daftar Hadir)</label>
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" id="lampiran_investigasi" wire:model="lampiran_investigasi" accept="application/pdf">
-                  <label class="custom-file-label" for="lampiran_investigasi">
-                    {{ $lampiran_investigasi && is_object($lampiran_investigasi) ? $lampiran_investigasi->getClientOriginalName() : 'Pilih file PDF' }}
-                  </label>
+                <div class="mb-2">
+                  <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalTestInvestigasiKecelakaan">
+                    <i class="fas fa-search-plus mr-1"></i> {{ $generated_investigasi_path ? 'Ubah Form Investigasi' : 'Form Investigasi' }}
+                  </button>
+                  @if($generated_investigasi_path)
+                    <button type="button" class="btn btn-outline-secondary ml-1" wire:click="downloadGeneratedInvestigation">
+                      <i class="fas fa-download mr-1"></i> Unduh PDF
+                    </button>
+                    <span class="text-success small ml-2"><i class="fas fa-check-circle mr-1"></i>{{ $generated_investigasi_name }}</span>
+                  @endif
                 </div>
-                <div wire:loading wire:target="lampiran_investigasi" class="text-info mt-1 small"><i class="fas fa-spinner fa-spin"></i> Mengunggah...</div>
-                @error('lampiran_investigasi') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
-                <small class="text-muted d-block mt-1">PDF (Maks. 2MB).</small>
+                <small class="text-muted d-block mt-1">Isi formulir, lalu sistem akan membuat lampiran PDF investigasi secara otomatis.</small>
               </div>
 
             </div>
@@ -480,6 +489,8 @@
       </form>
     </div>
 
+    @include('livewire.public.partials._accident-pdf-test-modals')
+
     <div class="text-center text-muted mt-3">
       <small>© {{ date('Y') }} Sistem HSE</small>
     </div>
@@ -504,6 +515,14 @@
 
   window.addEventListener('scrollToTop', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  window.addEventListener('pelaporan-pdf-generated', () => {
+    $('#modalTestPelaporanKecelakaan').modal('hide');
+  });
+
+  window.addEventListener('investigasi-pdf-generated', () => {
+    $('#modalTestInvestigasiKecelakaan').modal('hide');
   });
 </script>
 @endpush

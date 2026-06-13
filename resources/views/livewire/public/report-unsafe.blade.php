@@ -35,31 +35,6 @@
         </div>
       </div>
 
-      <div class="col-md-3 mb-3 menu-card">
-        <div class="small-box bg-danger" data-toggle="modal" data-target="#modalTestPelaporanKecelakaan">
-          <div class="inner">
-            <h4 class="font-weight-bold mb-1">Form Pelaporan</h4>
-            <p>Test modal form pelaporan kecelakaan.</p>
-          </div>
-          <div class="icon"><i class="fas fa-file-medical"></i></div>
-          <a href="javascript:void(0)" class="small-box-footer">
-            Test Modal <i class="fas fa-arrow-circle-right"></i>
-          </a>
-        </div>
-      </div>
-
-      <div class="col-md-3 mb-3 menu-card">
-        <div class="small-box bg-secondary" data-toggle="modal" data-target="#modalTestInvestigasiKecelakaan">
-          <div class="inner">
-            <h4 class="font-weight-bold mb-1">Form Investigasi</h4>
-            <p>Test modal laporan investigasi kecelakaan.</p>
-          </div>
-          <div class="icon"><i class="fas fa-search-plus"></i></div>
-          <a href="javascript:void(0)" class="small-box-footer">
-            Test Modal <i class="fas fa-arrow-circle-right"></i>
-          </a>
-        </div>
-      </div>
     </div>
 
     {{-- Info --}}
@@ -579,7 +554,6 @@
   </div>
 </div>
 
-@include('livewire.public.partials._accident-pdf-test-modals')
 </div>
 
 @push('scripts')
