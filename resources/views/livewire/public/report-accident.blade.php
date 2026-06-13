@@ -218,27 +218,37 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="required">Lokasi Kerja</label>
-                    <select class="form-control" wire:model="lokasi_kerja">
+                    <select class="form-control" wire:model.live="lokasi_kerja">
                       <option selected disabled value="">-- Pilih Lokasi Kerja --</option>
-                      <option value="Office Utama">Office Utama</option>
+                      <option value="Head Office">Head Office</option>
+                      <option value="Operational Office">Operational Office</option>
                       <option value="Workshop">Workshop</option>
-                      <option value="Gudang">Gudang</option>
-                      <option value="Area Produksi">Area Produksi</option>
-                      <option value="Area Loading/Unloading">Area Loading/Unloading</option>
-                      <option value="Site A">Site A</option>
-                      <option value="Site B">Site B</option>
-                      <option value="Area Parkir">Area Parkir</option>
-                      <option value="Kantin">Kantin</option>
-                      <option value="Lainnya">Lainnya</option>
+                      <option value="Yang Lain">Yang Lain (Site A/B/C)</option>
                     </select>
                     @error('lokasi_kerja') <small class="text-danger">{{ $message }}</small> @enderror
+                    @if($lokasi_kerja === 'Yang Lain')
+                      <input type="text" class="form-control mt-2" wire:model="lokasi_kerja_lain"
+                             placeholder="Contoh: Site A / Site B / Site C">
+                    @endif
                   </div>
                 </div>
 
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="required">Department/Bagian</label>
-                    <input type="text" class="form-control" wire:model="departemen" placeholder="Contoh: Produksi / Maintenance / HSE">
+                    <select class="form-control" wire:model="departemen">
+                      <option selected disabled value="">-- Pilih Departemen --</option>
+                      <option value="HSE">HSE</option>
+                      <option value="Procurement">Procurement</option>
+                      <option value="Project Manager">Project Manager</option>
+                      <option value="BOD & GM">BOD & GM</option>
+                      <option value="EBD">EBD</option>
+                      <option value="FAT">FAT</option>
+                      <option value="HCFC">HCFC</option>
+                      <option value="IT">IT</option>
+                      <option value="Legal">Legal</option>
+                      <option value="Workshop">Workshop</option>
+                    </select>
                     @error('departemen') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>
@@ -266,19 +276,10 @@
                     <label class="required">Tempat Kejadian</label>
                     <select class="form-control" wire:model="tempat">
                       <option selected disabled value="">-- Pilih Tempat --</option>
-                      <option value="Area Loading">Area Loading</option>
-                      <option value="Area Unloading">Area Unloading</option>
-                      <option value="Workshop A">Workshop A</option>
-                      <option value="Workshop B">Workshop B</option>
-                      <option value="Gudang Bahan Baku">Gudang Bahan Baku</option>
-                      <option value="Gudang Produk Jadi">Gudang Produk Jadi</option>
-                      <option value="Area Produksi">Area Produksi</option>
-                      <option value="Laboratorium">Laboratorium</option>
-                      <option value="Area Parkir">Area Parkir</option>
-                      <option value="Kantor/Office">Kantor/Office</option>
-                      <option value="Toilet/Kamar Mandi">Toilet/Kamar Mandi</option>
-                      <option value="Area Luar Gedung">Area Luar Gedung</option>
-                      <option value="Lainnya">Lainnya</option>
+                      <option value="Workshop">Workshop</option>
+                      <option value="Site A">Site A</option>
+                      <option value="Site B">Site B</option>
+                      <option value="Site C">Site C</option>
                     </select>
                     @error('tempat') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>

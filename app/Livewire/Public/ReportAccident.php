@@ -22,6 +22,7 @@ class ReportAccident extends Component
     public $no_telepon;
     public $jenis_kelamin;
     public $lokasi_kerja;
+    public $lokasi_kerja_lain;
     public $departemen;
     public $nama_korban;
     

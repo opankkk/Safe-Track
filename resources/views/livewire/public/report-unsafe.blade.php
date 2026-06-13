@@ -150,6 +150,26 @@
                 </div>
               </div>
 
+              <div class="row mt-3">
+                <div class="col-md-12">
+                  <div class="form-group mb-0">
+                    <label class="required">Lokasi Kerja Pelapor</label>
+                    <select class="form-control @error('ua_lokasi_kerja') is-invalid @enderror" wire:model.live="ua_lokasi_kerja">
+                      <option selected disabled value="">-- Pilih Lokasi Kerja --</option>
+                      <option value="Head Office">Head Office</option>
+                      <option value="Operational Office">Operational Office</option>
+                      <option value="Workshop">Workshop</option>
+                      <option value="Yang Lain">Yang Lain (Site A/B/C)</option>
+                    </select>
+                    @error('ua_lokasi_kerja') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    @if($ua_lokasi_kerja === 'Yang Lain')
+                      <input type="text" class="form-control mt-2" wire:model="ua_lokasi_kerja_lain"
+                             placeholder="Contoh: Site A / Site B / Site C">
+                    @endif
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -172,35 +192,26 @@
                     <input class="custom-control-input @error('ua_status') is-invalid @enderror" type="radio" id="ua_status_sub" wire:model="ua_status" value="Karyawan Sub-Kontraktor">
                     <label class="custom-control-label" for="ua_status_sub">Karyawan Sub-Kontraktor</label>
                   </div>
-                  <div class="custom-control custom-radio">
-                    <input class="custom-control-input @error('ua_status') is-invalid @enderror" type="radio" id="ua_status_tamu" wire:model="ua_status" value="Tamu">
-                    <label class="custom-control-label" for="ua_status_tamu">Tamu</label>
-                  </div>
                 </div>
                 @error('ua_status') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
                 <small class="hint d-block mt-1">Jika Sub-Kontraktor/Tamu, isi nama perusahaan di bawah.</small>
               </div>
 
-              @php
-                $departemen = [
-                  'Produksi','Workshop','Supply Chain','Engineering','Finance Accounting Tax',
-                  'Quality Control - Quality Assurance','Health Safety Environment','Human Capital & Facility Care',
-                  'Information & Technology','Business Development','Legal','Sub Kontraktor/Tamu'
-                ];
-              @endphp
-
               <div class="form-group">
                 <label class="required">Nama Departemen/Subkontraktor</label>
-                <div class="row">
-                  @foreach($departemen as $i => $d)
-                    <div class="col-md-6">
-                      <div class="custom-control custom-radio mb-2">
-                        <input class="custom-control-input @error('ua_departemen') is-invalid @enderror" type="radio" id="ua_dept_{{ $i }}" wire:model="ua_departemen" value="{{ $d }}">
-                        <label class="custom-control-label" for="ua_dept_{{ $i }}">{{ $d }}</label>
-                      </div>
-                    </div>
-                  @endforeach
-                </div>
+                <select class="form-control @error('ua_departemen') is-invalid @enderror" wire:model="ua_departemen">
+                  <option selected disabled value="">-- Pilih Departemen --</option>
+                  <option value="HSE">HSE</option>
+                  <option value="Procurement">Procurement</option>
+                  <option value="Project Manager">Project Manager</option>
+                  <option value="BOD & GM">BOD & GM</option>
+                  <option value="EBD">EBD</option>
+                  <option value="FAT">FAT</option>
+                  <option value="HCFC">HCFC</option>
+                  <option value="IT">IT</option>
+                  <option value="Legal">Legal</option>
+                  <option value="Workshop">Workshop</option>
+                </select>
                 @error('ua_departemen') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
               </div>
 
@@ -248,15 +259,9 @@
                 <select class="form-control @error('ua_lokasi') is-invalid @enderror" wire:model="ua_lokasi">
                   <option selected disabled value="">-- Pilih Lokasi --</option>
                   <option value="Workshop">Workshop</option>
-                  <option value="Gudang">Gudang</option>
-                  <option value="Area Produksi">Area Produksi</option>
-                  <option value="Area Loading">Area Loading</option>
-                  <option value="Area Unloading">Area Unloading</option>
-                  <option value="Area Parkir">Area Parkir</option>
-                  <option value="Kantor/Office">Kantor/Office</option>
-                  <option value="Laboratorium">Laboratorium</option>
-                  <option value="Toilet/Kamar Mandi">Toilet/Kamar Mandi</option>
-                  <option value="Lainnya">Lainnya</option>
+                  <option value="Site A">Site A</option>
+                  <option value="Site B">Site B</option>
+                  <option value="Site C">Site C</option>
                 </select>
                 @error('ua_lokasi') <div class="invalid-feedback">{{ $message }}</div> @enderror
               </div>
@@ -401,6 +406,26 @@
                 </div>
               </div>
 
+              <div class="row mt-3">
+                <div class="col-md-12">
+                  <div class="form-group mb-0">
+                    <label class="required">Lokasi Kerja Pelapor</label>
+                    <select class="form-control @error('uc_lokasi_kerja') is-invalid @enderror" wire:model.live="uc_lokasi_kerja">
+                      <option selected disabled value="">-- Pilih Lokasi Kerja --</option>
+                      <option value="Head Office">Head Office</option>
+                      <option value="Operational Office">Operational Office</option>
+                      <option value="Workshop">Workshop</option>
+                      <option value="Yang Lain">Yang Lain (Site A/B/C)</option>
+                    </select>
+                    @error('uc_lokasi_kerja') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    @if($uc_lokasi_kerja === 'Yang Lain')
+                      <input type="text" class="form-control mt-2" wire:model="uc_lokasi_kerja_lain"
+                             placeholder="Contoh: Site A / Site B / Site C">
+                    @endif
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -422,34 +447,25 @@
                     <input class="custom-control-input @error('uc_status') is-invalid @enderror" type="radio" id="uc_status_sub" wire:model="uc_status" value="Karyawan Sub-Kontraktor">
                     <label class="custom-control-label" for="uc_status_sub">Karyawan Sub-Kontraktor</label>
                   </div>
-                  <div class="custom-control custom-radio">
-                    <input class="custom-control-input @error('uc_status') is-invalid @enderror" type="radio" id="uc_status_tamu" wire:model="uc_status" value="Tamu">
-                    <label class="custom-control-label" for="uc_status_tamu">Tamu</label>
-                  </div>
                 </div>
                 @error('uc_status') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
               </div>
 
-              @php
-                $departemen2 = [
-                  'Produksi','Workshop','Supply Chain','Engineering','Finance Accounting Tax',
-                  'Quality Control - Quality Assurance','Health Safety Environment','Human Capital & Facility Care',
-                  'Information & Technology','Business Development','Legal','Sub Kontraktor/Tamu'
-                ];
-              @endphp
-
               <div class="form-group">
                 <label class="required">Nama Departemen/Subkontraktor</label>
-                <div class="row">
-                  @foreach($departemen2 as $i => $d)
-                    <div class="col-md-6">
-                      <div class="custom-control custom-radio mb-2">
-                        <input class="custom-control-input @error('uc_departemen') is-invalid @enderror" type="radio" id="uc_dept_{{ $i }}" wire:model="uc_departemen" value="{{ $d }}">
-                        <label class="custom-control-label" for="uc_dept_{{ $i }}">{{ $d }}</label>
-                      </div>
-                    </div>
-                  @endforeach
-                </div>
+                <select class="form-control @error('uc_departemen') is-invalid @enderror" wire:model="uc_departemen">
+                  <option selected disabled value="">-- Pilih Departemen --</option>
+                  <option value="HSE">HSE</option>
+                  <option value="Procurement">Procurement</option>
+                  <option value="Project Manager">Project Manager</option>
+                  <option value="BOD & GM">BOD & GM</option>
+                  <option value="EBD">EBD</option>
+                  <option value="FAT">FAT</option>
+                  <option value="HCFC">HCFC</option>
+                  <option value="IT">IT</option>
+                  <option value="Legal">Legal</option>
+                  <option value="Workshop">Workshop</option>
+                </select>
                 @error('uc_departemen') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
               </div>
 
@@ -495,19 +511,10 @@
                 <label class="required">Lokasi</label>
                 <select class="form-control @error('uc_lokasi') is-invalid @enderror" wire:model="uc_lokasi">
                   <option selected disabled value="">-- Pilih Lokasi --</option>
-                  <option value="Area Loading">Area Loading</option>
-                  <option value="Area Unloading">Area Unloading</option>
-                  <option value="Workshop A">Workshop A</option>
-                  <option value="Workshop B">Workshop B</option>
-                  <option value="Gudang Bahan Baku">Gudang Bahan Baku</option>
-                  <option value="Gudang Produk Jadi">Gudang Produk Jadi</option>
-                  <option value="Area Produksi">Area Produksi</option>
-                  <option value="Laboratorium">Laboratorium</option>
-                  <option value="Area Parkir">Area Parkir</option>
-                  <option value="Kantor/Office">Kantor/Office</option>
-                  <option value="Toilet/Kamar Mandi">Toilet/Kamar Mandi</option>
-                  <option value="Area Luar Gedung">Area Luar Gedung</option>
-                  <option value="Lainnya">Lainnya</option>
+                  <option value="Workshop">Workshop</option>
+                  <option value="Site A">Site A</option>
+                  <option value="Site B">Site B</option>
+                  <option value="Site C">Site C</option>
                 </select>
                 @error('uc_lokasi') <div class="invalid-feedback">{{ $message }}</div> @enderror
               </div>

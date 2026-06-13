@@ -69,6 +69,8 @@ class ReportUnsafe extends Component
     public $ua_status;
     public $ua_departemen;
     public $ua_perusahaan;
+    public $ua_lokasi_kerja;
+    public $ua_lokasi_kerja_lain;
     public $ua_perilaku;
     public $ua_foto_sebelum;
     public $ua_lokasi;
@@ -85,6 +87,8 @@ class ReportUnsafe extends Component
     public $uc_status;
     public $uc_departemen;
     public $uc_perusahaan;
+    public $uc_lokasi_kerja;
+    public $uc_lokasi_kerja_lain;
     public $uc_kondisi;
     public $uc_foto_sebelum;
     public $uc_lokasi;
