@@ -245,7 +245,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label class="required">Department/Bagian</label>
-                    <select class="form-control" wire:model="departemen">
+                    <select class="form-control" wire:model.live="departemen">
                       <option selected disabled value="">-- Pilih Departemen --</option>
                       <option value="HSE">HSE</option>
                       <option value="Procurement">Procurement</option>
@@ -439,30 +439,10 @@
           <div class="card section-card mb-0">
             <div class="card-header">
               <p class="section-title required">Email Atasan</p>
-              <p class="section-hint">Pilih email atasan terkait (sesuaikan data master di sistem).</p>
+              <p class="section-hint">Otomatis terisi sesuai departemen yang dipilih.</p>
             </div>
             <div class="card-body pt-3">
-              <select class="form-control" wire:model="email_atasan" required>
-                <option selected disabled value="">Pilih</option>
-                <option value="shaffan_zain@pamitra.co.id">Shaffan_Zain@pamitra.co.id</option>
-                <option value="hendrakurniajaya@pamitra.co.id">hendrakurniajaya@pamitra.co.id</option>
-                <option value="rahmad.erwan@pamitra.co.id">rahmad.erwan@pamitra.co.id</option>
-                <option value="guruh.alvianda@pamitra.co.id">guruh.alvianda@pamitra.co.id</option>
-                <option value="indra.setiawan@pamitra.co.id">indra.setiawan@pamitra.co.id</option>
-                <option value="septian.iskandar@pamitra.co.id">septian.iskandar@pamitra.co.id</option>
-                <option value="lukman@pamitra.co.id">lukman@pamitra.co.id</option>
-                <option value="anggatrilaksonoputro@pamitra.co.id">anggatrilaksonoputro@pamitra.co.id</option>
-                <option value="erik.dewantara@pamitra.co.id">erik.dewantara@pamitra.co.id</option>
-                <option value="it@pamitra.co.id">it@pamitra.co.id</option>
-                <option value="faiq@pamitra.co.id">faiq@pamitra.co.id</option>
-                <option value="rudianto@pamitra.co.id">rudianto@pamitra.co.id</option>
-                <option value="zaenal.masqur@pamitra.co.id">zaenal.masqur@pamitra.co.id</option>
-                <option value="daerubbi@pamitra.co.id">daerubbi@pamitra.co.id</option>
-                <option value="fajar@pamitra.co.id">fajar@pamitra.co.id</option>
-                <option value="eko.wardiyanto@pamitra.co.id">eko.wardiyanto@pamitra.co.id</option>
-                <option value="gilanggusti@pamitra.co.id">gilanggusti@pamitra.co.id</option>
-                 <option value="antariksa@pamitra.co.id">antariksa@pamitra.co.id</option>
-              </select>
+              <input type="email" class="form-control" wire:model="email_atasan" readonly required placeholder="Otomatis terisi berdasarkan departemen">
               @error('email_atasan') <small class="text-danger d-block mt-1">{{ $message }}</small> @enderror
               <small class="text-muted d-block mt-2">
                 *Sebaiknya sumber data email atasan dari master user/atasan agar tidak hardcode.

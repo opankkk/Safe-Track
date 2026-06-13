@@ -96,6 +96,42 @@ class ReportUnsafe extends Component
     public $uc_perbaikan;
     public $uc_email_atasan = '';
 
+    public function updatedUaDepartemen($value)
+    {
+        $emails = [
+            'HSE' => 'angga.trilaksono@pamitra.co.id',
+            'Procurement' => 'adi.wibowo@pamitra.co.id',
+            'Project Manager' => 'fajar.pratama@pamitra.co.id',
+            'BOD & GM' => 'shaffan.zain@pamitra.co.id',
+            'EBD' => 'farid@pamitra.co.id',
+            'FAT' => 'guruh.alvianda@pamitra.co.id',
+            'HCFC' => 'hanifah.junior@pamitra.co.id',
+            'IT' => 'it@pamitra.co.id',
+            'Legal' => 'legal@pamitra.co.id',
+            'Workshop' => 'erik.dewanto@pamitra.co.id',
+        ];
+
+        $this->ua_email_atasan = $emails[$value] ?? '';
+    }
+
+    public function updatedUcDepartemen($value)
+    {
+        $emails = [
+            'HSE' => 'angga.trilaksono@pamitra.co.id',
+            'Procurement' => 'adi.wibowo@pamitra.co.id',
+            'Project Manager' => 'fajar.pratama@pamitra.co.id',
+            'BOD & GM' => 'shaffan.zain@pamitra.co.id',
+            'EBD' => 'farid@pamitra.co.id',
+            'FAT' => 'guruh.alvianda@pamitra.co.id',
+            'HCFC' => 'hanifah.junior@pamitra.co.id',
+            'IT' => 'it@pamitra.co.id',
+            'Legal' => 'legal@pamitra.co.id',
+            'Workshop' => 'erik.dewanto@pamitra.co.id',
+        ];
+
+        $this->uc_email_atasan = $emails[$value] ?? '';
+    }
+
     public function saveUnsafeAction()
     {
         $this->validate([

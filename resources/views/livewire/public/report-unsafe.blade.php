@@ -174,7 +174,7 @@
 
               <div class="form-group">
                 <label class="required">Nama Departemen/Subkontraktor</label>
-                <select class="form-control @error('ua_departemen') is-invalid @enderror" wire:model="ua_departemen">
+                <select class="form-control @error('ua_departemen') is-invalid @enderror" wire:model.live="ua_departemen">
                   <option selected disabled value="">-- Pilih Departemen --</option>
                   <option value="HSE">HSE</option>
                   <option value="Procurement">Procurement</option>
@@ -264,27 +264,8 @@
             <div class="card-body">
               <div class="form-group mb-0">
                 <label class="required">Email Atasan/Sponsor</label>
-                <select class="form-control" wire:model="ua_email_atasan" required>
-                  <option selected disabled value="">Pilih</option>
-                  <option value="shaffan_zain@pamitra.co.id">shaffan_zain@pamitra.co.id</option>
-                  <option value="hendrakurniajaya@pamitra.co.id">hendrakurniajaya@pamitra.co.id</option>
-                  <option value="rahmad.erwan@pamitra.co.id">rahmad.erwan@pamitra.co.id</option>
-                  <option value="guruh.alvianda@pamitra.co.id">guruh.alvianda@pamitra.co.id</option>
-                  <option value="indra.setiawan@pamitra.co.id">indra.setiawan@pamitra.co.id</option>
-                  <option value="septian.iskandar@pamitra.co.id">septian.iskandar@pamitra.co.id</option>
-                  <option value="lukman@pamitra.co.id">lukman@pamitra.co.id</option>
-                  <option value="anggatrilaksonoputro@pamitra.co.id">anggatrilaksonoputro@pamitra.co.id</option>
-                  <option value="erik.dewantara@pamitra.co.id">erik.dewantara@pamitra.co.id</option>
-                  <option value="it@pamitra.co.id">it@pamitra.co.id</option>
-                  <option value="faiq@pamitra.co.id">faiq@pamitra.co.id</option>
-                  <option value="rudianto@pamitra.co.id">rudianto@pamitra.co.id</option>
-                  <option value="zaenal.masqur@pamitra.co.id">zaenal.masqur@pamitra.co.id</option>
-                  <option value="daerubbi@pamitra.co.id">daerubbi@pamitra.co.id</option>
-                  <option value="fajar@pamitra.co.id">fajar@pamitra.co.id</option>
-                  <option value="eko.wardiyanto@pamitra.co.id">eko.wardiyanto@pamitra.co.id</option>
-                  <option value="gilanggusti@pamitra.co.id">gilanggusti@pamitra.co.id</option>
-                  <option value="antariksa@pamitra.co.id">antariksa@pamitra.co.id</option>
-                </select>
+                <input type="email" class="form-control @error('ua_email_atasan') is-invalid @enderror" wire:model="ua_email_atasan" readonly required placeholder="Otomatis terisi berdasarkan departemen">
+                @error('ua_email_atasan') <div class="invalid-feedback">{{ $message }}</div> @enderror
               </div>
             </div>
           </div>
@@ -428,7 +409,7 @@
 
               <div class="form-group">
                 <label class="required">Nama Departemen/Subkontraktor</label>
-                <select class="form-control @error('uc_departemen') is-invalid @enderror" wire:model="uc_departemen">
+                <select class="form-control @error('uc_departemen') is-invalid @enderror" wire:model.live="uc_departemen">
                   <option selected disabled value="">-- Pilih Departemen --</option>
                   <option value="HSE">HSE</option>
                   <option value="Procurement">Procurement</option>
@@ -515,27 +496,8 @@
             <div class="card-body">
               <div class="form-group mb-0">
                 <label class="required">Email Atasan/Sponsor</label>
-                <select class="form-control" wire:model="uc_email_atasan" required>
-                  <option selected disabled value="">Pilih</option>
-                  <option value="shaffan_zain@pamitra.co.id">shaffan_zain@pamitra.co.id</option>
-                  <option value="hendrakurniajaya@pamitra.co.id">hendrakurniajaya@pamitra.co.id</option>
-                  <option value="rahmad.erwan@pamitra.co.id">rahmad.erwan@pamitra.co.id</option>
-                  <option value="guruh.alvianda@pamitra.co.id">guruh.alvianda@pamitra.co.id</option>
-                  <option value="indra.setiawan@pamitra.co.id">indra.setiawan@pamitra.co.id</option>
-                  <option value="septian.iskandar@pamitra.co.id">septian.iskandar@pamitra.co.id</option>
-                  <option value="lukman@pamitra.co.id">lukman@pamitra.co.id</option>
-                  <option value="anggatrilaksonoputro@pamitra.co.id">anggatrilaksonoputro@pamitra.co.id</option>
-                  <option value="erik.dewantara@pamitra.co.id">erik.dewantara@pamitra.co.id</option>
-                  <option value="it@pamitra.co.id">it@pamitra.co.id</option>
-                  <option value="faiq@pamitra.co.id">faiq@pamitra.co.id</option>
-                  <option value="rudianto@pamitra.co.id">rudianto@pamitra.co.id</option>
-                  <option value="zaenal.masqur@pamitra.co.id">zaenal.masqur@pamitra.co.id</option>
-                  <option value="daerubbi@pamitra.co.id">daerubbi@pamitra.co.id</option>
-                  <option value="fajar@pamitra.co.id">fajar@pamitra.co.id</option>
-                  <option value="eko.wardiyanto@pamitra.co.id">eko.wardiyanto@pamitra.co.id</option>
-                  <option value="gilanggusti@pamitra.co.id">gilanggusti@pamitra.co.id</option>
-                  <option value="antariksa@pamitra.co.id">antariksa@pamitra.co.id</option>
-                </select>
+                <input type="email" class="form-control @error('uc_email_atasan') is-invalid @enderror" wire:model="uc_email_atasan" readonly required placeholder="Otomatis terisi berdasarkan departemen">
+                @error('uc_email_atasan') <div class="invalid-feedback">{{ $message }}</div> @enderror
               </div>
             </div>
           </div>

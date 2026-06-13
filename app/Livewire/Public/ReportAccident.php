@@ -107,6 +107,24 @@ class ReportAccident extends Component
         ];
     }
 
+    public function updatedDepartemen($value)
+    {
+        $emails = [
+            'HSE' => 'angga.trilaksono@pamitra.co.id',
+            'Procurement' => 'adi.wibowo@pamitra.co.id',
+            'Project Manager' => 'fajar.pratama@pamitra.co.id',
+            'BOD & GM' => 'shaffan.zain@pamitra.co.id',
+            'EBD' => 'farid@pamitra.co.id',
+            'FAT' => 'guruh.alvianda@pamitra.co.id',
+            'HCFC' => 'hanifah.junior@pamitra.co.id',
+            'IT' => 'it@pamitra.co.id',
+            'Legal' => 'legal@pamitra.co.id',
+            'Workshop' => 'erik.dewanto@pamitra.co.id',
+        ];
+
+        $this->email_atasan = $emails[$value] ?? '';
+    }
+
     public function generatePelaporanPdf(AccidentPelaporanPdfGenerator $generator): void
     {
         $this->pelaporan['tanggal_terbit'] = $this->currentIssueDate();
