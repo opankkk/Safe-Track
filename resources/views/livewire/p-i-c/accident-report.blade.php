@@ -402,7 +402,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          <i class="fas fa-file-upload mr-1"></i> Form Upload Dokumen Hasil Perbaikan
+          <i class="fas fa-file-upload mr-1"></i> Upload Bukti Hasil Perbaikan
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" wire:click="$set('uploadResultReportId', null)">
           <span aria-hidden="true">&times;</span>

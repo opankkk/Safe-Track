@@ -4,16 +4,13 @@ namespace App\Livewire\Public;
 
 use App\Services\AccidentPelaporanPdfGenerator;
 use App\Services\AccidentInvestigationPdfGenerator;
-use Livewire\Component;
-use Livewire\WithFileUploads;
 use App\Models\Report;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 
-class ReportAccident extends Component
+class ReportAccident extends ReportUnsafe
 {
-    use WithFileUploads;
 
     public $jenis_insiden;
     public $lampiran_pelaporan;
@@ -378,12 +375,12 @@ class ReportAccident extends Component
             $this->resetPelaporanForm();
             $this->resetInvestigationForm();
 
-            $this->dispatch('scrollToTop');
+            $this->dispatch('scrollToTop', modal: 'modalAccidentReport');
 
         } catch (\Exception $e) {
             DB::rollBack();
             $this->dispatch('swal:toast', type: 'error', message: 'Terjadi kesalahan: ' . $e->getMessage());
-            $this->dispatch('scrollToTop');
+            $this->dispatch('scrollToTop', modal: 'modalAccidentReport');
         }
     }
 

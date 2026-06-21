@@ -10,6 +10,7 @@ use App\Models\ReportPlans;
 use App\Models\ReportActions;
 use App\Models\ReportLog;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\TemplateProcessor;
 
 
 class IncidentReport extends Component
@@ -22,6 +23,16 @@ class IncidentReport extends Component
 
     public ?int $uploadPlanReportId = null;
     public $planFile = null;
+    public ?string $planTanggal = null;
+    public ?string $planWaktu = null;
+    public ?string $planLokasi = null;
+    public ?string $planDepartemen = null;
+    public ?string $planDeskripsi = null;
+    public ?string $planTindakan = null;
+    public ?string $planTindakanLanjut = null;
+    public ?string $planNamaPelapor = null;
+    public ?string $planNomorPelapor = null;
+    public ?string $planJabatan = null;
 
     public ?int $uploadResultReportId = null;
     public $resultFile = null;
@@ -59,25 +70,78 @@ class IncidentReport extends Component
 
     public function openUploadPlanModal(int $id): void
     {
+        $report = Report::with('unsafeDetail')->findOrFail($id);
+        $detail = $report->unsafeDetail;
+
         $this->uploadPlanReportId = $id;
         $this->planFile = null;
+        $this->planTanggal = $detail?->tanggal_pengamatan?->format('Y-m-d') ?? now('Asia/Jakarta')->format('Y-m-d');
+        $this->planWaktu = $detail?->waktu_pengamatan ? substr((string) $detail->waktu_pengamatan, 0, 5) : now('Asia/Jakarta')->format('H:i');
+        $this->planLokasi = $detail?->lokasi ?? '';
+        $this->planDepartemen = $detail?->departemen ?? '';
+        $this->planDeskripsi = '';
+        $this->planTindakan = '';
+        $this->planTindakanLanjut = '';
+        $this->planNamaPelapor = $report->reporter_name ?? '';
+        $this->planNomorPelapor = $detail?->nip ?? '';
+        $this->planJabatan = '';
+
         $this->dispatch('open-modal', modal: 'modalUploadPlan');
     }
 
     public function submitUploadPlan(): void
     {
-        $this->validate(['planFile' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:5120']);
+        $this->validate([
+            'planTanggal' => 'required|date',
+            'planWaktu' => 'required|date_format:H:i',
+            'planLokasi' => 'required|string|max:255',
+            'planDepartemen' => 'required|string|max:255',
+            'planDeskripsi' => 'required|string',
+            'planTindakan' => 'required|string',
+            'planTindakanLanjut' => 'required|string',
+            'planNamaPelapor' => 'required|string|max:255',
+            'planNomorPelapor' => 'nullable|string|max:100',
+            'planJabatan' => 'nullable|string|max:255',
+        ]);
 
-        $report = Report::findOrFail($this->uploadPlanReportId);
+        $report = Report::with('unsafeDetail')->findOrFail($this->uploadPlanReportId);
 
         if (!in_array($report->sub_status, [Report::SUB_WAITING_PIC, Report::SUB_PLAN_REJECTED_MANAGER])) {
             $this->errorMsg = 'Status laporan tidak sesuai.';
             return;
         }
 
+        $templatePath = resource_path('file/FORMULIR PELAPORAN UA UC.docx');
+        if (!file_exists($templatePath)) {
+            $this->dispatch('swal:toast', type: 'error', message: 'Template formulir tidak ditemukan.');
+            return;
+        }
+
+        $oldStatus = $report->sub_status;
         $folder = 'reports/plans/' . date('Y/m');
-        $filename = 'Plan-' . str_replace('/', '-', $report->report_number) . '-' . time() . '.' . $this->planFile->getClientOriginalExtension();
-        $path = $this->planFile->storeAs($folder, $filename, 'public');
+        $filename = 'Plan-' . str_replace('/', '-', $report->report_number) . '-' . time() . '.docx';
+        $path = $folder . '/' . $filename;
+        Storage::disk('public')->makeDirectory($folder);
+
+        try {
+            $template = new TemplateProcessor($templatePath);
+            $template->setValue('tanggal', $this->planTanggal);
+            $template->setValue('waktu', $this->planWaktu);
+            $template->setValue('lokasi', $this->planLokasi);
+            $template->setValue('unsafe_action', $report->type === 'unsafe_action' ? 'X' : '');
+            $template->setValue('unsafe_condition', $report->type === 'unsafe_condition' ? 'X' : '');
+            $template->setValue('departemen', $this->planDepartemen);
+            $template->setValue('deskripsi', $this->planDeskripsi);
+            $template->setValue('tindakan', $this->planTindakan);
+            $template->setValue('tindakan_lanjut', $this->planTindakanLanjut);
+            $template->setValue('nama_pelapor', $this->planNamaPelapor);
+            $template->setValue('nomor_pelapor', $this->planNomorPelapor ?: '-');
+            $template->setValue('jabatan', $this->planJabatan ?: '');
+            $template->saveAs(Storage::disk('public')->path($path));
+        } catch (\Throwable $e) {
+            $this->dispatch('swal:toast', type: 'error', message: 'Gagal membuat dokumen: ' . $e->getMessage());
+            return;
+        }
 
         if ($report->plan) {
             Storage::disk('public')->delete($report->plan->file_path);
@@ -96,14 +160,32 @@ class IncidentReport extends Component
         ReportLog::create([
             'report_id'   => $report->id,
             'user_id'     => auth()->id() ?? 1,
-            'status_from' => $report->getOriginal('sub_status'),
+            'status_from' => $oldStatus,
             'status_to'   => Report::SUB_PLAN_VERIFICATION,
-            'message'     => 'PIC mengupload dokumen Plan Tindak Lanjut.',
+            'message'     => 'PIC mengisi dan mengirim Formulir Pelaporan Inspeksi K3LL.',
         ]);
 
-        $this->reset(['uploadPlanReportId', 'planFile']);
-        $this->dispatch('swal:toast', type: 'success', message: 'Dokumen Plan berhasil diupload.');
+        $this->resetPlanForm();
+        $this->dispatch('swal:toast', type: 'success', message: 'Formulir berhasil dibuat dan dikirim.');
         $this->dispatch('close-modal', modal: 'modalUploadPlan');
+    }
+
+    private function resetPlanForm(): void
+    {
+        $this->reset([
+            'uploadPlanReportId',
+            'planFile',
+            'planTanggal',
+            'planWaktu',
+            'planLokasi',
+            'planDepartemen',
+            'planDeskripsi',
+            'planTindakan',
+            'planTindakanLanjut',
+            'planNamaPelapor',
+            'planNomorPelapor',
+            'planJabatan',
+        ]);
     }
 
     public function startWorking(int $id): void
