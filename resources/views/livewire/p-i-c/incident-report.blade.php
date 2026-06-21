@@ -34,6 +34,31 @@
   .text-orange-status { color: #fd7e14 !important; }
   .text-red-status { color: #dc3545 !important; }
   .text-grey-status { color: #6c757d !important; }
+  .plan-form-section {
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: .6rem;
+    overflow: hidden;
+    margin-bottom: .85rem;
+    background: #fff;
+  }
+  .plan-form-section .section-head {
+    padding: .7rem .9rem;
+    background: linear-gradient(135deg, rgba(0,123,255,.08), rgba(23,162,184,.08));
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  .plan-form-section .section-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: .92rem;
+    color: #343a40;
+  }
+  .plan-form-section .section-body {
+    padding: .9rem;
+  }
+  .plan-form-section label {
+    font-weight: 700;
+    font-size: .86rem;
+  }
 </style>
 @endpush
 
@@ -365,7 +390,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modalFollowUpIncidentLabel">
-          <i class="fas fa-file-upload mr-1"></i> Form Upload Dokumen Plan Tindak Lanjut
+          <i class="fas fa-file-signature mr-1"></i> Formulir Pelaporan Inspeksi K3LL
         </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" wire:click="$set('uploadPlanReportId', null)">
           <span aria-hidden="true">&times;</span>
@@ -375,24 +400,121 @@
       <form wire:submit.prevent="submitUploadPlan">
         <div class="modal-body">
 
-          <div class="form-group mb-0">
-            <label>Upload Dokumen <span class="text-danger">*</span></label>
-            <div class="custom-file">
-              <input type="file" class="custom-file-input @error('planFile') is-invalid @enderror" wire:model="planFile" id="planFileInputInc" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="document.getElementById('planFileLabelInc').innerText = this.files[0] ? this.files[0].name : 'Pilih dokumen...'">
-              <label class="custom-file-label" for="planFileInputInc" id="planFileLabelInc">
-                @if($planFile && method_exists($planFile, 'getClientOriginalName'))
-                  {{ $planFile->getClientOriginalName() }}
-                @else
-                  Pilih dokumen...
-                @endif
-              </label>
+          <div class="alert alert-light border mb-3" style="border-radius:.6rem;">
+            <i class="fas fa-info-circle mr-1 text-primary"></i>
+            Isi formulir berikut. Sistem akan membuat dokumen DOCX otomatis dari template.
+          </div>
+
+          <div class="plan-form-section">
+            <div class="section-head">
+              <p class="section-title">Data Temuan</p>
             </div>
-            @error('planFile')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-            <small class="form-text text-muted" wire:loading.remove wire:target="planFile">
-              Format yang diperbolehkan: PDF, DOC, DOCX, JPG, JPEG, PNG.
-            </small>
-            <div wire:loading wire:target="planFile" class="text-info small mt-1">
-              <span class="spinner-border spinner-border-sm"></span> Sedang memproses file...
+            <div class="section-body">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Tanggal Temuan <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control @error('planTanggal') is-invalid @enderror" wire:model="planTanggal" readonly disabled>
+                    @error('planTanggal')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Waktu <span class="text-danger">*</span></label>
+                    <input type="time" class="form-control @error('planWaktu') is-invalid @enderror" wire:model="planWaktu" readonly disabled>
+                    @error('planWaktu')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Lokasi <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('planLokasi') is-invalid @enderror" wire:model="planLokasi" readonly disabled>
+                    @error('planLokasi')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mb-md-0">
+                    <label>Jenis Temuan</label>
+                    <input type="text" class="form-control" value="{{ $selectedPlan?->type === 'unsafe_action' ? 'Perilaku yang Berisiko (Unsafe Action)' : 'Kondisi yang Tidak Selamat (Unsafe Condition)' }}" readonly disabled>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-0">
+                    <label>Departemen/Area <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('planDepartemen') is-invalid @enderror" wire:model="planDepartemen" readonly disabled>
+                    @error('planDepartemen')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="plan-form-section">
+            <div class="section-head">
+              <p class="section-title">Isi Laporan</p>
+            </div>
+            <div class="section-body">
+              <div class="form-group">
+                <label>Deskripsi Temuan <span class="text-danger">*</span></label>
+                <textarea rows="4" class="form-control @error('planDeskripsi') is-invalid @enderror" wire:model="planDeskripsi"></textarea>
+                @error('planDeskripsi')<div class="invalid-feedback">{{ $message }}</div>@enderror
+              </div>
+
+              <div class="form-group">
+                <label>Tindakan Perbaikan yang Dilakukan <span class="text-danger">*</span></label>
+                <textarea rows="3" class="form-control @error('planTindakan') is-invalid @enderror" wire:model="planTindakan"></textarea>
+                @error('planTindakan')<div class="invalid-feedback">{{ $message }}</div>@enderror
+              </div>
+
+              <div class="form-group mb-0">
+                <label>Tindakan Lanjut <span class="text-danger">*</span></label>
+                <textarea rows="3" class="form-control @error('planTindakanLanjut') is-invalid @enderror" wire:model="planTindakanLanjut"></textarea>
+                @error('planTindakanLanjut')<div class="invalid-feedback">{{ $message }}</div>@enderror
+              </div>
+            </div>
+          </div>
+
+          <div class="plan-form-section mb-0">
+            <div class="section-head">
+              <p class="section-title">Data Pelapor</p>
+            </div>
+            <div class="section-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Nama Pelapor <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('planNamaPelapor') is-invalid @enderror" wire:model="planNamaPelapor" readonly disabled>
+                    @error('planNamaPelapor')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Nomor Pegawai</label>
+                    <input type="text" class="form-control @error('planNomorPelapor') is-invalid @enderror" wire:model="planNomorPelapor" readonly disabled>
+                    @error('planNomorPelapor')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group mb-md-0">
+                    <label>Departemen <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('planDepartemen') is-invalid @enderror" wire:model="planDepartemen" readonly disabled>
+                    @error('planDepartemen')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group mb-0">
+                    <label>Jabatan <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control @error('planJabatan') is-invalid @enderror" wire:model="planJabatan" readonly disabled>
+                    @error('planJabatan')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -401,9 +523,9 @@
           <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" wire:click="$set('uploadPlanReportId', null)">
             <i class="fas fa-times mr-1"></i> Batal
           </button>
-          <button type="submit" class="btn btn-primary btn-sm" wire:loading.attr="disabled" wire:target="submitUploadPlan, planFile">
+          <button type="submit" class="btn btn-primary btn-sm" wire:loading.attr="disabled" wire:target="submitUploadPlan">
             <span wire:loading wire:target="submitUploadPlan" class="spinner-border spinner-border-sm mr-1"></span>
-            <i class="fas fa-save mr-1" wire:loading.remove wire:target="submitUploadPlan"></i> Upload &amp; Simpan
+            <i class="fas fa-file-word mr-1" wire:loading.remove wire:target="submitUploadPlan"></i> Buat Dokumen &amp; Simpan
           </button>
         </div>
       </form>

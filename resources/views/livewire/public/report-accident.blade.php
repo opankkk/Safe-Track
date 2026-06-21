@@ -1,14 +1,75 @@
 <div>
-@section('title', 'Accident Report | Sistem HSE')
+@section('title', 'Public Report | Sistem HSE')
 @section('body-class', 'hold-transition layout-top-nav')
 @section('is-auth', true)
 
-@push('styles')
-@endpush
 
 @include('layouts.partials.report-accident-styles')
 <div class="public-page">
   <div class="container">
+
+    {{-- Menu --}}
+    <div class="row">
+      <div class="col-md-4 mb-3 menu-card">
+        <div class="small-box bg-warning" data-toggle="modal" data-target="#modalUnsafeAction">
+          <div class="inner">
+            <h4 class="font-weight-bold mb-1">Unsafe Action</h4>
+            <p>Melaporkan tindakan tidak aman (perilaku/aksi).</p>
+          </div>
+          <div class="icon"><i class="fas fa-user-times"></i></div>
+          <a href="javascript:void(0)" class="small-box-footer">
+            Buat Laporan <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3 menu-card">
+        <div class="small-box bg-info" data-toggle="modal" data-target="#modalUnsafeCondition">
+          <div class="inner">
+            <h4 class="font-weight-bold mb-1">Unsafe Condition</h4>
+            <p>Melaporkan kondisi/lingkungan tidak aman.</p>
+          </div>
+          <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+          <a href="javascript:void(0)" class="small-box-footer">
+            Buat Laporan <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3 menu-card">
+        <div class="small-box bg-success" data-toggle="modal" data-target="#modalAccidentReport">
+          <div class="inner">
+            <h4 class="font-weight-bold mb-1">Accident Report</h4>
+            <p>Melaporkan insiden atau kecelakaan kerja.</p>
+          </div>
+          <div class="icon"><i class="fas fa-notes-medical"></i></div>
+          <a href="javascript:void(0)" class="small-box-footer">
+            Buat Laporan <i class="fas fa-arrow-circle-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-light border" style="border-radius:14px;">
+      <i class="fas fa-info-circle mr-1"></i>
+      Pilih jenis laporan yang sesuai. Setelah laporan terkirim, tim HSE akan melakukan verifikasi dan tindak lanjut.
+    </div>
+
+    @include('livewire.public.partials._unsafe-report-modals')
+
+    {{-- MODAL: ACCIDENT REPORT --}}
+    <div class="modal fade" id="modalAccidentReport" tabindex="-1" role="dialog" aria-labelledby="modalAccidentReportLabel" aria-hidden="true" wire:ignore.self>
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalAccidentReportLabel">
+              <i class="fas fa-notes-medical text-success mr-1"></i> Laporan: Accident Report
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
 
     {{-- Stepper --}}
     <div class="stepper mb-3">
@@ -73,7 +134,10 @@
           </div>
           <script>
             setTimeout(() => {
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              const modalBody = document.querySelector('#modalAccidentReport .modal-body');
+              if (modalBody) {
+                modalBody.scrollTo({ top: 0, behavior: 'smooth' });
+              }
             }, 100);
           </script>
         @endif
@@ -471,14 +535,18 @@
 
     @include('livewire.public.partials._accident-pdf-test-modals')
 
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="text-center text-muted mt-3">
-      <small>© {{ date('Y') }} Sistem HSE</small>
+      <small>&copy; {{ date('Y') }} Sistem HSE</small>
     </div>
 
   </div>
 </div>
 </div>
-
 @push('scripts')
 <script>
   document.addEventListener('change', function (e) {
@@ -493,7 +561,22 @@
     }
   });
 
-  window.addEventListener('scrollToTop', () => {
+  window.addEventListener('scrollToTop', event => {
+    const params = event.detail[0] || event.detail;
+    if (params && params.modal) {
+      const modalObj = document.getElementById(params.modal);
+      const modalBody = modalObj ? modalObj.querySelector('.modal-body') : null;
+      if (modalBody) {
+        const firstTarget = modalBody.querySelector('.alert-success, .alert-danger, .is-invalid, .invalid-feedback');
+        if (firstTarget) {
+          firstTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          modalBody.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        return;
+      }
+    }
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
