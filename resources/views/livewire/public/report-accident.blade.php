@@ -37,7 +37,7 @@
       </div>
 
       <div class="col-md-4 mb-3 menu-card">
-        <div class="small-box bg-success" data-toggle="modal" data-target="#modalAccidentReport">
+        <div class="small-box" style="background-color: #DC3545; color: #fff;" data-toggle="modal" data-target="#modalAccidentReport">
           <div class="inner">
             <h4 class="font-weight-bold mb-1">Accident Report</h4>
             <p>Melaporkan insiden atau kecelakaan kerja.</p>
@@ -253,7 +253,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>NIP</label>
+                    <label>NIP <small class="text-muted">(opsional)</small></label>
                     <input type="text" class="form-control" wire:model="nip" placeholder="Nomor Induk Pegawai (opsional)">
                     @error('nip') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
@@ -261,8 +261,8 @@
 
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>No Telepon</label>
-                    <input type="text" class="form-control" wire:model="no_telepon" placeholder="Contoh: 031-1234567 (opsional)">
+                    <label class="required">No Telepon</label>
+                    <input type="text" class="form-control" wire:model="no_telepon" placeholder="Contoh: 031-1234567">
                     @error('no_telepon') <small class="text-danger">{{ $message }}</small> @enderror
                   </div>
                 </div>

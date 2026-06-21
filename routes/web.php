@@ -20,9 +20,10 @@ Route::get('/auth/resetpw/{token}', \App\Livewire\Auth\Resetpw::class)->name('pa
 |--------------------------------------------------------------------------
 */
 Route::prefix('public/report')->name('public.report.')->group(function () {
-    Route::get('/', \App\Livewire\Public\ReportAccident::class)->name('index');
-    Route::redirect('/accident', '/public/report/')->name('accident');
-    Route::redirect('/unsafe', '/public/report/')->name('unsafe');
+    // Satu URL untuk semua 3 modal (Accident, Unsafe Action, Unsafe Condition)
+    Route::get('/',         \App\Livewire\Public\ReportAccident::class)->name('index');
+    Route::get('/accident', \App\Livewire\Public\ReportAccident::class)->name('accident');
+    Route::get('/unsafe',   \App\Livewire\Public\ReportAccident::class)->name('unsafe');
 });
 
 /*

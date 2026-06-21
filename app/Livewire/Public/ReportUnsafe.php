@@ -73,6 +73,7 @@ class ReportUnsafe extends Component
     public $ua_lokasi_kerja_lain;
     public $ua_perilaku;
     public $ua_foto_sebelum;
+    public $ua_foto_sesudah;   // opsional
     public $ua_lokasi;
     public $ua_dampak;
     public $ua_perbaikan;
@@ -91,6 +92,7 @@ class ReportUnsafe extends Component
     public $uc_lokasi_kerja_lain;
     public $uc_kondisi;
     public $uc_foto_sebelum;
+    public $uc_foto_sesudah;   // opsional
     public $uc_lokasi;
     public $uc_dampak;
     public $uc_perbaikan;
@@ -139,7 +141,7 @@ class ReportUnsafe extends Component
             'ua_waktu_pengamatan' => 'required|date_format:H:i',
             'ua_nama' => 'required|string|max:255',
             'ua_nip' => 'nullable|string|max:50',
-            'ua_no_telepon' => 'nullable|string|max:20',
+            'ua_no_telepon' => 'required|string|max:20',
             'ua_status' => 'required|string',
             'ua_departemen' => 'required|string',
             'ua_perusahaan' => 'nullable|string',
@@ -149,6 +151,7 @@ class ReportUnsafe extends Component
             'ua_perbaikan' => 'required|string',
             'ua_email_atasan' => 'required|email',
             'ua_foto_sebelum' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'ua_foto_sesudah' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $this->processSave('unsafe_action', [
@@ -166,6 +169,7 @@ class ReportUnsafe extends Component
             'perbaikan' => $this->ua_perbaikan,
             'email_atasan' => $this->ua_email_atasan,
             'foto_sebelum' => $this->ua_foto_sebelum,
+            'foto_sesudah' => $this->ua_foto_sesudah,
         ]);
     }
 
@@ -176,7 +180,7 @@ class ReportUnsafe extends Component
             'uc_waktu_pengamatan' => 'required|date_format:H:i',
             'uc_nama' => 'required|string|max:255',
             'uc_nip' => 'nullable|string|max:50',
-            'uc_no_telepon' => 'nullable|string|max:20',
+            'uc_no_telepon' => 'required|string|max:20',
             'uc_status' => 'required|string',
             'uc_departemen' => 'required|string',
             'uc_perusahaan' => 'nullable|string',
@@ -186,6 +190,7 @@ class ReportUnsafe extends Component
             'uc_perbaikan' => 'required|string',
             'uc_email_atasan' => 'required|email',
             'uc_foto_sebelum' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'uc_foto_sesudah' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $this->processSave('unsafe_condition', [
@@ -203,6 +208,7 @@ class ReportUnsafe extends Component
             'perbaikan' => $this->uc_perbaikan,
             'email_atasan' => $this->uc_email_atasan,
             'foto_sebelum' => $this->uc_foto_sebelum,
+            'foto_sesudah' => $this->uc_foto_sesudah,
         ]);
     }
 
@@ -248,6 +254,18 @@ class ReportUnsafe extends Component
                 ]);
             }
 
+            // Handle Foto Sesudah (opsional)
+            if (!empty($data['foto_sesudah'])) {
+                $file = $data['foto_sesudah'];
+                $filename = 'after_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs($folder, $filename, 'public');
+                $report->attachments()->create([
+                    'file_path' => $path,
+                    'file_name' => $file->getClientOriginalName(),
+                    'category'  => 'evidence_after'
+                ]);
+            }
+
             // Generate Combined PDF Record
             $report->load('attachments');
             $pdf = Pdf::loadView('pdf.unsafe', [
@@ -271,11 +289,11 @@ class ReportUnsafe extends Component
             
             // Reset form input
             if ($type === 'unsafe_action') {
-                $this->reset(['ua_tanggal_pengamatan','ua_waktu_pengamatan','ua_nama','ua_nip','ua_no_telepon','ua_status','ua_departemen','ua_perusahaan','ua_perilaku','ua_foto_sebelum','ua_lokasi','ua_dampak','ua_perbaikan','ua_email_atasan']);
+                $this->reset(['ua_tanggal_pengamatan','ua_waktu_pengamatan','ua_nama','ua_nip','ua_no_telepon','ua_status','ua_departemen','ua_perusahaan','ua_perilaku','ua_foto_sebelum','ua_foto_sesudah','ua_lokasi','ua_dampak','ua_perbaikan','ua_email_atasan']);
                 $this->dispatch('scrollToTop', modal: 'modalUnsafeAction');
                 $this->dispatch('swal:toast', type: 'success', message: 'Laporan Unsafe Action Berhasil Dikirim!');
             } else {
-                $this->reset(['uc_tanggal_pengamatan','uc_waktu_pengamatan','uc_nama','uc_nip','uc_no_telepon','uc_status','uc_departemen','uc_perusahaan','uc_kondisi','uc_foto_sebelum','uc_lokasi','uc_dampak','uc_perbaikan','uc_email_atasan']);
+                $this->reset(['uc_tanggal_pengamatan','uc_waktu_pengamatan','uc_nama','uc_nip','uc_no_telepon','uc_status','uc_departemen','uc_perusahaan','uc_kondisi','uc_foto_sebelum','uc_foto_sesudah','uc_lokasi','uc_dampak','uc_perbaikan','uc_email_atasan']);
                 $this->dispatch('scrollToTop', modal: 'modalUnsafeCondition');
                 $this->dispatch('swal:toast', type: 'success', message: 'Laporan Unsafe Condition Berhasil Dikirim!');
             }

@@ -84,7 +84,7 @@ class ReportAccident extends ReportUnsafe
             'nama_pelapor' => 'required|string|max:255',
             'nip' => 'nullable|string|max:50',
             'no_handphone' => 'required|string|max:20',
-            'no_telepon' => 'nullable|string|max:20',
+            'no_telepon' => 'required|string|max:20',
             'jenis_kelamin' => 'required|string',
             'lokasi_kerja' => 'required|string|max:255',
             'departemen' => 'required|string|max:255',
