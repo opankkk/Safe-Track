@@ -4,18 +4,25 @@
   @include('layouts.partials.head')
 </head>
 
-<body class="@yield('body-class', 'hold-transition sidebar-mini')">
+<body class="@yield('body-class', 'hold-transition sidebar-mini sidebar-mini-md layout-fixed')">
 
 {{-- kalau halaman auth (login/register/forgot), tampilkan konten saja --}}
 @if(View::hasSection('is-auth'))
-  @yield('content')
+  <div class="auth-wrapper">
+    {{ $slot ?? '' }}
+    @yield('content')
+  </div>
 @else
 <div class="wrapper">
 
   {{-- Navbar --}}
-@if(!View::hasSection('hide-navbar'))
+  @php
+    $showNavbar = !View::hasSection('hide-navbar');
+  @endphp
+  
+  <div class="{{ $showNavbar ? '' : 'd-lg-none' }}">
     @include('layouts.partials.navbar')
-@endif
+  </div>
 
 {{-- Sidebar --}}
 @if(!View::hasSection('hide-sidebar'))
@@ -26,6 +33,7 @@
     @include('layouts.partials.content-header')
 
     <section class="content">
+      {{ $slot ?? '' }}
       @yield('content')
     </section>
   </div>

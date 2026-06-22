@@ -6,13 +6,18 @@ export default defineConfig({
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
+            refresh: [
+                'resources/views/**',
+                'routes/**',
+                'app/Livewire/**',
+            ],
         }),
         tailwindcss(),
     ],
     server: {
+        host: '127.0.0.1',
         watch: {
-            ignored: ['**/storage/framework/views/**'],
+            usePolling: true,
         },
     },
 });
